@@ -23,7 +23,8 @@ INSERT INTO practice.clusters (name, slug) VALUES
   ('Finance', 'finance'),
   ('Hospitality and Tourism', 'hospitality-and-tourism'),
   ('Marketing', 'marketing'),
-  ('Personal Financial Literacy', 'personal-financial-literacy')
+  ('Personal Financial Literacy', 'personal-financial-literacy'),
+  ('Principles', 'principles')
 ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name;
 
 -- =============================================================================
@@ -57,11 +58,11 @@ FROM (VALUES
   ('STDM',  'Sports and Entertainment Marketing Team Decision Making','roleplay_team', 'marketing'),
   ('TTDM',  'Travel and Tourism Team Decision Making',                'roleplay_team', 'hospitality-and-tourism'),
   -- Principles of Business Administration
-  ('PBM',   'Principles of Business Management and Administration',   'roleplay_individual', 'business-management-and-administration'),
-  ('PEN',   'Principles of Entrepreneurship',                         'roleplay_individual', 'entrepreneurship'),
-  ('PFN',   'Principles of Finance',                                  'roleplay_individual', 'finance'),
-  ('PHT',   'Principles of Hospitality and Tourism',                  'roleplay_individual', 'hospitality-and-tourism'),
-  ('PMK',   'Principles of Marketing',                                'roleplay_individual', 'marketing'),
+  ('PBM',   'Principles of Business Management and Administration',   'roleplay_individual', 'principles'),
+  ('PEN',   'Principles of Entrepreneurship',                         'roleplay_individual', 'principles'),
+  ('PFN',   'Principles of Finance',                                  'roleplay_individual', 'principles'),
+  ('PHT',   'Principles of Hospitality and Tourism',                  'roleplay_individual', 'principles'),
+  ('PMK',   'Principles of Marketing',                                'roleplay_individual', 'principles'),
   -- Personal Financial Literacy
   ('PFL',   'Personal Financial Literacy',                            'roleplay_individual', 'personal-financial-literacy'),
   -- Professional Selling and Consulting

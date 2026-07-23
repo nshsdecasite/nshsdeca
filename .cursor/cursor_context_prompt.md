@@ -18,7 +18,7 @@ A centralized training platform for Newman Smith High School DECA members to pra
 ## 2. Database architecture — 6 Postgres schemas
 
 ```sql
-CREATE SCHEMA IF NOT EXISTS practice;  -- shared vocabulary: clusters, instructional areas, PIs, blueprints
+CREATE SCHEMA IF NOT EXISTS practice;  -- clusters, instructional areas, PI master bank
 CREATE SCHEMA IF NOT EXISTS events;    -- event & scenario definitions
 CREATE SCHEMA IF NOT EXISTS rubric;    -- scoring engine + roleplay submissions
 CREATE SCHEMA IF NOT EXISTS testbank;  -- questions, exams, practice sessions
@@ -30,7 +30,34 @@ All `id` columns are `uuid PRIMARY KEY DEFAULT gen_random_uuid()`. Cross-schema 
 
 ---
 
-## 3. Full schema (current version, v4)
+## 3. Full schema (current version, v5 — aligned to roleplay + exam PDFs)
+
+**Source of truth migration:** `supabase/migrations/20260723180000_pdf_aligned_schema.sql`
+
+**v4 → v5 removed** (not present in downloaded PDFs): `practice.performance_elements`, entire `practice.pi_blueprints` / `blueprint_*` layer, `events.scenario_judge_questions`, `testbank.questions.difficulty`, `testbank.questions.question_type`, `rubric.rubric_templates.presentation_weight`, `events.event_performance_indicators.tier_id`, `practice.instructional_areas.standard_text`, `testbank.sources.publisher`.
+
+**v4 → v5 added:** `events.event_performance_indicators.year` + `indicator_text` (plain text from roleplay cover; `pi_id` optional link), `events.scenarios.career_pathway`, `rubric.rubric_templates.level`, `testbank.exams.cluster_id`, `testbank.sources.citation_text`.
+
+### PDF → table field map
+
+| Roleplay PDF section | DB destination |
+|---|---|
+| `CAREER CLUSTER` / `INSTRUCTIONAL AREA` / `CAREER PATHWAY` | `practice.clusters`, `practice.instructional_areas`, `scenarios.career_pathway` |
+| `PERFORMANCE INDICATORS` (cover bullets) | `events.event_performance_indicators` (`indicator_text`, per `event_id` + `year`) |
+| `EVENT SITUATION` / `CASE STUDY SITUATION` | `scenarios.situation_description` |
+| `JUDGE ROLE-PLAY CHARACTERIZATION` | `scenarios.judge_characterization` |
+| `SOLUTION` (2024+ only, ~14%) | `scenarios.solution_text` |
+| `Judge's Evaluation Form` | `rubric.rubric_templates` → `rubric_criteria` → `rubric_levels` |
+
+| Exam PDF section | DB destination |
+|---|---|
+| `Test ####` header | `testbank.exams` (`exam_code`, `title`, `year`, `cluster_id`, `posted_date`) |
+| `USED FOR THE FOLLOWING EVENTS` (2024+; older exams use static cluster→event map in loader) | `testbank.exam_events` |
+| Questions `1.`–`100.` + A–D choices | `testbank.questions` + `question_choices` |
+| Answer key letter + rationale | `question_choices.is_correct`, `questions.rationale` |
+| `SOURCE: FI:093 …` | `practice.performance_indicators` + `questions.pi_id` |
+| `SOURCE: LAP-FI-093—Title` | `testbank.lap_modules` + `questions.lap_module_id` |
+| Article `SOURCE: Author (date)… Retrieved … from URL` | `testbank.sources` + `questions.source_id` |
 
 ### `practice`
 
@@ -42,68 +69,22 @@ CREATE TABLE practice.clusters (
 );
 
 CREATE TABLE practice.instructional_areas (
-    id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    code           text NOT NULL UNIQUE,   -- e.g. "PM", "EN", "FI"
-    name           text NOT NULL,
-    standard_text  text
-);
-
-CREATE TABLE practice.performance_elements (
-    id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    instructional_area_id uuid NOT NULL REFERENCES practice.instructional_areas(id),
-    element_text          text NOT NULL,
-    display_order         int,
-    UNIQUE (instructional_area_id, element_text)
+    id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    code text NOT NULL UNIQUE,   -- e.g. "FI" — derived from PI code prefix or roleplay header
+    name text NOT NULL            -- e.g. "Financial Analysis"
 );
 
 CREATE TABLE practice.performance_indicators (
-    id                     uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    pi_code                text NOT NULL UNIQUE,   -- e.g. "EN:040", "FI:093"
-    indicator_text         text NOT NULL,
-    performance_element_id uuid REFERENCES practice.performance_elements(id)
+    id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    pi_code               text NOT NULL UNIQUE,   -- e.g. "FI:093" — from exam answer keys
+    indicator_text        text NOT NULL,
+    instructional_area_id uuid REFERENCES practice.instructional_areas(id)
 );
 
 CREATE TABLE practice.pi_tiers (
     id    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     code  text NOT NULL UNIQUE,   -- PQ, CS, SP, SU, MN, ON
     label text NOT NULL
-);
-
-CREATE TABLE practice.pi_blueprints (
-    id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    title       text NOT NULL,
-    year        int,
-    cluster_id  uuid REFERENCES practice.clusters(id),
-    posted_date date,
-    source_url  text
-);
-
-CREATE TABLE practice.blueprint_events (
-    id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    blueprint_id uuid NOT NULL REFERENCES practice.pi_blueprints(id),
-    event_id     uuid NOT NULL REFERENCES events.events(id),
-    UNIQUE (blueprint_id, event_id)
-);
-
-CREATE TABLE practice.blueprint_performance_indicators (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    blueprint_id  uuid NOT NULL REFERENCES practice.pi_blueprints(id),
-    pi_id         uuid NOT NULL REFERENCES practice.performance_indicators(id),
-    tier_id       uuid REFERENCES practice.pi_tiers(id),
-    display_order int,
-    UNIQUE (blueprint_id, pi_id)
-);
-
-CREATE TABLE practice.blueprint_pi_events (
-    -- Scopes which events a specific blueprint PI actually applies to. NOT every PI in a cluster's
-    -- blueprint applies to every event that shares that blueprint — e.g. the last several pages of the
-    -- Finance blueprint apply to BFS but not to ACT, FCE, or FTDM, even though all four events use the
-    -- same Finance cluster exam/blueprint. blueprint_events (above) says an event uses the blueprint at
-    -- all; this table says a *specific PI within it* applies to that event. Partial coverage is expected.
-    id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    blueprint_pi_id uuid NOT NULL REFERENCES practice.blueprint_performance_indicators(id),
-    event_id        uuid NOT NULL REFERENCES events.events(id),
-    UNIQUE (blueprint_pi_id, event_id)
 );
 ```
 
@@ -131,35 +112,29 @@ CREATE TABLE events.events (
 );
 
 CREATE TABLE events.event_performance_indicators (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    event_id      uuid NOT NULL REFERENCES events.events(id),
-    pi_id         uuid NOT NULL REFERENCES practice.performance_indicators(id),
-    tier_id       uuid REFERENCES practice.pi_tiers(id),
-    display_order int,
-    UNIQUE (event_id, pi_id)
+    id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_id       uuid NOT NULL REFERENCES events.events(id),
+    year           int NOT NULL,
+    indicator_text text NOT NULL,   -- plain English from roleplay PDF cover
+    pi_id          uuid REFERENCES practice.performance_indicators(id),  -- linked when matched to master bank
+    display_order  int NOT NULL,
+    UNIQUE (event_id, year, display_order)
 );
 
 CREATE TABLE events.scenarios (
     id                     uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     event_id               uuid NOT NULL REFERENCES events.events(id),
-    year                   int,
-    level                  text CHECK (level IN ('district','state','icdc')),
-    scenario_number        int NOT NULL DEFAULT 1,   -- see note below
+    year                   int NOT NULL,
+    level                  text NOT NULL CHECK (level IN ('district','state','icdc')),
+    scenario_number        int NOT NULL DEFAULT 1,
     instructional_area_id  uuid REFERENCES practice.instructional_areas(id),
+    career_pathway         text,
     scenario_title         text,
-    situation_description  text,   -- participant-facing "Event Situation" (2nd person)
-    judge_characterization text,   -- judge-facing "Judge Role-Play Characterization" (3rd person) — NOT identical text to situation_description
-    solution_text          text,   -- worked answer key / model solution
+    situation_description  text,
+    judge_characterization text,
+    solution_text          text,   -- null when PDF has no SOLUTION section (~86% of older roleplays)
     source_url             text,
     UNIQUE (event_id, year, level, scenario_number)
-);
-
-CREATE TABLE events.scenario_judge_questions (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    scenario_id   uuid NOT NULL REFERENCES events.scenarios(id),
-    question_text text NOT NULL,
-    display_order int,
-    UNIQUE (scenario_id, display_order)
 );
 ```
 
@@ -167,13 +142,13 @@ CREATE TABLE events.scenario_judge_questions (
 
 ```sql
 CREATE TABLE rubric.rubric_templates (
-    id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    event_id            uuid NOT NULL REFERENCES events.events(id),
-    year                int,
-    title               text,
-    max_total_points    int,
-    presentation_weight int DEFAULT 2,   -- presentation counts this many times the exam score
-    UNIQUE (event_id, year)
+    id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_id         uuid NOT NULL REFERENCES events.events(id),
+    year             int NOT NULL,
+    level            text NOT NULL DEFAULT 'district' CHECK (level IN ('district','state','icdc')),
+    title            text,
+    max_total_points int,
+    UNIQUE (event_id, year, level)
 );
 
 CREATE TABLE rubric.rubric_criteria (
@@ -260,22 +235,20 @@ CREATE TABLE testbank.lap_modules (
 
 CREATE TABLE testbank.sources (
     id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    citation_text  text NOT NULL,   -- raw SOURCE block from answer key
     author         text,
     title          text,
-    publisher      text,
     url            text,
     published_date date,
-    accessed_date  date
+    accessed_date  date,
+    UNIQUE (citation_text)
 );
 
 CREATE TABLE testbank.questions (
     id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     question_text         text NOT NULL,
     pi_id                 uuid REFERENCES practice.performance_indicators(id),
-    instructional_area_id uuid REFERENCES practice.instructional_areas(id),  -- denormalized copy for fast filtering
-    difficulty            text,
-    question_type         text DEFAULT 'multiple_choice' CHECK (question_type IN (
-                              'multiple_choice','true_false')),
+    instructional_area_id uuid REFERENCES practice.instructional_areas(id),  -- denormalized from pi_code prefix
     lap_module_id         uuid REFERENCES testbank.lap_modules(id),
     source_id             uuid REFERENCES testbank.sources(id),
     rationale             text
@@ -293,10 +266,11 @@ CREATE TABLE testbank.question_choices (
 CREATE TABLE testbank.exams (
     id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     exam_code   text NOT NULL UNIQUE,   -- e.g. "TEST-1324"
-    title       text,
-    year        int,
+    title       text NOT NULL,
+    year        int NOT NULL,
+    cluster_id  uuid NOT NULL REFERENCES practice.clusters(id),
     posted_date date,
-    source_org  text
+    source_org  text DEFAULT 'MBA Research Center'
 );
 
 CREATE TABLE testbank.exam_events (
@@ -379,7 +353,8 @@ CREATE TABLE content.user_flashcard_progress (
     user_id      uuid REFERENCES core.users(id),
     flashcard_id uuid NOT NULL REFERENCES content.flashcards(id),
     status       text CHECK (status IN ('learning','know_it')),
-    last_seen    timestamptz
+    last_seen    timestamptz,
+    UNIQUE (user_id, flashcard_id)
 );
 
 CREATE TABLE content.theories (
@@ -481,42 +456,34 @@ WHERE correct_count::float / NULLIF(total_attempts, 0) < 0.7;
 
 ## 4. Rules that prevent errors — read before writing any query or loader
 
-1. **`practice.performance_indicators` is a single global master bank — one row per `pi_code`, no `cluster_id` column on it at all.** The same PI code (e.g. `FI:093`) can be referenced by multiple clusters' blueprints, roleplay events, questions, flashcards, etc. Never create a duplicate PI row for a different cluster — always upsert on `pi_code`.
+1. **`practice.performance_indicators` is a single global master bank — one row per `pi_code`.** Bootstrap it from exam answer-key `SOURCE: FI:093 …` lines as exams are loaded. Never duplicate a PI row — always upsert on `pi_code`.
 
-2. **A PI's association with a cluster is indirect, via `practice.blueprint_performance_indicators`.** That table links `pi_id` → `blueprint_id`, and each blueprint has its own `cluster_id`. A PI is "in" a cluster only if a row exists connecting it to that cluster's blueprint — there's no automatic universal membership. Tier (`tier_id`) is stored per-blueprint-usage, not per-PI, because the same PI can carry a different tier in different clusters.
+2. **`events.event_performance_indicators` stores plain text from roleplay PDF covers**, scoped to `(event_id, year)`. Roleplay PDFs do not print PI codes — store `indicator_text` always; set `pi_id` only after fuzzy-matching to the master bank. PIs change year to year for the same event.
 
-3. **`practice.blueprint_performance_indicators` ≠ `events.event_performance_indicators`.** These are two different join tables for two different things:
-   - `practice.blueprint_performance_indicators` — the full cluster-wide exam blueprint (~150 PIs), used to tag test-bank questions across an entire cluster.
-   - `events.event_performance_indicators` — the short curated PI list (typically 5–7 PIs) printed on one specific roleplay event's cover page. Does not route through the blueprint layer at all.
-   Do not conflate these or try to derive one from the other.
+3. **`events.scenarios` can have multiple rows per `event_id` + `year` + `level`.** Unique key is `(event_id, year, level, scenario_number)`. Leave `solution_text` null when the PDF has no `SOLUTION` section — do not insert empty strings.
 
-3b. **Not every PI in a cluster's blueprint applies to every event that shares that blueprint.** Example: the Finance blueprint feeds ACT, BFS, FCE, and FTDM, but the last several pages of PIs in that blueprint apply only to BFS, not the other three. `practice.blueprint_events` only tells you an event uses the blueprint *at all* — it does not mean every PI in the blueprint applies to that event. Use `practice.blueprint_pi_events` (links a specific `blueprint_performance_indicators` row to a specific `event_id`) to check or set PI-to-event coverage. Never assume full/uniform PI coverage across every event sharing a blueprint — load coverage explicitly, per event, from the source material (e.g. page ranges in the PI PDF).
+4. **`events.scenarios` has three distinct text fields — never merge them:**
+   - `situation_description` — participant-facing "Event Situation" / "Case Study Situation"
+   - `judge_characterization` — "Judge Role-Play Characterization" (third person)
+   - `solution_text` — worked answer key when present (~14% of PDFs, mostly 2024+)
 
-4. **`events.scenarios` can have multiple rows per `event_id` + `year` + `level`.** DECA regularly publishes more than one numbered scenario per event/year/level (e.g. "District Event 1" and "District Event 2") to prevent predictability. The unique constraint is `(event_id, year, level, scenario_number)`, and `scenario_number` defaults to `1`. Loaders for single-scenario events don't need to set it explicitly — only set it when loading a second/third numbered scenario for the same event/year/level.
+5. **Judge follow-up questions are not a separate table.** They are embedded in `judge_characterization` prose — do not invent `scenario_judge_questions` rows.
 
-5. **`events.scenarios` has three distinct text fields — never merge them:**
-   - `situation_description` — participant-facing "Event Situation," second person ("you are to assume the role of...")
-   - `judge_characterization` — judge-facing "Judge Role-Play Characterization," third person ("the participant will..."), not identical wording to `situation_description`
-   - `solution_text` — the worked answer key / model solution (calculations, narrative explanation) that participants can check their prep against
-   Populate all three when loading a roleplay PDF; don't collapse them into one field.
+6. **`rubric.rubric_criteria.max_points` and `rubric.rubric_levels` point bands vary per event/year** — always parse from that PDF's Evaluation Form. Never hardcode scales.
 
-6. **`rubric.rubric_criteria.max_points` and the point scales in `rubric.rubric_levels` vary per event and per year — never hardcode a point scale.** Two real examples that differ: ETDM-26 has 7 PI-criterion rows (max 10 pts each) + 4 skills rows (max 6 pts) + 1 overall row (max 6 pts); BFS-26 has 5 PI-criterion rows (max 14 pts each, scored 0-4/5-8/9-11/12-14) + the same 4 skills + 1 overall pattern. Always read points from the loaded data, never assume a fixed scale.
+7. **`testbank.questions` lives in the bank exactly once** — `testbank.exam_questions` links questions to exams. All exam PDF questions are multiple-choice (A–D); there is no `difficulty` or `question_type` column.
 
-7. **`testbank.questions` lives in the bank exactly once — never duplicate a question per exam.** `testbank.exam_questions` is the join table that says "question X is item #7 on exam Y." A question can belong to zero, one, or many exams. Practice sessions pulling randomly from the bank (`session_type IN ('full','custom','pi_targeted')`) never set `exam_id` on `test_sessions`; only `session_type = 'official_exam'` sets it.
+8. **`testbank.exams.cluster_id` is required** — derive from exam slug (`finance`, `bac`, etc.) in the loader. Older exams (pre-2024) may lack an on-page event list; use a static cluster→events map for `exam_events`.
 
-8. **One `events.events` table, not separate individual/team tables.** The `event_format` CHECK constraint (`roleplay_team | roleplay_individual | written | exam_only`) plus row count on `event_performance_indicators` is how the app distinguishes formats — don't propose splitting this table.
+9. **One `events.events` table** — `event_format` distinguishes roleplay_team / roleplay_individual / written / exam_only.
 
-9. **No tags/taggables table exists** — freeform cross-cutting labels were deliberately excluded. Don't invent one.
+10. **`instructional_area_id` lives on `events.scenarios`, not on `events.events`** — it varies per case study/year.
 
-10. **No `event_solution_criteria` or `event_career_competencies` tables exist** — that content is static text rendered in the app, not database rows.
+11. **`event_code` drops the year suffix** — store `"BFS"`, never `"BFS-26"`.
 
-11. **`instructional_area_id` lives on `events.scenarios`, not on `events.events`** — it varies per case study/year, not per event type.
+12. **All IDs are UUIDs from `gen_random_uuid()`** — capture returned IDs from upserts before using as FKs.
 
-12. **`event_code` drops the year suffix** — store `"ETDM"` or `"BFS"`, never `"ETDM-26"`.
-
-13. **All IDs are UUIDs generated by the database (`gen_random_uuid()`)** — never hardcode a UUID client-side; always capture the `id` returned from an insert/upsert before using it as a foreign key elsewhere.
-
-14. **Every table has a meaningful natural-key UNIQUE constraint specifically so loaders can safely upsert and be re-run without creating duplicates.** When writing a loader, always upsert on that natural key (e.g. `pi_code`, `event_code`, `exam_code`, `(blueprint_id, pi_id)`, `(event_id, year, level, scenario_number)`) — never do a plain `INSERT` for practice/reference data.
+13. **Upsert on natural keys** — `pi_code`, `event_code`, `exam_code`, `(event_id, year, level, scenario_number)`, `(event_id, year, display_order)`, `citation_text`, `lap_code`.
 
 ---
 
@@ -524,18 +491,19 @@ WHERE correct_count::float / NULLIF(total_attempts, 0) < 0.7;
 
 Always load in this order — later steps assume earlier ones already exist.
 
-1. **`practice.pi_tiers`** — no dependencies. 6 fixed rows (PQ, CS, SP, SU, MN, ON).
-2. **`practice.clusters`** — no dependencies. One row per DECA career cluster.
-3. **`practice.instructional_areas` → `practice.performance_elements` → `practice.performance_indicators`** — load from the official PI PDF, areas before elements before indicators (each level FKs to the one above). Two-pass upsert-on-`pi_code` — safe to re-run for every cluster's PI PDF, since PIs are a single global bank, not cluster-scoped.
-4. **`events.events`** — depends on `practice.clusters`. One row per event *type* (ETDM, BFS, FTDM...), not per year.
-5. **`events.event_performance_indicators`** — depends on `events.events` + `practice.performance_indicators`. The short curated PI list off the event's cover page — pull straight from the roleplay PDF, don't derive it from a blueprint.
-6. **`practice.pi_blueprints` → `practice.blueprint_events` → `practice.blueprint_performance_indicators` → `practice.blueprint_pi_events`** — depends on `practice.clusters`, `events.events`, `practice.performance_indicators`, `practice.pi_tiers`. Load the full ~150-PI cluster blueprint, then, for each PI in it, load `blueprint_pi_events` rows per event it actually applies to — do not assume every PI applies to every event sharing the blueprint (see rule 3b). No ordering dependency between this step and step 5.
-7. **`rubric.rubric_templates` → `rubric.rubric_criteria` → `rubric.rubric_levels`** — depends on `events.events` and `practice.performance_indicators`. Load per event, per year — pull `max_points` and level bands straight from that year's Judge's Evaluation Form; never assume a prior year's point scale (see rule 6).
-8. **`testbank.lap_modules` and `testbank.sources`** — no dependencies. Deduplicated citation lookups; load opportunistically as new LAP codes/sources are encountered while loading questions (step 9), upserting on their natural key.
-9. **`testbank.questions` → `testbank.question_choices` → `testbank.exams` → `testbank.exam_events` → `testbank.exam_questions`** — depends on `practice.performance_indicators`, `practice.instructional_areas`, `testbank.lap_modules`, `testbank.sources` (nullable FKs), and `events.events` (for `exam_events`). Load questions and choices first, then the exam record, then the join rows connecting them.
-10. **`events.scenarios` → `events.scenario_judge_questions`** — depends on `events.events` and `practice.instructional_areas`. Set `scenario_number` explicitly only for a second/third scenario on the same event/year/level — defaults to `1`. `judge_characterization` and `solution_text` are nullable — leave `null` if the source material doesn't include one, don't insert an empty string, so the UI can distinguish "not published" from "published but blank."
-11. **`core.chapters` → `core.users`** — no dependency on anything above; load any time. Chapters before users (`users.chapter_id` references `chapters`).
+1. **`practice.pi_tiers`** — seed data (6 fixed rows).
+2. **`practice.clusters`** — seed data.
+3. **`practice.instructional_areas`** — from roleplay PDF headers + PI code prefixes in exam keys.
+4. **`events.events`** — seed data (already in `supabase/seed/001_reference_data.sql`).
+5. **`testbank.lap_modules` + `testbank.sources`** — opportunistically while loading exams (upsert on `lap_code` / `citation_text`).
+6. **`practice.performance_indicators`** — upsert from exam answer-key `SOURCE: XX:###` lines.
+7. **`testbank.questions` → `testbank.question_choices` → `testbank.exams` → `testbank.exam_events` → `testbank.exam_questions`** — from 68 exam PDFs.
+8. **`events.event_performance_indicators`** — from roleplay PDF cover pages (per `event_id` + `year`).
+9. **`rubric.rubric_templates` → `rubric.rubric_criteria` → `rubric.rubric_levels`** — from Evaluation Form in roleplay PDFs (per `event_id` + `year` + `level`).
+10. **`events.scenarios`** — from 402 roleplay PDFs last (needs instructional areas + events).
 
-**Everything after this is ongoing, user-generated data, not seed data** — created through normal app usage rather than a loader script. For reference, the dependency order there is: `rubric.submissions` (needs a user + scenario/event) → `rubric.submission_comments` / `rubric.submission_scores` → `rubric.submission_criterion_scores`; `testbank.test_sessions` → `testbank.test_answers` / `testbank.test_notes`; `content.flashcard_sets` → `content.flashcards` → `content.user_flashcard_progress`; `core.pi_performance` and `core.user_points_log` are written incrementally as the above activities happen.
+**User-generated (not from PDFs):** `core.*`, `rubric.submissions*`, `testbank.test_sessions*`, `content.notes`, `content.user_flashcard_progress`.
+
+**Curated seed (not from roleplay/exam PDFs):** `content.vocab_terms`, `content.theories`, `content.visuals`, premade `content.flashcard_sets`.
 
 ---

@@ -95,7 +95,7 @@ def collect_exams() -> dict[str, dict]:
 
 
 def destination_for(item: dict) -> Path:
-    return OUT_DIR / item["year"] / f"{item['slug']}.pdf"
+    return OUT_DIR / item["slug"] / f"{item['year']}.pdf"
 
 
 def safe_url(url: str) -> str:
@@ -115,7 +115,7 @@ def main() -> None:
     manifest = []
 
     for index, item in enumerate(
-        sorted(items.values(), key=lambda row: (row["year"], row["slug"])),
+        sorted(items.values(), key=lambda row: (row["slug"], row["year"])),
         1,
     ):
         dest = destination_for(item)

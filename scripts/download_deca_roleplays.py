@@ -100,9 +100,9 @@ def destination_for(item: dict) -> Path:
         suffix = match.group(3)
         virtual = "_Virtual" if "_Virtual" in filename else ""
         stem = f"district-event-{suffix}{virtual}" if suffix else f"district-event{virtual}"
-        return OUT_DIR / year / event_code / f"{stem}.pdf"
+        return OUT_DIR / event_code / year / f"{stem}.pdf"
 
-    return OUT_DIR / item["year"] / item["event_code"] / filename
+    return OUT_DIR / item["event_code"] / item["year"] / filename
 
 
 def safe_url(url: str) -> str:
@@ -121,7 +121,7 @@ def main() -> None:
     items = collect_roleplays()
     manifest = []
 
-    for index, item in enumerate(sorted(items.values(), key=lambda row: (row["year"], row["event_code"], row["filename"])), 1):
+    for index, item in enumerate(sorted(items.values(), key=lambda row: (row["event_code"], row["year"], row["filename"])), 1):
         dest = destination_for(item)
         print(f"[{index}/{len(items)}] {dest.relative_to(OUT_DIR.parent.parent)}")
         download(item["url"], dest)

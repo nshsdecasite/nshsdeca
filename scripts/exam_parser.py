@@ -8,6 +8,8 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
+from pdf_ligatures import fix_pdf_ligatures
+
 EXAM_SLUG_TITLES = {
     "bac": "Business Administration Core Exam",
     "bma": "Business Management and Administration Exam",
@@ -119,7 +121,8 @@ class ParsedExam:
 
 
 def extract_text(path: Path) -> str:
-    return "\n".join((page.extract_text() or "") for page in PdfReader(str(path)).pages)
+    text = "\n".join((page.extract_text() or "") for page in PdfReader(str(path)).pages)
+    return fix_pdf_ligatures(text) or ""
 
 
 def normalize_pi_code(raw: str | None) -> str | None:
@@ -175,7 +178,7 @@ def extract_choices(body: str) -> dict[str, str]:
             re.S,
         )
         if match:
-            choices[label] = re.sub(r"\s+", " ", match.group(1).strip())
+            choices[label] = fix_pdf_ligatures(re.sub(r"\s+", " ", match.group(1).strip())) or ""
     return choices
 
 
@@ -197,7 +200,7 @@ def parse_questions(qtext: str) -> dict[int, dict[str, object]]:
         stem_match = re.match(r"(.+?)(?=\n\s*A\.\s)", body, re.S)
         if not stem_match or len(choices) < 4:
             continue
-        stem = re.sub(r"\s+", " ", stem_match.group(1).strip())
+        stem = fix_pdf_ligatures(re.sub(r"\s+", " ", stem_match.group(1).strip())) or ""
         if len(stem) < 8:
             continue
         questions[number] = {"stem": stem, "choices": choices}
@@ -205,7 +208,7 @@ def parse_questions(qtext: str) -> dict[int, dict[str, object]]:
 
 
 def parse_answer_block(block: str) -> dict[str, object]:
-    rationale = re.sub(r"\s+", " ", block).strip()
+    rationale = fix_pdf_ligatures(re.sub(r"\s+", " ", block).strip()) or ""
     pi_code = None
     pi_text = None
     lap_code = None
@@ -226,7 +229,7 @@ def parse_answer_block(block: str) -> dict[str, object]:
             pi_code = normalize_pi_code(f"{pi_match.group(1)}:{pi_match.group(2)}")
             remainder = pi_match.group(3).strip()
             if remainder:
-                pi_text = remainder
+                pi_text = fix_pdf_ligatures(remainder)
             continue
 
         lap_match = re.match(
@@ -236,7 +239,7 @@ def parse_answer_block(block: str) -> dict[str, object]:
         )
         if lap_match:
             lap_code = normalize_lap_code(lap_match.group(1))
-            lap_title = lap_match.group(2).strip()
+            lap_title = fix_pdf_ligatures(lap_match.group(2).strip())
             continue
 
         if re.search(r"\(\d{4}", payload) or "Retrieved" in payload or "http" in payload:

@@ -10,6 +10,12 @@ import {
 } from "@/lib/roleplay/types";
 import { extractYouTubeId } from "@/lib/roleplay/video";
 import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -47,43 +53,45 @@ export function DriveDurationInput({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4">
-      <h3 className="text-sm font-semibold text-slate-800 mb-1">Video Length</h3>
-      <p className="text-xs text-slate-500 mb-3">
+    <Card className="p-4">
+      <h3 className="mb-1 text-sm font-semibold text-foreground">Video Length</h3>
+      <p className="mb-3 text-xs text-muted-foreground">
         Google Drive doesn&apos;t report video duration. Enter the length so you can
         place timestamped comments on the timeline.
       </p>
       <div className="flex items-end gap-3">
         <div>
-          <label className="text-xs text-slate-500 block mb-1">Minutes</label>
-          <input
+          <Label htmlFor="drive-duration-minutes" className="mb-1 block text-xs font-normal text-muted-foreground">
+            Minutes
+          </Label>
+          <Input
+            id="drive-duration-minutes"
             type="number"
             min={0}
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
-            className="w-20 border border-slate-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="h-9 w-20 px-2 py-1.5"
           />
         </div>
         <div>
-          <label className="text-xs text-slate-500 block mb-1">Seconds</label>
-          <input
+          <Label htmlFor="drive-duration-seconds" className="mb-1 block text-xs font-normal text-muted-foreground">
+            Seconds
+          </Label>
+          <Input
+            id="drive-duration-seconds"
             type="number"
             min={0}
             max={59}
             value={seconds}
             onChange={(e) => setSeconds(e.target.value)}
-            className="w-20 border border-slate-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="h-9 w-20 px-2 py-1.5"
           />
         </div>
-        <button
-          type="button"
-          onClick={handleSave}
-          className="bg-indigo-600 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-indigo-700"
-        >
+        <Button type="button" size="sm" onClick={handleSave}>
           Set Length
-        </button>
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -129,16 +137,17 @@ const Timeline = memo(function Timeline({
 
   return (
     <div className="space-y-1.5 pt-2">
-      <div className="flex items-center justify-between text-xs text-slate-500 px-0.5">
+      <div className="flex items-center justify-between px-0.5 text-xs text-muted-foreground">
         <span>{manualMode ? '0:00' : formatTime(currentTime)}</span>
         <span>{duration > 0 ? formatTime(duration) : '--:--'}</span>
       </div>
 
       <div
         ref={timelineRef}
-        className={`relative h-8 bg-slate-200 rounded ${
-          canInteract ? 'cursor-pointer hover:bg-slate-300' : 'opacity-60'
-        }`}
+        className={cn(
+          "relative h-8 rounded bg-muted",
+          canInteract ? "cursor-pointer hover:bg-accent" : "opacity-60",
+        )}
         onClick={
           canInteract
             ? (e) => {
@@ -155,7 +164,7 @@ const Timeline = memo(function Timeline({
       >
         {!manualMode && (
           <div
-            className="absolute top-0 left-0 h-full bg-indigo-300 rounded"
+            className="absolute left-0 top-0 h-full rounded bg-primary/30"
             style={{ width: `${progress}%` }}
           />
         )}
@@ -168,9 +177,10 @@ const Timeline = memo(function Timeline({
               <button
                 key={comment.id}
                 type="button"
-                className={`absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border border-white shadow transition-transform hover:scale-125 ${
-                  isActive ? 'bg-amber-500 scale-125 z-10' : 'bg-indigo-600'
-                }`}
+                className={cn(
+                  "absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border border-white shadow transition-transform hover:scale-125",
+                  isActive ? "z-10 scale-125 bg-amber-500" : "bg-primary",
+                )}
                 style={{ left: `calc(${pos}% - 5px)` }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -185,7 +195,7 @@ const Timeline = memo(function Timeline({
           })}
         {hoverTime !== null && canInteract && (
           <div
-            className="absolute -top-7 -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-0.5 rounded pointer-events-none whitespace-nowrap"
+            className="pointer-events-none absolute -top-7 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-0.5 text-xs text-background"
             style={{ left: `${(hoverTime / duration) * 100}%` }}
           >
             {formatTime(hoverTime)}
@@ -194,7 +204,7 @@ const Timeline = memo(function Timeline({
       </div>
 
       {canInteract && (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted-foreground">
           {manualMode
             ? 'Click the timeline to add a comment at that timestamp'
             : 'Click timeline to add a comment, or use the button below'}
@@ -203,13 +213,15 @@ const Timeline = memo(function Timeline({
 
       {canInteract && !manualMode && (
         <div className="flex justify-end">
-          <button
+          <Button
             type="button"
+            variant="link"
+            size="sm"
+            className="h-auto p-0 text-xs font-medium"
             onClick={() => onTimelineClick?.(currentTime)}
-            className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
           >
             + Comment at {formatTime(currentTime)}
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -276,14 +288,12 @@ function YouTubeVideoPlayer(props: VideoPlayerProps) {
 
   return (
     <div className="space-y-0">
-      <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-        <div id={containerId} className="w-full h-full" />
+      <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
+        <div id={containerId} className="h-full w-full" />
       </div>
-      <div className="flex items-center gap-2 mt-2">
-        <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">
-          YouTube
-        </span>
-        <span className="text-xs text-green-600">
+      <div className="mt-2 flex items-center gap-2">
+        <Badge className="bg-red-100 text-red-700">YouTube</Badge>
+        <span className="text-xs text-primary">
           Comments appear in the panel during playback
         </span>
       </div>
@@ -319,10 +329,10 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
 
   return (
     <div className="space-y-3">
-      <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
+      <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
         <iframe
           src={embedUrl}
-          className="w-full h-full"
+          className="h-full w-full"
           allow="autoplay; encrypted-media"
           allowFullScreen
           title="Roleplay video"
@@ -330,10 +340,8 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-          Google Drive
-        </span>
-        <span className="text-xs text-slate-500">
+        <Badge className="bg-blue-100 text-blue-700">Google Drive</Badge>
+        <span className="text-xs text-muted-foreground">
           Click comment markers to view feedback
         </span>
       </div>
@@ -364,17 +372,17 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
             setAutoPopup={setActiveLocal}
           />
           {activeComment && !props.externalComments && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <div className="flex items-center gap-2 mb-1">
+            <Card className="border-amber-200 bg-amber-50 p-3">
+              <div className="mb-1 flex items-center gap-2">
                 <span className="text-xs font-medium text-amber-700">
                   {formatTime(activeComment.timestamp)}
                 </span>
-                <span className="text-xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded">
+                <Badge className="bg-amber-200 text-amber-800">
                   {COMMENT_TAG_LABELS[activeComment.tag]}
-                </span>
+                </Badge>
               </div>
-              <p className="text-sm text-slate-700">{activeComment.text}</p>
-            </div>
+              <p className="text-sm text-foreground">{activeComment.text}</p>
+            </Card>
           )}
         </>
       ) : (

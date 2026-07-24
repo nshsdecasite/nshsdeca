@@ -1,23 +1,38 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { createSubmission } from "@/app/roleplay/actions";
-import { SCENARIOS } from "@/lib/roleplay/scenarios";
+import type { ScenarioSummary } from "@/lib/roleplay/scenario-types";
+import { LEVEL_LABELS } from "@/lib/roleplay/scenario-types";
 import { extractDriveFileId } from "@/lib/roleplay/types";
 import {
   extractYouTubeId,
   normalizeVideoUrl,
   type VideoSource,
 } from "@/lib/roleplay/video";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
-export function SubmitRoleplayForm() {
-  const [scenarioId, setScenarioId] = useState("");
+type SubmitRoleplayFormProps = {
+  scenarios: ScenarioSummary[];
+  initialScenarioId?: string;
+};
+
+export function SubmitRoleplayForm({
+  scenarios,
+  initialScenarioId = "",
+}: SubmitRoleplayFormProps) {
+  const [scenarioId, setScenarioId] = useState(initialScenarioId);
   const [videoSource, setVideoSource] = useState<VideoSource>("youtube");
   const [videoUrl, setVideoUrl] = useState("");
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const selectedScenario = SCENARIOS.find((scenario) => scenario.id === scenarioId);
+  const selectedScenario = scenarios.find((scenario) => scenario.id === scenarioId);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -59,68 +74,92 @@ export function SubmitRoleplayForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-ink mb-2">
-          Select scenario
-        </label>
-        <div className="space-y-2">
-          {SCENARIOS.map((scenario) => (
-            <label
-              key={scenario.id}
-              className={`block p-4 rounded-2xl border-2 cursor-pointer transition-colors ${
-                scenarioId === scenario.id
-                  ? "border-deca-green bg-deca-green-light"
-                  : "border-slate-200 hover:border-slate-300 bg-white"
-              }`}
-            >
-              <input
-                type="radio"
-                name="scenario"
-                value={scenario.id}
-                checked={scenarioId === scenario.id}
-                onChange={(event) => setScenarioId(event.target.value)}
-                className="sr-only"
-              />
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <span className="text-xs font-medium text-deca-green">
-                    {scenario.event}
-                  </span>
-                  <h3 className="font-medium text-ink">{scenario.title}</h3>
-                  <p className="text-sm text-muted mt-1">{scenario.description}</p>
-                </div>
-                <span className="text-xs text-muted font-mono shrink-0">
-                  {scenario.id}
-                </span>
-              </div>
-            </label>
-          ))}
+      <Card className="p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">Select scenario</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Browse the full library or pick from recent scenarios below.
+            </p>
+          </div>
+          <Button variant="secondary" size="sm" asChild>
+            <Link href="/roleplays">Browse library</Link>
+          </Button>
         </div>
-      </div>
 
-      {selectedScenario && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-4">
-          <h4 className="text-sm font-medium text-ink mb-2">
-            Performance indicators
-          </h4>
-          <ul className="space-y-1">
-            {selectedScenario.pis.map((pi, index) => (
-              <li key={pi} className="text-sm text-muted flex gap-2">
-                <span className="text-deca-green font-medium shrink-0">
-                  PI {index + 1}:
-                </span>
-                {pi}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {scenarios.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            No scenarios loaded yet. Open the scenario library to choose one.
+          </p>
+        ) : (
+          <div className="mt-4 space-y-2">
+            {scenarios.map((scenario) => {
+              const title =
+                scenario.scenario_title?.trim() ||
+                `${scenario.event_code} scenario ${scenario.scenario_number}`;
+
+              return (
+                <label
+                  key={scenario.id}
+                  className={cn(
+                    "block cursor-pointer rounded-2xl border-2 p-4 transition-colors",
+                    scenarioId === scenario.id
+                      ? "border-primary bg-primary/10"
+                      : "border-border bg-muted hover:border-border",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="scenario"
+                    value={scenario.id}
+                    checked={scenarioId === scenario.id}
+                    onChange={(event) => setScenarioId(event.target.value)}
+                    className="sr-only"
+                  />
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+                          {scenario.event_code}
+                        </span>
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {LEVEL_LABELS[scenario.level]} · {scenario.year}
+                        </span>
+                      </div>
+                      <h3 className="mt-1 font-medium text-foreground">{title}</h3>
+                      {scenario.preview ? (
+                        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                          {scenario.preview}
+                        </p>
+                      ) : null}
+                    </div>
+                    <Link
+                      href={`/roleplays/${scenario.id}`}
+                      className="shrink-0 text-xs font-medium text-primary hover:underline"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      View
+                    </Link>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </Card>
+
+      {selectedScenario ? (
+        <Card className="p-5">
+          <h4 className="text-sm font-semibold text-foreground">Selected scenario</h4>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {selectedScenario.event_name} · {selectedScenario.cluster_name}
+          </p>
+        </Card>
+      ) : null}
 
       <div>
-        <label className="block text-sm font-medium text-ink mb-2">
-          Video host
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Label>Video host</Label>
+        <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {(
             [
               {
@@ -139,11 +178,12 @@ export function SubmitRoleplayForm() {
           ).map((option) => (
             <label
               key={option.value}
-              className={`p-4 rounded-2xl border-2 cursor-pointer transition-colors ${
+              className={cn(
+                "cursor-pointer rounded-2xl border-2 p-4 transition-colors",
                 videoSource === option.value
-                  ? "border-deca-green bg-deca-green-light"
-                  : "border-slate-200 hover:border-slate-300 bg-white"
-              }`}
+                  ? "border-primary bg-primary/10"
+                  : "border-border bg-card hover:border-border",
+              )}
             >
               <input
                 type="radio"
@@ -153,18 +193,18 @@ export function SubmitRoleplayForm() {
                 onChange={() => setVideoSource(option.value)}
                 className="sr-only"
               />
-              <h3 className="font-medium text-ink text-sm">{option.title}</h3>
-              <p className="text-xs text-muted mt-1">{option.description}</p>
+              <h3 className="text-sm font-medium text-foreground">{option.title}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{option.description}</p>
             </label>
           ))}
         </div>
       </div>
 
       <div>
-        <label htmlFor="videoUrl" className="block text-sm font-medium text-ink mb-2">
+        <Label htmlFor="videoUrl">
           {videoSource === "youtube" ? "YouTube URL" : "Google Drive URL"}
-        </label>
-        <input
+        </Label>
+        <Input
           id="videoUrl"
           type="url"
           value={videoUrl}
@@ -174,23 +214,19 @@ export function SubmitRoleplayForm() {
               ? "https://youtube.com/watch?v=..."
               : "https://drive.google.com/file/d/..."
           }
-          className="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-deca-green focus:border-transparent bg-white"
+          className="mt-2"
         />
       </div>
 
-      {error && (
-        <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-xl">
+      {error ? (
+        <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </div>
-      )}
+      ) : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full bg-deca-green text-white font-medium py-2.5 rounded-2xl hover:bg-deca-green-dark transition-colors disabled:opacity-50"
-      >
+      <Button type="submit" disabled={isPending} size="lg" className="w-full">
         {isPending ? "Submitting..." : "Submit roleplay"}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -5,8 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { deleteSubmission } from "@/app/roleplay/actions";
 import { SubmissionStatusBadge } from "@/components/roleplay/SubmissionStatusBadge";
-import { getScenario } from "@/lib/roleplay/scenarios";
+import { submissionScenarioTitle } from "@/lib/roleplay/scenario-display";
 import type { Submission } from "@/lib/roleplay/types";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export function OfficerQueueList({
   submissions,
@@ -20,8 +23,7 @@ export function OfficerQueueList({
   const completed = submissions.filter((submission) => submission.status === "reviewed");
 
   const handleDelete = (submission: Submission) => {
-    const scenario = getScenario(submission.scenario_key);
-    const label = scenario?.title ?? submission.scenario_key;
+    const label = submissionScenarioTitle(submission);
     if (
       !window.confirm(
         `Delete submission "${label}" (Attempt #${submission.attempt_number})? This cannot be undone.`,
@@ -38,9 +40,9 @@ export function OfficerQueueList({
 
   if (submissions.length === 0) {
     return (
-      <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-soft">
-        <p className="text-muted">No submissions to grade yet.</p>
-      </div>
+      <Card className="p-12 text-center">
+        <p className="text-muted-foreground">No submissions to grade yet.</p>
+      </Card>
     );
   }
 
@@ -48,7 +50,7 @@ export function OfficerQueueList({
     <div className="space-y-8">
       {pending.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Pending ({pending.length})
           </h2>
           <div className="space-y-2">
@@ -66,7 +68,7 @@ export function OfficerQueueList({
 
       {completed.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Completed ({completed.length})
           </h2>
           <div className="space-y-2">
@@ -94,40 +96,40 @@ function SubmissionRow({
   onDelete: () => void;
   disabled: boolean;
 }) {
-  const scenario = getScenario(submission.scenario_key);
-
   return (
-    <div className="flex items-center gap-2 bg-white rounded-2xl border border-slate-200 hover:border-deca-green/40 hover:shadow-soft transition-all">
+    <Card className="flex items-center gap-2 p-0 transition-all hover:shadow-border-hover">
       <Link
         href={`/admin/grading/${submission.id}`}
-        className="flex flex-1 items-center justify-between p-4 min-w-0"
+        className="flex min-w-0 flex-1 items-center justify-between p-4"
       >
         <div className="min-w-0">
-          <h3 className="font-medium text-ink truncate">
-            {scenario?.title ?? submission.scenario_key}
+          <h3 className="truncate font-medium text-foreground">
+            {submissionScenarioTitle(submission)}
           </h3>
-          <p className="text-sm text-muted">
-            {submission.student_name ?? "Student"} · {scenario?.event ?? "Roleplay"} ·
+          <p className="text-sm text-muted-foreground">
+            {submission.student_name ?? "Student"} · {submission.event_name ?? "Roleplay"} ·
             Attempt #{submission.attempt_number} ·{" "}
             {new Date(submission.submitted_at).toLocaleDateString()}
           </p>
         </div>
-        <div className="flex items-center gap-3 shrink-0 ml-4">
+        <div className="ml-4 flex shrink-0 items-center gap-3">
           <SubmissionStatusBadge status={submission.status} />
-          <span className="text-deca-green text-sm font-medium">
+          <span className="text-sm font-medium text-primary">
             {submission.status === "reviewed" ? "View" : "Grade"} →
           </span>
         </div>
       </Link>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={onDelete}
         disabled={disabled}
-        className="shrink-0 mr-3 p-2 text-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
         title="Delete submission"
+        className={cn("mr-3 shrink-0 text-muted-foreground hover:text-destructive")}
       >
         ✕
-      </button>
-    </div>
+      </Button>
+    </Card>
   );
 }

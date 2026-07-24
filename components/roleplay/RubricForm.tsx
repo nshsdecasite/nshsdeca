@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { RubricScores } from "@/lib/roleplay/types";
 import { getMaxScore, getTotalScore } from "@/lib/roleplay/types";
 import { MAX_CENTURY_SCORE, MAX_PI_SCORE } from "@/lib/roleplay/scenarios";
+import { Input } from "@/components/ui/input";
 
 interface RubricFormProps {
   rubric: RubricScores;
@@ -43,7 +44,7 @@ export default function RubricForm({
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-slate-800">Rubric Scoring</h3>
+      <h3 className="font-semibold text-foreground">Rubric Scoring</h3>
 
       <div className="space-y-3">
         {piLabels.map((label, i) => {
@@ -51,13 +52,13 @@ export default function RubricForm({
           const score = rubric.piScores[key] ?? 0;
           const feedback = piFeedback?.[key] ?? '';
           return (
-            <div key={key} className="bg-slate-50 rounded-lg p-3 space-y-2">
+            <div key={key} className="space-y-2 rounded-2xl bg-muted p-3">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <span className="text-xs font-medium text-indigo-600">
+                <div className="min-w-0 flex-1">
+                  <span className="text-xs font-medium text-primary">
                     PI {i + 1}
                   </span>
-                  <p className="text-sm text-slate-700 mt-0.5">{label}</p>
+                  <p className="mt-0.5 text-sm text-foreground">{label}</p>
                 </div>
                 <ScoreInput
                   value={score}
@@ -69,7 +70,7 @@ export default function RubricForm({
               {(onPiFeedbackChange || (readOnly && feedback)) && (
                 readOnly ? (
                   feedback && (
-                    <p className="text-sm text-slate-600 bg-white rounded-md px-3 py-2 border border-slate-100">
+                    <p className="rounded-xl border border-border/60 bg-card px-3 py-2 text-sm text-muted-foreground">
                       {feedback}
                     </p>
                   )
@@ -79,7 +80,7 @@ export default function RubricForm({
                     onChange={(e) => onPiFeedbackChange?.(key, e.target.value)}
                     placeholder={`Feedback for PI ${i + 1}...`}
                     rows={2}
-                    className="w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white"
+                    className="w-full resize-none rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground shadow-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   />
                 )
               )}
@@ -88,13 +89,13 @@ export default function RubricForm({
         })}
       </div>
 
-      <div className="bg-indigo-50 rounded-lg p-3 space-y-2">
+      <div className="space-y-2 rounded-2xl bg-primary/10 p-3">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <span className="text-xs font-medium text-indigo-600">
+            <span className="text-xs font-medium text-primary">
               21st Century Skills
             </span>
-            <p className="text-sm text-slate-700 mt-0.5">
+            <p className="mt-0.5 text-sm text-foreground">
               Communication, collaboration, critical thinking, creativity
             </p>
           </div>
@@ -108,7 +109,7 @@ export default function RubricForm({
         {(onCenturyFeedbackChange || (readOnly && centuryFeedback)) && (
           readOnly ? (
             centuryFeedback && (
-              <p className="text-sm text-slate-600 bg-white rounded-md px-3 py-2 border border-indigo-100">
+              <p className="rounded-xl border border-primary/20 bg-card px-3 py-2 text-sm text-muted-foreground">
                 {centuryFeedback}
               </p>
             )
@@ -118,16 +119,16 @@ export default function RubricForm({
               onChange={(e) => onCenturyFeedbackChange?.(e.target.value)}
               placeholder="Feedback for 21st Century Skills..."
               rows={2}
-              className="w-full border border-indigo-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white"
+              className="w-full resize-none rounded-xl border border-primary/20 bg-card px-3 py-2 text-sm text-foreground shadow-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           )
         )}
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-slate-200">
-        <span className="font-semibold text-slate-800">Total Score</span>
-        <span className="text-2xl font-bold text-indigo-600">
-          {total} <span className="text-base font-normal text-slate-500">/ {max}</span>
+      <div className="flex items-center justify-between border-t border-border pt-3">
+        <span className="font-semibold text-foreground">Total Score</span>
+        <span className="text-2xl font-bold text-primary">
+          {total} <span className="text-base font-normal text-muted-foreground">/ {max}</span>
         </span>
       </div>
     </div>
@@ -150,7 +151,7 @@ function ScoreInput({
 
   if (readOnly) {
     return (
-      <span className="text-lg font-semibold text-slate-800 w-16 text-right">
+      <span className="w-16 text-right text-lg font-semibold text-foreground">
         {value}
       </span>
     );
@@ -158,7 +159,7 @@ function ScoreInput({
 
   return (
     <div className="flex items-center gap-1">
-      <input
+      <Input
         type="number"
         min={0}
         max={max}
@@ -171,9 +172,9 @@ function ScoreInput({
           }
         }}
         onBlur={() => setDraft(null)}
-        className="w-14 text-center border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="h-9 w-14 min-h-0 px-2 py-1 text-center text-sm"
       />
-      <span className="text-xs text-slate-500">/ {max}</span>
+      <span className="text-xs text-muted-foreground">/ {max}</span>
     </div>
   );
 }

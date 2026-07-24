@@ -2,31 +2,39 @@ import Link from "next/link";
 import { platformSections } from "@/data/platform-features";
 import { getUserRole } from "@/lib/auth/roles";
 import { createClient } from "@/lib/supabase/server";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 function FeatureBadge({ badge }: { badge?: "coming-soon" | "officer" }) {
   if (!badge) {
-    return (
-      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted">
-        Coming soon
-      </span>
-    );
+    return <Badge variant="muted">Coming soon</Badge>;
   }
 
   if (badge === "officer") {
-    return (
-      <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
-        Officers
-      </span>
-    );
+    return <Badge variant="warning">Officers</Badge>;
   }
 
   return null;
 }
 
 const LIVE_ROUTES = new Set([
+  "/tests",
+  "/tests/full",
+  "/tests/custom",
+  "/tests/pi-targeted",
+  "/tests/history",
+  "/roleplays",
   "/roleplays/submit",
   "/submissions",
   "/admin/grading",
+  "/admin",
+  "/study",
+  "/study/pis",
+  "/study/flashcards",
+  "/notes",
+  "/dashboard",
+  "/leaderboard",
+  "/profile",
 ]);
 
 export async function PlatformFeatureGrid() {
@@ -41,8 +49,8 @@ export async function PlatformFeatureGrid() {
       {platformSections.map((section) => (
         <section key={section.title}>
           <div className="mb-6 max-w-2xl">
-            <h2 className="text-2xl font-bold text-ink">{section.title}</h2>
-            <p className="mt-2 text-sm text-muted">{section.description}</p>
+            <h2 className="text-2xl font-bold text-foreground">{section.title}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{section.description}</p>
           </div>
 
           <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -55,29 +63,29 @@ export async function PlatformFeatureGrid() {
 
               return (
                 <li key={feature.href}>
-                  <div className="flex h-full flex-col rounded-3xl bg-white p-5 shadow-soft">
+                  <Card className="flex h-full flex-col p-5">
                     <div className="mb-3 flex items-start justify-between gap-3">
-                      <h3 className="text-base font-semibold text-ink">
+                      <h3 className="text-base font-semibold text-foreground">
                         {feature.title}
                       </h3>
                       <FeatureBadge badge={isLive ? undefined : feature.badge} />
                     </div>
-                    <p className="flex-1 text-sm leading-relaxed text-muted">
+                    <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
                       {feature.description}
                     </p>
                     {canAccess ? (
                       <Link
                         href={feature.href}
-                        className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-deca-green hover:text-deca-green-dark"
+                        className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-primary hover:text-primary"
                       >
                         Open →
                       </Link>
                     ) : (
-                      <span className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-deca-green/50">
+                      <span className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-primary/50">
                         {feature.href}
                       </span>
                     )}
-                  </div>
+                  </Card>
                 </li>
               );
             })}
@@ -96,7 +104,8 @@ export async function DashboardQuickLinks() {
   const role = user ? await getUserRole(user.id) : null;
 
   const quickLinks = [
-    { label: "Start a test", href: "/tests", live: false },
+    { label: "Start a test", href: "/tests", live: true },
+    { label: "Browse roleplays", href: "/roleplays", live: true },
     { label: "Submit roleplay", href: "/roleplays/submit", live: role === "student" },
     { label: "My submissions", href: "/submissions", live: true },
     {
@@ -104,8 +113,11 @@ export async function DashboardQuickLinks() {
       href: "/admin/grading",
       live: role === "officer" || role === "advisor",
     },
-    { label: "Study PIs", href: "/study/pis", live: false },
-    { label: "View leaderboard", href: "/leaderboard", live: false },
+    { label: "Study PIs", href: "/study/pis", live: true },
+    { label: "Flashcards", href: "/study/flashcards", live: true },
+    { label: "My notes", href: "/notes", live: true },
+    { label: "View leaderboard", href: "/leaderboard", live: true },
+    { label: "Profile", href: "/profile", live: true },
   ];
 
   return (
@@ -115,14 +127,14 @@ export async function DashboardQuickLinks() {
           <Link
             key={link.href}
             href={link.href}
-            className="inline-flex min-h-10 items-center rounded-2xl bg-white px-4 text-sm font-medium text-ink shadow-soft transition-colors hover:text-deca-green"
+            className="inline-flex min-h-10 items-center rounded-2xl bg-card px-4 text-sm font-medium text-foreground shadow-border transition-colors hover:text-primary"
           >
             {link.label}
           </Link>
         ) : (
           <span
             key={link.href}
-            className="inline-flex min-h-10 cursor-not-allowed items-center rounded-2xl bg-white/70 px-4 text-sm font-medium text-green-100/80 shadow-soft"
+            className="inline-flex min-h-10 cursor-not-allowed items-center rounded-2xl bg-card/70 px-4 text-sm font-medium text-muted-foreground/80 shadow-border"
             title="Coming soon"
           >
             {link.label}

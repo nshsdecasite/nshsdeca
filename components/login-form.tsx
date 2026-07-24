@@ -5,6 +5,8 @@ import { useFormState, useFormStatus } from "react-dom";
 import { signIn, type AuthActionState } from "@/app/auth/actions";
 import { Logo } from "@/components/logo";
 import { TextField } from "@/components/text-field";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const initialState: AuthActionState = {};
 
@@ -12,13 +14,9 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-2 inline-flex min-h-11 items-center justify-center rounded-2xl bg-deca-green px-5 text-sm font-semibold text-white shadow-soft transition-[background-color,transform,opacity] duration-150 hover:bg-deca-green-dark active:scale-[0.96] disabled:opacity-60"
-    >
+    <Button type="submit" disabled={pending} className="mt-2 w-full">
       {pending ? "Signing in…" : "Sign in"}
-    </button>
+    </Button>
   );
 }
 
@@ -27,53 +25,52 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-lg items-center px-4 py-12 sm:px-6">
-      <div className="w-full rounded-3xl bg-white p-8 shadow-soft-lg">
-        <div className="mb-6 flex justify-center">
-          <Logo className="h-12 w-auto" />
-        </div>
-        <h1 className="text-2xl font-bold text-ink">Sign in</h1>
-        <p className="mt-3 text-sm text-muted">
-          Access practice tests, roleplays, study tools, and your progress
-          dashboard.
-        </p>
+      <Card className="w-full shadow-border-hover">
+        <CardHeader className="text-center">
+          <div className="mb-2 flex justify-center">
+            <Logo className="h-12 w-auto" />
+          </div>
+          <CardTitle className="text-2xl">Sign in</CardTitle>
+          <CardDescription>
+            Access practice tests, roleplays, study tools, and your progress dashboard.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="flex flex-col gap-5">
+            <input type="hidden" name="next" value={nextPath ?? "/dashboard"} />
 
-        <form action={formAction} className="mt-8 flex flex-col gap-5">
-          <input type="hidden" name="next" value={nextPath ?? "/dashboard"} />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+            />
 
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-          />
+            {state.error ? (
+              <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                {state.error}
+              </p>
+            ) : null}
 
-          {state.error ? (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-              {state.error}
-            </p>
-          ) : null}
+            <SubmitButton />
+          </form>
 
-          <SubmitButton />
-        </form>
-
-        <p className="mt-6 text-center text-sm text-muted">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-deca-green transition-colors duration-150 hover:text-deca-green-dark"
-          >
-            Create one
-          </Link>
-        </p>
-      </div>
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="font-medium text-primary hover:text-primary">
+              Create one
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

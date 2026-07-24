@@ -16,6 +16,9 @@ import {
   type Submission,
   type TimestampedComment,
 } from "@/lib/roleplay/types";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export function StudentFeedbackView({
   submission,
@@ -37,19 +40,19 @@ export function StudentFeedbackView({
         <div>
           <Link
             href="/submissions"
-            className="text-sm text-deca-green hover:underline"
+            className="text-sm text-primary hover:underline"
           >
             ← Back to submissions
           </Link>
-          <h1 className="text-2xl font-bold text-ink mt-2">{scenario.title}</h1>
-          <p className="text-muted">
+          <h1 className="mt-2 text-2xl font-bold text-foreground">{scenario.title}</h1>
+          <p className="text-muted-foreground">
             {scenario.event} · Attempt #{submission.attempt_number}
           </p>
         </div>
         <SubmissionStatusBadge status={submission.status} />
       </div>
 
-      <div className="grid lg:grid-cols-5 gap-6">
+      <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <VideoPlayer
             videoUrl={submission.video_url}
@@ -64,30 +67,30 @@ export function StudentFeedbackView({
           />
         </div>
 
-        <div className="lg:col-span-2 space-y-4">
+        <div className="space-y-4 lg:col-span-2">
           {!isReviewed ? (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 text-center shadow-soft">
-              <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Card className="p-6 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <span className="text-2xl">⏳</span>
               </div>
-              <h3 className="font-medium text-ink">
+              <h3 className="font-medium text-foreground">
                 {submission.status === "submitted"
                   ? "Awaiting review"
                   : "Under review"}
               </h3>
-              <p className="text-sm text-muted mt-1">
+              <p className="mt-1 text-sm text-muted-foreground">
                 An officer will review your submission and provide feedback
                 soon.
               </p>
-            </div>
+            </Card>
           ) : (
             <>
-              <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-soft">
-                <div className="text-center mb-4">
-                  <span className="text-4xl font-bold text-deca-green">
+              <Card className="p-4">
+                <div className="mb-4 text-center">
+                  <span className="text-4xl font-bold text-primary">
                     {getTotalScore(grading.rubric)}
                   </span>
-                  <span className="text-lg text-muted">
+                  <span className="text-lg text-muted-foreground">
                     {" "}
                     / {getMaxScore(grading.rubric)}
                   </span>
@@ -100,52 +103,53 @@ export function StudentFeedbackView({
                   centuryFeedback={grading.centuryFeedback}
                   readOnly
                 />
-              </div>
+              </Card>
 
               {(grading.comments?.length ?? 0) > 0 && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-soft">
-                  <h3 className="font-semibold text-ink mb-1">
+                <Card className="p-4">
+                  <h3 className="mb-1 font-semibold text-foreground">
                     Video timestamp feedback
                   </h3>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                  <div className="max-h-48 space-y-2 overflow-y-auto">
                     {grading.comments.map((comment) => (
                       <button
                         key={comment.id}
                         type="button"
                         onClick={() => setActiveComment(comment)}
-                        className={`w-full text-left p-2 rounded-lg transition-colors ${
+                        className={cn(
+                          "w-full rounded-lg p-2 text-left transition-colors",
                           activeComment?.id === comment.id
-                            ? "bg-amber-50 border border-amber-200"
-                            : "hover:bg-slate-50 border border-transparent"
-                        }`}
+                            ? "border border-amber-200 bg-amber-50"
+                            : "border border-transparent hover:bg-muted",
+                        )}
                       >
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-xs font-mono text-deca-green">
+                        <div className="mb-0.5 flex items-center gap-2">
+                          <span className="font-mono text-xs text-primary">
                             {formatTime(comment.timestamp)}
                           </span>
-                          <span className="text-xs bg-slate-100 text-muted px-1.5 py-0.5 rounded">
+                          <Badge variant="muted" className="normal-case">
                             {COMMENT_TAG_LABELS[comment.tag]}
-                          </span>
+                          </Badge>
                         </div>
-                        <p className="text-sm text-ink">{comment.text}</p>
+                        <p className="text-sm text-foreground">{comment.text}</p>
                       </button>
                     ))}
                   </div>
-                </div>
+                </Card>
               )}
 
               {grading.overallFeedback && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-soft">
-                  <h3 className="font-semibold text-ink mb-2">
+                <Card className="p-4">
+                  <h3 className="mb-2 font-semibold text-foreground">
                     Overall feedback
                   </h3>
-                  <p className="text-sm text-muted whitespace-pre-wrap">
+                  <p className="whitespace-pre-wrap text-sm text-muted-foreground">
                     {grading.overallFeedback}
                   </p>
-                  <p className="text-xs text-muted mt-2">
+                  <p className="mt-2 text-xs text-muted-foreground">
                     — {grading.officerName}
                   </p>
-                </div>
+                </Card>
               )}
             </>
           )}

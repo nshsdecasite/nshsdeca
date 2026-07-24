@@ -17,6 +17,12 @@ export interface Scenario {
   description: string;
   event: string;
   pis: string[];
+  performanceIndicators?: {
+    pi_id: string | null;
+    pi_code: string | null;
+    indicator_text: string;
+    display_order: number;
+  }[];
 }
 
 export interface TimestampedComment {
@@ -47,7 +53,11 @@ export interface Grading {
 export interface Submission {
   id: string;
   user_id: string;
+  scenario_id?: string | null;
   scenario_key: string;
+  scenario_title?: string | null;
+  event_code?: string | null;
+  event_name?: string | null;
   video_url: string;
   video_source: VideoSource;
   attempt_number: number;

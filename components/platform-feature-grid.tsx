@@ -21,6 +21,8 @@ function FeatureBadge({ badge }: { badge?: "coming-soon" | "officer" }) {
   return null;
 }
 
+const liveStudyHrefs = new Set(["/study/visuals", "/study/vocab"]);
+
 export function PlatformFeatureGrid() {
   return (
     <div className="flex flex-col gap-14">
@@ -33,7 +35,7 @@ export function PlatformFeatureGrid() {
 
           <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {section.features.map((feature) => {
-              const isLive = feature.href === "/study/visuals";
+              const isLive = liveStudyHrefs.has(feature.href);
 
               return (
                 <li key={feature.href}>
@@ -54,7 +56,7 @@ export function PlatformFeatureGrid() {
                         {feature.description}
                       </p>
                       <span className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-deca-green">
-                        Open library →
+                        Open →
                       </span>
                     </Link>
                   ) : (
@@ -83,19 +85,22 @@ export function PlatformFeatureGrid() {
   );
 }
 
+const liveQuickLinks = new Set(["/study/visuals", "/study/vocab"]);
+
 export function DashboardQuickLinks() {
   const quickLinks = [
     { label: "Start a test", href: "/tests" },
     { label: "Browse roleplays", href: "/roleplays" },
     { label: "Study PIs", href: "/study/pis" },
-    { label: "Visual library", href: "/study/visuals", active: true },
+    { label: "Vocab flashcards", href: "/study/vocab" },
+    { label: "Visual library", href: "/study/visuals" },
     { label: "View leaderboard", href: "/leaderboard" },
   ];
 
   return (
     <div className="flex flex-wrap gap-3">
       {quickLinks.map((link) =>
-        link.active ? (
+        liveQuickLinks.has(link.href) ? (
           <Link
             key={link.href}
             href={link.href}

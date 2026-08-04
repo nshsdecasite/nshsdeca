@@ -1,0 +1,43 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="28" font-weight="700" text-anchor="middle" fill="#1a1a2e">SWOT Analysis</text>
+
+  <!-- Quadrant backgrounds -->
+  <rect x="60" y="80" width="340" height="220" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="400" y="80" width="340" height="220" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <rect x="60" y="300" width="340" height="220" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <rect x="400" y="300" width="340" height="220" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+
+  <!-- Axis labels -->
+  <text x="400" y="70" font-size="14" font-weight="600" text-anchor="middle" fill="#555">INTERNAL</text>
+  <text x="400" y="527" font-size="0" text-anchor="middle"></text>
+  <text x="30" y="200" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 200)">HELPFUL</text>
+  <text x="30" y="420" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 420)">HARMFUL</text>
+
+  <!-- Quadrant titles -->
+  <text x="230" y="115" font-size="20" font-weight="700" text-anchor="middle" fill="#2e7d32">STRENGTHS</text>
+  <text x="570" y="115" font-size="20" font-weight="700" text-anchor="middle" fill="#c62828">WEAKNESSES</text>
+  <text x="230" y="335" font-size="20" font-weight="700" text-anchor="middle" fill="#1565c0">OPPORTUNITIES</text>
+  <text x="570" y="335" font-size="20" font-weight="700" text-anchor="middle" fill="#e65100">THREATS</text>
+
+  <!-- Bullet placeholders -->
+  <g font-size="13" fill="#333">
+    <text x="80" y="150">• Internal advantages</text>
+    <text x="80" y="175">• Core competencies</text>
+    <text x="80" y="200">• Resources you control</text>
+
+    <text x="420" y="150">• Internal limitations</text>
+    <text x="420" y="175">• Resource gaps</text>
+    <text x="420" y="200">• Areas needing improvement</text>
+
+    <text x="80" y="370">• External possibilities</text>
+    <text x="80" y="395">• Market trends to leverage</text>
+    <text x="80" y="420">• Unmet customer needs</text>
+
+    <text x="420" y="370">• External risks</text>
+    <text x="420" y="395">• Competitor actions</text>
+    <text x="420" y="420">• Market/regulatory shifts</text>
+  </g>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A framework for evaluating a business's internal strengths/weaknesses and external opportunities/threats.</text>
+</svg>

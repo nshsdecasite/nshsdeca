@@ -1,0 +1,35 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">PDCA: Continuous Improvement</text>
+
+  <circle cx="400" cy="300" r="180" fill="none" stroke="#ddd" stroke-width="2" stroke-dasharray="6,6"/>
+
+  <g font-size="18" font-weight="700" fill="#fff" text-anchor="middle">
+    <circle cx="400" cy="130" r="70" fill="#0072ce"/>
+    <text x="400" y="137">PLAN</text>
+
+    <circle cx="570" cy="300" r="70" fill="#2e7d32"/>
+    <text x="570" y="307">DO</text>
+
+    <circle cx="400" cy="470" r="70" fill="#e65100"/>
+    <text x="400" y="477">CHECK</text>
+
+    <circle cx="230" cy="300" r="70" fill="#c62828"/>
+    <text x="230" y="307">ACT</text>
+  </g>
+
+  <g stroke="#888" stroke-width="2" fill="none" marker-end="url(#arrow3)">
+    <path d="M 460 175 Q 520 200 545 235"/>
+    <path d="M 545 365 Q 500 420 460 440"/>
+    <path d="M 340 440 Q 300 420 255 365"/>
+    <path d="M 255 235 Q 300 200 340 175"/>
+  </g>
+
+  <defs>
+    <marker id="arrow3" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A repeating four-stage model for continuous process improvement.</text>
+</svg>

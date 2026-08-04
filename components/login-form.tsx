@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { signIn, type AuthActionState } from "@/app/auth/actions";
 import { Logo } from "@/components/logo";
 import { TextField } from "@/components/text-field";
@@ -23,7 +24,7 @@ function SubmitButton() {
 }
 
 export function LoginForm({ nextPath }: { nextPath?: string }) {
-  const [state, formAction] = useFormState(signIn, initialState);
+  const [state, formAction] = useActionState(signIn, initialState);
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-lg items-center px-4 py-12 sm:px-6">

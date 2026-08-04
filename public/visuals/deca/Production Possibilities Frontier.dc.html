@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-a3773b0a-0810-4151-a7bc-3eb87eb43bb3/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:var(--color-bg)}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;box-sizing:border-box">
+<div class="card blueprint" style="width:640px;position:relative">
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+<div class="card-kicker">Economics</div>
+<h3 class="card-title">Production Possibilities Frontier</h3>
+<div class="card-body">
+<svg viewBox="0 0 600 380" width="100%" style="overflow:visible">
+<line x1="60" y1="20" x2="60" y2="340" stroke="var(--color-neutral-700)" stroke-width="1.5"></line>
+<line x1="60" y1="340" x2="560" y2="340" stroke="var(--color-neutral-700)" stroke-width="1.5"></line>
+<path d="M 60 60 Q 100 260 500 340" fill="none" stroke="var(--color-accent-600)" stroke-width="2.5"></path>
+<circle cx="280" cy="180" r="5" fill="var(--color-accent-700)"></circle>
+<text x="292" y="176" font-family="var(--font-heading)" font-size="12" font-weight="600" fill="var(--color-text)">Efficient (on curve)</text>
+<circle cx="240" cy="260" r="5" fill="var(--color-neutral-700)"></circle>
+<text x="252" y="264" font-family="var(--font-heading)" font-size="12" font-weight="600" fill="var(--color-text)">Inefficient (inside)</text>
+<circle cx="360" cy="130" r="5" fill="var(--color-neutral-500)"></circle>
+<text x="372" y="126" font-family="var(--font-heading)" font-size="12" font-weight="600" fill="var(--color-text)">Unattainable (outside)</text>
+<text x="315" y="368" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--color-text)">Good B</text>
+<text x="-180" y="30" transform="rotate(-90)" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--color-text)">Good A</text>
+</svg>
+</div>
+</div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">The Accounting Equation</text>
+
+  <rect x="60" y="100" width="220" height="100" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="170" y="155" font-size="22" font-weight="700" text-anchor="middle" fill="#1565c0">ASSETS</text>
+  <text x="170" y="178" font-size="12" text-anchor="middle" fill="#333">what a business owns</text>
+
+  <text x="310" y="160" font-size="30" font-weight="700" text-anchor="middle" fill="#333">=</text>
+
+  <rect x="340" y="100" width="220" height="100" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="450" y="155" font-size="22" font-weight="700" text-anchor="middle" fill="#c62828">LIABILITIES</text>
+  <text x="450" y="178" font-size="12" text-anchor="middle" fill="#333">what a business owes</text>
+
+  <text x="590" y="160" font-size="30" font-weight="700" text-anchor="middle" fill="#333">+</text>
+
+  <rect x="620" y="100" width="140" height="100" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="690" y="150" font-size="16" font-weight="700" text-anchor="middle" fill="#2e7d32">OWNER'S</text>
+  <text x="690" y="170" font-size="16" font-weight="700" text-anchor="middle" fill="#2e7d32">EQUITY</text>
+
+  <!-- balance beam illustration -->
+  <line x1="170" y1="260" x2="690" y2="260" stroke="#888" stroke-width="4"/>
+  <polygon points="430,260 410,320 450,320" fill="#888"/>
+  <line x1="170" y1="260" x2="170" y2="330" stroke="#1565c0" stroke-width="2"/>
+  <ellipse cx="170" cy="340" rx="70" ry="14" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="170" y="345" font-size="12" font-weight="700" text-anchor="middle" fill="#1565c0">Assets</text>
+
+  <line x1="690" y1="260" x2="690" y2="330" stroke="#c62828" stroke-width="2"/>
+  <ellipse cx="690" cy="340" rx="70" ry="14" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="690" y="345" font-size="12" font-weight="700" text-anchor="middle" fill="#c62828">Liabilities + Equity</text>
+
+  <text x="400" y="450" font-size="16" text-anchor="middle" fill="#333">A balance sheet must always balance: what a business owns equals</text>
+  <text x="400" y="475" font-size="16" text-anchor="middle" fill="#333">what it owes plus what the owner has invested.</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">The fundamental equation underlying every balance sheet.</text>
+</svg>

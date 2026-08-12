@@ -1,0 +1,43 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">The Marketing Mix: 4 Ps</text>
+
+  <circle cx="400" cy="300" r="70" fill="#0072ce"/>
+  <text x="400" y="295" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">MARKETING</text>
+  <text x="400" y="315" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">MIX</text>
+
+  <!-- Product -->
+  <rect x="90" y="90" width="230" height="130" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="205" y="120" font-size="18" font-weight="700" text-anchor="middle" fill="#2e7d32">PRODUCT</text>
+  <text x="105" y="145" font-size="12" fill="#333">• Features &amp; quality</text>
+  <text x="105" y="165" font-size="12" fill="#333">• Branding &amp; packaging</text>
+  <text x="105" y="185" font-size="12" fill="#333">• Variety &amp; design</text>
+
+  <!-- Price -->
+  <rect x="480" y="90" width="230" height="130" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="595" y="120" font-size="18" font-weight="700" text-anchor="middle" fill="#c62828">PRICE</text>
+  <text x="495" y="145" font-size="12" fill="#333">• List price &amp; discounts</text>
+  <text x="495" y="165" font-size="12" fill="#333">• Payment terms</text>
+  <text x="495" y="185" font-size="12" fill="#333">• Perceived value</text>
+
+  <!-- Place -->
+  <rect x="90" y="380" width="230" height="130" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="205" y="410" font-size="18" font-weight="700" text-anchor="middle" fill="#1565c0">PLACE</text>
+  <text x="105" y="435" font-size="12" fill="#333">• Distribution channels</text>
+  <text x="105" y="455" font-size="12" fill="#333">• Inventory &amp; logistics</text>
+  <text x="105" y="475" font-size="12" fill="#333">• Store/online locations</text>
+
+  <!-- Promotion -->
+  <rect x="480" y="380" width="230" height="130" rx="8" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <text x="595" y="410" font-size="18" font-weight="700" text-anchor="middle" fill="#e65100">PROMOTION</text>
+  <text x="495" y="435" font-size="12" fill="#333">• Advertising &amp; PR</text>
+  <text x="495" y="455" font-size="12" fill="#333">• Sales promotion</text>
+  <text x="495" y="475" font-size="12" fill="#333">• Personal selling</text>
+
+  <line x1="330" y1="200" x2="360" y2="260" stroke="#888" stroke-width="2"/>
+  <line x1="470" y1="200" x2="440" y2="260" stroke="#888" stroke-width="2"/>
+  <line x1="330" y1="400" x2="360" y2="340" stroke="#888" stroke-width="2"/>
+  <line x1="470" y1="400" x2="440" y2="340" stroke="#888" stroke-width="2"/>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">The four controllable variables a business blends to market a product effectively.</text>
+</svg>

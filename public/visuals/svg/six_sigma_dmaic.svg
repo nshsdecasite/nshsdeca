@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">Six Sigma: DMAIC Cycle</text>
+
+  <g font-size="16" font-weight="700" fill="#fff" text-anchor="middle">
+    <circle cx="400" cy="120" r="65" fill="#0072ce"/>
+    <text x="400" y="126">DEFINE</text>
+
+    <circle cx="620" cy="230" r="65" fill="#2e7d32"/>
+    <text x="620" y="236">MEASURE</text>
+
+    <circle cx="540" cy="450" r="65" fill="#e65100"/>
+    <text x="540" y="456">ANALYZE</text>
+
+    <circle cx="260" cy="450" r="65" fill="#c62828"/>
+    <text x="260" y="456">IMPROVE</text>
+
+    <circle cx="180" cy="230" r="65" fill="#6a1b9a"/>
+    <text x="180" y="236">CONTROL</text>
+  </g>
+
+  <!-- connecting arrows in a cycle -->
+  <g stroke="#888" stroke-width="2" fill="none" marker-end="url(#arrow2)">
+    <path d="M 452 155 Q 550 175 575 190"/>
+    <path d="M 605 292 Q 590 370 580 400"/>
+    <path d="M 490 465 Q 400 480 310 465"/>
+    <path d="M 220 400 Q 210 370 195 292"/>
+    <path d="M 225 190 Q 250 175 348 155"/>
+  </g>
+
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A five-phase, continuous cycle for improving quality and reducing inefficiencies in a process.</text>
+</svg>

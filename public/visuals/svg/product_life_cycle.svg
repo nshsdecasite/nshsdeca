@@ -1,0 +1,24 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">Product Life Cycle</text>
+
+  <line x1="80" y1="500" x2="740" y2="500" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="500" x2="80" y2="80" stroke="#333" stroke-width="2"/>
+  <text x="410" y="540" font-size="14" fill="#333">Time</text>
+  <text x="40" y="290" font-size="14" fill="#333" transform="rotate(-90 40 290)">Sales / Revenue</text>
+
+  <path d="M 80 495 C 160 490, 220 460, 280 380 C 340 300, 380 180, 460 150 C 540 130, 620 140, 680 220 C 710 260, 725 320, 730 380"
+        fill="none" stroke="#0072ce" stroke-width="3"/>
+
+  <!-- stage dividers -->
+  <line x1="220" y1="90" x2="220" y2="500" stroke="#ddd" stroke-dasharray="4,4"/>
+  <line x1="440" y1="90" x2="440" y2="500" stroke="#ddd" stroke-dasharray="4,4"/>
+  <line x1="620" y1="90" x2="620" y2="500" stroke="#ddd" stroke-dasharray="4,4"/>
+
+  <text x="150" y="475" font-size="14" font-weight="700" text-anchor="middle" fill="#c62828">Introduction</text>
+  <text x="330" y="475" font-size="14" font-weight="700" text-anchor="middle" fill="#e65100">Growth</text>
+  <text x="530" y="115" font-size="14" font-weight="700" text-anchor="middle" fill="#2e7d32">Maturity</text>
+  <text x="680" y="475" font-size="14" font-weight="700" text-anchor="middle" fill="#1565c0">Decline</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">The stages a product's sales typically pass through, from launch to decline.</text>
+</svg>

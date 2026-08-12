@@ -1,0 +1,31 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">The Business Cycle</text>
+
+  <!-- axes -->
+  <line x1="80" y1="500" x2="740" y2="500" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="500" x2="80" y2="80" stroke="#333" stroke-width="2"/>
+  <text x="410" y="540" font-size="14" fill="#333">Time</text>
+  <text x="40" y="290" font-size="14" fill="#333" transform="rotate(-90 40 290)">Real GDP</text>
+
+  <!-- trend line -->
+  <line x1="80" y1="400" x2="740" y2="260" stroke="#aaa" stroke-width="2" stroke-dasharray="6,6"/>
+  <text x="620" y="250" font-size="12" fill="#999">Long-term growth trend</text>
+
+  <!-- cycle curve -->
+  <path d="M 80 420 C 180 300, 260 150, 340 140 C 420 130, 460 250, 540 320 C 620 390, 660 400, 700 300 C 720 250, 735 220, 740 210"
+        fill="none" stroke="#0072ce" stroke-width="3"/>
+
+  <!-- labels -->
+  <text x="330" y="115" font-size="14" font-weight="700" fill="#2e7d32">Peak</text>
+  <circle cx="345" cy="138" r="5" fill="#2e7d32"/>
+
+  <text x="170" y="330" font-size="14" font-weight="700" fill="#1565c0">Expansion</text>
+  <text x="480" y="380" font-size="14" font-weight="700" fill="#c62828">Contraction</text>
+  <text x="590" y="430" font-size="14" font-weight="700" fill="#e65100">Trough</text>
+  <circle cx="612" cy="395" r="5" fill="#e65100"/>
+
+  <text x="660" y="260" font-size="14" font-weight="700" fill="#1565c0">Recovery</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">The recurring pattern of expansion, peak, contraction and trough in overall economic activity.</text>
+</svg>

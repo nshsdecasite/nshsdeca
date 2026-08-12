@@ -1,0 +1,33 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">Ansoff Matrix</text>
+
+  <rect x="60" y="80" width="340" height="220" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="400" y="80" width="340" height="220" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <rect x="60" y="300" width="340" height="220" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <rect x="400" y="300" width="340" height="220" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+  <text x="400" y="70" font-size="14" font-weight="600" text-anchor="middle" fill="#555">PRODUCTS</text>
+  <text x="30" y="200" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 200)">EXISTING MARKETS</text>
+  <text x="30" y="420" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 420)">NEW MARKETS</text>
+  <text x="230" y="65" font-size="12" text-anchor="middle" fill="#777">Existing</text>
+  <text x="570" y="65" font-size="12" text-anchor="middle" fill="#777">New</text>
+
+  <text x="230" y="120" font-size="19" font-weight="700" text-anchor="middle" fill="#2e7d32">MARKET PENETRATION</text>
+  <text x="80" y="150" font-size="12" fill="#333">Sell more of existing</text>
+  <text x="80" y="170" font-size="12" fill="#333">products to existing markets</text>
+
+  <text x="570" y="120" font-size="19" font-weight="700" text-anchor="middle" fill="#e65100">PRODUCT DEVELOPMENT</text>
+  <text x="420" y="150" font-size="12" fill="#333">New products for</text>
+  <text x="420" y="170" font-size="12" fill="#333">existing markets</text>
+
+  <text x="230" y="340" font-size="19" font-weight="700" text-anchor="middle" fill="#1565c0">MARKET DEVELOPMENT</text>
+  <text x="80" y="370" font-size="12" fill="#333">Existing products into</text>
+  <text x="80" y="390" font-size="12" fill="#333">new markets</text>
+
+  <text x="570" y="340" font-size="19" font-weight="700" text-anchor="middle" fill="#c62828">DIVERSIFICATION</text>
+  <text x="420" y="370" font-size="12" fill="#333">New products into</text>
+  <text x="420" y="390" font-size="12" fill="#333">new markets (highest risk)</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A model for evaluating strategies to grow a business through products and markets.</text>
+</svg>

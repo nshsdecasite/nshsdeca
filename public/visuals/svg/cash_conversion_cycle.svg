@@ -1,0 +1,37 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">Cash Conversion Cycle</text>
+
+  <line x1="80" y1="300" x2="720" y2="300" stroke="#ccc" stroke-width="4"/>
+
+  <!-- Purchase inventory -->
+  <circle cx="120" cy="300" r="10" fill="#0072ce"/>
+  <text x="120" y="270" font-size="13" font-weight="700" text-anchor="middle" fill="#0072ce">Buy Inventory</text>
+
+  <!-- DIO segment -->
+  <rect x="120" y="330" width="220" height="36" rx="4" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="230" y="353" font-size="13" font-weight="700" text-anchor="middle" fill="#1565c0">DIO — Days Inventory Outstanding</text>
+
+  <!-- Sell inventory -->
+  <circle cx="340" cy="300" r="10" fill="#2e7d32"/>
+  <text x="340" y="270" font-size="13" font-weight="700" text-anchor="middle" fill="#2e7d32">Sell Inventory</text>
+
+  <!-- DSO segment -->
+  <rect x="340" y="330" width="220" height="36" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="450" y="353" font-size="13" font-weight="700" text-anchor="middle" fill="#2e7d32">DSO — Days Sales Outstanding</text>
+
+  <!-- Collect cash -->
+  <circle cx="560" cy="300" r="10" fill="#e65100"/>
+  <text x="560" y="270" font-size="13" font-weight="700" text-anchor="middle" fill="#e65100">Collect Cash</text>
+
+  <!-- DPO segment (below, offset to show it runs concurrently from purchase) -->
+  <rect x="120" y="420" width="220" height="36" rx="4" fill="#fff3e0" stroke="#e65100"/>
+  <text x="230" y="443" font-size="13" font-weight="700" text-anchor="middle" fill="#e65100">DPO — Days Payable Outstanding</text>
+  <line x1="120" y1="310" x2="120" y2="420" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <text x="230" y="490" font-size="12" text-anchor="middle" fill="#555">(runs from purchase until supplier is paid)</text>
+
+  <text x="400" y="90" font-size="16" font-weight="700" text-anchor="middle" fill="#1a1a2e">CCC = DIO + DSO − DPO</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">The number of days cash is tied up in operations, from paying for inventory to collecting from customers.</text>
+</svg>

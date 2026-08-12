@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">The Communication Process</text>
+
+  <rect x="40" y="150" width="140" height="80" rx="8" fill="#0072ce"/>
+  <text x="110" y="196" font-size="15" font-weight="700" text-anchor="middle" fill="#fff">SENDER</text>
+
+  <line x1="180" y1="190" x2="270" y2="190" stroke="#333" stroke-width="2" marker-end="url(#arrow5)"/>
+  <text x="225" y="175" font-size="12" text-anchor="middle" fill="#555">encodes</text>
+
+  <rect x="270" y="150" width="140" height="80" rx="8" fill="#2e7d32"/>
+  <text x="340" y="186" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">MESSAGE</text>
+  <text x="340" y="204" font-size="11" text-anchor="middle" fill="#fff">(via a channel)</text>
+
+  <line x1="410" y1="190" x2="500" y2="190" stroke="#333" stroke-width="2" marker-end="url(#arrow5)"/>
+  <text x="455" y="175" font-size="12" text-anchor="middle" fill="#555">decodes</text>
+
+  <rect x="500" y="150" width="140" height="80" rx="8" fill="#e65100"/>
+  <text x="570" y="196" font-size="15" font-weight="700" text-anchor="middle" fill="#fff">RECEIVER</text>
+
+  <!-- feedback loop -->
+  <path d="M 570 230 Q 570 320 110 320 Q 110 320 110 230" fill="none" stroke="#c62828" stroke-width="2" marker-end="url(#arrow6)"/>
+  <text x="340" y="345" font-size="13" font-weight="700" text-anchor="middle" fill="#c62828">FEEDBACK</text>
+
+  <!-- noise -->
+  <text x="340" y="120" font-size="13" font-weight="700" text-anchor="middle" fill="#888">↑ NOISE (can distort the message at any stage) ↑</text>
+
+  <defs>
+    <marker id="arrow5" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#333"/>
+    </marker>
+    <marker id="arrow6" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">How a message travels from sender to receiver, and back again through feedback.</text>
+</svg>

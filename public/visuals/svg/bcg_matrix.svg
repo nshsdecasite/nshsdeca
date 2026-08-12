@@ -1,0 +1,33 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">BCG Growth-Share Matrix</text>
+
+  <rect x="60" y="80" width="340" height="220" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <rect x="400" y="80" width="340" height="220" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="60" y="300" width="340" height="220" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <rect x="400" y="300" width="340" height="220" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+
+  <text x="400" y="70" font-size="14" font-weight="600" text-anchor="middle" fill="#555">RELATIVE MARKET SHARE</text>
+  <text x="230" y="65" font-size="12" text-anchor="middle" fill="#777">High</text>
+  <text x="570" y="65" font-size="12" text-anchor="middle" fill="#777">Low</text>
+  <text x="30" y="200" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 200)">HIGH GROWTH</text>
+  <text x="30" y="420" font-size="14" font-weight="600" text-anchor="middle" fill="#555" transform="rotate(-90 30 420)">LOW GROWTH</text>
+
+  <text x="230" y="180" font-size="20" font-weight="700" text-anchor="middle" fill="#e65100">★ STARS</text>
+  <text x="80" y="215" font-size="12" fill="#333">High growth, high share —</text>
+  <text x="80" y="233" font-size="12" fill="#333">invest to maintain lead</text>
+
+  <text x="570" y="180" font-size="20" font-weight="700" text-anchor="middle" fill="#2e7d32">? QUESTION MARKS</text>
+  <text x="420" y="215" font-size="12" fill="#333">High growth, low share —</text>
+  <text x="420" y="233" font-size="12" fill="#333">invest or divest decision</text>
+
+  <text x="230" y="400" font-size="20" font-weight="700" text-anchor="middle" fill="#c62828">$ CASH COWS</text>
+  <text x="80" y="435" font-size="12" fill="#333">Low growth, high share —</text>
+  <text x="80" y="453" font-size="12" fill="#333">generate steady profit</text>
+
+  <text x="570" y="400" font-size="20" font-weight="700" text-anchor="middle" fill="#1565c0">✕ DOGS</text>
+  <text x="420" y="435" font-size="12" fill="#333">Low growth, low share —</text>
+  <text x="420" y="453" font-size="12" fill="#333">consider divesting</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A tool for evaluating a company's product portfolio by growth rate and market share.</text>
+</svg>

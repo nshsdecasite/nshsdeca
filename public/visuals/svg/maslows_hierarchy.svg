@@ -1,0 +1,23 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="45" font-size="26" font-weight="700" text-anchor="middle" fill="#1a1a2e">Maslow's Hierarchy of Needs</text>
+
+  <!-- pyramid built from 5 trapezoids, widest at bottom -->
+  <polygon points="400,90 460,170 340,170" fill="#6a1b9a"/>
+  <text x="400" y="140" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">Self-</text>
+  <text x="400" y="155" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">Actualization</text>
+
+  <polygon points="340,170 460,170 500,250 300,250" fill="#0072ce"/>
+  <text x="400" y="215" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">Esteem</text>
+
+  <polygon points="300,250 500,250 540,330 260,330" fill="#2e7d32"/>
+  <text x="400" y="295" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">Love / Belonging</text>
+
+  <polygon points="260,330 540,330 580,410 220,410" fill="#e65100"/>
+  <text x="400" y="375" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">Safety</text>
+
+  <polygon points="220,410 580,410 620,490 180,490" fill="#c62828"/>
+  <text x="400" y="455" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">Physiological (food, water, sleep)</text>
+
+  <text x="400" y="565" font-size="13" text-anchor="middle" fill="#888">A theory that human motivation moves through five levels of need, from basic to self-fulfillment.</text>
+</svg>

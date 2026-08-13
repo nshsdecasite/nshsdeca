@@ -1,3 +1,6 @@
+import type { ClusterSlug } from "@/data/vocab-clusters";
+import { additionalVocabTerms } from "@/data/vocab-terms-additional";
+
 export type VocabTerm = {
   term: string;
   definition: string;
@@ -16,12 +19,15 @@ export type VocabTerm = {
     | "RM"
     | "PM"
     | "CO"
+    | "CR"
+    | "PR"
+    | "SE"
     | "UN";
   /** Optional explicit cluster tags when a term spans clusters beyond its IA defaults. */
-  clusterSlugs?: import("@/data/vocab-clusters").ClusterSlug[];
+  clusterSlugs?: ClusterSlug[];
 };
 
-export const vocabTerms: VocabTerm[] = [
+const baseVocabTerms: VocabTerm[] = [
   {
     term: "Asset",
     definition: "Anything of value a business owns.",
@@ -560,4 +566,9 @@ export const vocabTerms: VocabTerm[] = [
       "The efficiency of production, measured by output per unit of input.",
     instructionalAreaCode: "EC",
   },
+];
+
+export const vocabTerms: VocabTerm[] = [
+  ...baseVocabTerms,
+  ...additionalVocabTerms,
 ];

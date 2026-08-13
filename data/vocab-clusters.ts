@@ -30,11 +30,11 @@ export const iaToClusters: Record<
   VocabTerm["instructionalAreaCode"],
   ClusterSlug[]
 > = {
-  FI: ["finance", "entrepreneurship"],
-  EC: ["finance", "marketing", "entrepreneurship"],
+  FI: ["finance", "entrepreneurship", "personal-financial-literacy"],
+  EC: ["finance", "marketing", "entrepreneurship", "personal-financial-literacy"],
   MK: ["marketing"],
   DS: ["marketing"],
-  OP: ["business-management-and-administration", "entrepreneurship"],
+  OP: ["business-management-and-administration", "entrepreneurship", "hospitality-and-tourism"],
   QM: ["business-management-and-administration"],
   EN: ["entrepreneurship"],
   SM: [
@@ -48,6 +48,9 @@ export const iaToClusters: Record<
   RM: ["finance", "business-management-and-administration"],
   PM: ["marketing"],
   CO: ["business-management-and-administration", "marketing"],
+  CR: ["marketing", "hospitality-and-tourism"],
+  PR: ["marketing", "entrepreneurship"],
+  SE: ["marketing", "entrepreneurship"],
   UN: ["business-management-and-administration"],
 };
 

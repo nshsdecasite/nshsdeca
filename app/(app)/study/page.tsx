@@ -9,7 +9,14 @@ export const metadata: Metadata = {
   title: "Study tools",
 };
 
-const LIVE_STUDY_ROUTES = new Set(["/study/pis", "/study/flashcards", "/notes"]);
+const LIVE_STUDY_ROUTES = new Set([
+  "/study/pis",
+  "/study/flashcards",
+  "/study/vocab",
+  "/study/visuals",
+  "/study/theories",
+  "/notes",
+]);
 
 export default async function StudyPage() {
   await requireAuth("/study");

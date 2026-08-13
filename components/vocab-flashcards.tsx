@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ClusterSlug } from "@/data/vocab-clusters";
 import type { VocabFlashcard } from "@/lib/content/vocab";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 type VocabFlashcardsProps = {
   setTitle: string;
@@ -100,11 +103,11 @@ export function VocabFlashcards({
 
   if (cards.length === 0) {
     return (
-      <div className="rounded-3xl bg-white p-10 text-center shadow-soft">
-        <p className="text-sm text-muted">
+      <Card className="p-10 text-center">
+        <p className="text-sm text-muted-foreground">
           No vocabulary flashcards are available yet.
         </p>
-      </div>
+      </Card>
     );
   }
 
@@ -112,54 +115,43 @@ export function VocabFlashcards({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-sm font-medium text-muted">{setTitle}</p>
-          <p className="mt-1 text-sm text-muted">
+          <p className="text-sm font-medium text-muted-foreground">{setTitle}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
             {filteredDeck.length} card{filteredDeck.length === 1 ? "" : "s"}
           </p>
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={reshuffle}
-            className="inline-flex min-h-10 items-center rounded-2xl bg-white px-4 text-sm font-medium text-ink shadow-soft transition-[transform,color] duration-150 hover:text-deca-green active:scale-[0.96]"
-          >
-            Shuffle
-          </button>
-        </div>
+        <Button type="button" variant="secondary" onClick={reshuffle}>
+          Shuffle
+        </Button>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <button
+        <Button
           type="button"
+          size="sm"
+          variant={activeCluster === "all" ? "default" : "secondary"}
+          className="rounded-full"
           onClick={() => setActiveCluster("all")}
-          className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
-            activeCluster === "all"
-              ? "bg-deca-green text-white"
-              : "bg-white text-muted shadow-soft hover:text-ink"
-          }`}
         >
           All clusters
-        </button>
+        </Button>
         {clusters.map((cluster) => (
-          <button
+          <Button
             key={cluster.slug}
             type="button"
+            size="sm"
+            variant={activeCluster === cluster.slug ? "default" : "secondary"}
+            className="rounded-full"
             onClick={() => setActiveCluster(cluster.slug)}
-            className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
-              activeCluster === cluster.slug
-                ? "bg-deca-green text-white"
-                : "bg-white text-muted shadow-soft hover:text-ink"
-            }`}
           >
             {cluster.label}
-          </button>
+          </Button>
         ))}
       </div>
 
-      <div className="h-2 overflow-hidden rounded-full bg-white shadow-soft">
+      <div className="h-2 overflow-hidden rounded-full bg-secondary">
         <div
-          className="h-full rounded-full bg-deca-green transition-[width] duration-200"
+          className="h-full rounded-full bg-primary transition-[width] duration-200"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -168,63 +160,58 @@ export function VocabFlashcards({
         <button
           type="button"
           onClick={() => setFlipped((value) => !value)}
-          className="group min-h-[320px] rounded-3xl bg-white p-8 text-left shadow-soft-lg transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_rgba(15,23,42,0.08)] active:scale-[0.995] sm:min-h-[360px] sm:p-10"
+          className="group min-h-[320px] rounded-2xl border border-border/60 bg-card p-8 text-left shadow-border-hover transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 active:scale-[0.995] sm:min-h-[360px] sm:p-10"
         >
           <div className="flex h-full min-h-[240px] flex-col sm:min-h-[280px]">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <span className="rounded-full bg-deca-green/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-deca-green">
-                {activeClusterLabel}
-              </span>
-              <span className="text-sm font-medium text-muted">
+              <Badge>{activeClusterLabel}</Badge>
+              <span className="text-sm font-medium tabular-nums text-muted-foreground">
                 {index + 1} / {filteredDeck.length}
               </span>
             </div>
 
             <div className="flex flex-1 items-center justify-center px-2 py-8">
-              <p className="max-w-2xl text-center text-2xl font-semibold leading-snug text-ink sm:text-3xl">
+              <p className="max-w-2xl text-center text-2xl font-semibold leading-snug text-foreground sm:text-3xl">
                 {flipped ? currentCard.definition : currentCard.term}
               </p>
             </div>
 
-            <p className="text-center text-sm text-muted">
+            <p className="text-center text-sm text-muted-foreground">
               {flipped ? "Showing definition" : "Showing term"} · Click or
               press Space to flip
             </p>
           </div>
         </button>
       ) : (
-        <div className="rounded-3xl bg-white p-10 text-center shadow-soft">
-          <p className="text-sm text-muted">No cards in this cluster yet.</p>
-        </div>
+        <Card className="p-10 text-center">
+          <p className="text-sm text-muted-foreground">No cards in this cluster yet.</p>
+        </Card>
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={goPrevious}
           disabled={filteredDeck.length === 0}
-          className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-5 text-sm font-semibold text-ink shadow-soft transition-[transform,opacity] duration-150 hover:text-deca-green active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          ← Previous
-        </button>
-
-        <button
+          Previous
+        </Button>
+        <Button
           type="button"
+          variant="outline"
           onClick={() => setFlipped((value) => !value)}
           disabled={!currentCard}
-          className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-deca-green/10 px-5 text-sm font-semibold text-deca-green transition-[transform,opacity] duration-150 hover:bg-deca-green/15 active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
         >
           Flip card
-        </button>
-
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={goNext}
           disabled={filteredDeck.length === 0}
-          className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-deca-green px-5 text-sm font-semibold text-white shadow-soft transition-[background-color,transform] duration-150 hover:bg-deca-green-dark active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Next →
-        </button>
+          Next
+        </Button>
       </div>
     </div>
   );

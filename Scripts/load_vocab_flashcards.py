@@ -12,6 +12,7 @@ import psycopg2
 
 ROOT = Path(__file__).resolve().parents[1]
 VOCAB_TS = ROOT / "data" / "vocab-terms.ts"
+ADDITIONAL_VOCAB_TS = ROOT / "data" / "vocab-terms-additional.ts"
 SET_TITLE = "DECA Business Vocabulary"
 
 
@@ -28,15 +29,20 @@ def load_env() -> None:
 
 
 def parse_vocab_terms() -> list[dict[str, str]]:
-    text = VOCAB_TS.read_text(encoding="utf-8")
     pattern = re.compile(
         r'term:\s*"([^"]+)"\s*,\s*definition:\s*"([^"]+)"\s*,\s*instructionalAreaCode:\s*"([^"]+)"',
         re.MULTILINE,
     )
-    return [
-        {"term": term, "definition": definition, "code": code}
-        for term, definition, code in pattern.findall(text)
-    ]
+    terms: list[dict[str, str]] = []
+    for path in (VOCAB_TS, ADDITIONAL_VOCAB_TS):
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        terms.extend(
+            {"term": term, "definition": definition, "code": code}
+            for term, definition, code in pattern.findall(text)
+        )
+    return terms
 
 
 def connect():

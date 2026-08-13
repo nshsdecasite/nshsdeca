@@ -1,17 +1,28 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   visualCategories,
   visuals,
   type VisualCategory,
   type VisualItem,
 } from "@/data/visuals";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 function VisualPreview({ visual }: { visual: VisualItem }) {
   if (visual.type === "svg") {
     return (
-      <div className="relative flex h-44 items-center justify-center bg-white p-4">
+      <div className="relative flex h-44 items-center justify-center bg-card p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={visual.src}
@@ -23,7 +34,7 @@ function VisualPreview({ visual }: { visual: VisualItem }) {
   }
 
   return (
-    <div className="relative h-44 overflow-hidden bg-[#f4f8f4]">
+    <div className="relative h-44 overflow-hidden bg-muted">
       <iframe
         src={visual.src}
         title={visual.title}
@@ -38,7 +49,7 @@ function VisualPreview({ visual }: { visual: VisualItem }) {
 function VisualExpanded({ visual }: { visual: VisualItem }) {
   if (visual.type === "svg") {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center bg-white p-6 sm:p-10">
+      <div className="flex min-h-[50vh] items-center justify-center bg-card p-6 sm:p-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={visual.src}
@@ -53,7 +64,7 @@ function VisualExpanded({ visual }: { visual: VisualItem }) {
     <iframe
       src={visual.src}
       title={visual.title}
-      className="h-[min(75vh,720px)] w-full border-0 bg-[#f4f8f4]"
+      className="h-[min(75vh,720px)] w-full border-0 bg-muted"
     />
   );
 }
@@ -80,92 +91,62 @@ export function VisualLibrary() {
     });
   }, [activeCategory, query]);
 
-  const closeModal = useCallback(() => setSelected(null), []);
-
-  useEffect(() => {
-    if (!selected) {
-      return;
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [closeModal, selected]);
-
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
             type="button"
+            size="sm"
+            variant={activeCategory === "All" ? "default" : "secondary"}
+            className="rounded-full"
             onClick={() => setActiveCategory("All")}
-            className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
-              activeCategory === "All"
-                ? "bg-deca-green text-white"
-                : "bg-white text-muted shadow-soft hover:text-ink"
-            }`}
           >
             All
-          </button>
+          </Button>
           {visualCategories.map((category) => (
-            <button
+            <Button
               key={category}
               type="button"
+              size="sm"
+              variant={activeCategory === category ? "default" : "secondary"}
+              className="rounded-full"
               onClick={() => setActiveCategory(category)}
-              className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
-                activeCategory === category
-                  ? "bg-deca-green text-white"
-                  : "bg-white text-muted shadow-soft hover:text-ink"
-              }`}
             >
               {category}
-            </button>
+            </Button>
           ))}
         </div>
 
-        <label className="relative w-full sm:max-w-xs">
-          <span className="sr-only">Search visuals</span>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search visuals…"
-            className="min-h-11 w-full rounded-2xl bg-white px-4 text-sm text-ink shadow-soft outline-none transition-[box-shadow] duration-150 focus:shadow-[0_0_0_3px_rgba(45,106,45,0.18)]"
-          />
-        </label>
+        <Input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search visuals…"
+          className="sm:max-w-xs"
+          aria-label="Search visuals"
+        />
       </div>
 
-      <p className="text-sm text-muted">
+      <p className="text-sm text-muted-foreground">
         {filtered.length} visual{filtered.length === 1 ? "" : "s"}
       </p>
 
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((visual) => (
           <li key={visual.id}>
             <button
               type="button"
               onClick={() => setSelected(visual)}
-              className="group flex h-full w-full flex-col overflow-hidden rounded-3xl bg-white text-left shadow-soft transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-[0.99]"
+              className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card text-left shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.99]"
             >
               <VisualPreview visual={visual} />
               <div className="flex flex-1 flex-col gap-2 p-5">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-deca-green">
-                  {visual.category}
-                </span>
-                <h2 className="text-base font-semibold text-ink group-hover:text-deca-green">
+                <Badge className="w-fit">{visual.category}</Badge>
+                <h2 className="text-base font-semibold text-foreground group-hover:text-primary">
                   {visual.title}
                 </h2>
-                <span className="mt-auto text-xs text-muted">
+                <span className="mt-auto text-xs text-muted-foreground">
                   Click to expand
                 </span>
               </div>
@@ -175,56 +156,31 @@ export function VisualLibrary() {
       </ul>
 
       {filtered.length === 0 ? (
-        <div className="rounded-3xl bg-white p-10 text-center shadow-soft">
-          <p className="text-sm text-muted">
+        <Card className="p-10 text-center">
+          <p className="text-sm text-muted-foreground">
             No visuals match your search. Try another category or keyword.
           </p>
-        </div>
+        </Card>
       ) : null}
 
-      {selected ? (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="visual-modal-title"
-        >
-          <button
-            type="button"
-            aria-label="Close visual"
-            onClick={closeModal}
-            className="absolute inset-0 bg-ink/55 backdrop-blur-[2px]"
-          />
-
-          <div className="relative z-10 flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-soft-lg">
-            <div className="flex items-start justify-between gap-4 border-b border-deca-green/10 px-5 py-4 sm:px-6">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-deca-green">
-                  {selected.category}
-                </p>
-                <h2
-                  id="visual-modal-title"
-                  className="mt-1 text-xl font-bold text-ink"
-                >
-                  {selected.title}
-                </h2>
+      <Dialog open={Boolean(selected)} onOpenChange={(open) => !open && setSelected(null)}>
+        <DialogContent className="max-h-[92vh] max-w-5xl overflow-hidden p-0">
+          {selected ? (
+            <>
+              <DialogHeader className="px-6 pt-6">
+                <Badge className="w-fit">{selected.category}</Badge>
+                <DialogTitle>{selected.title}</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Expanded visual reference
+                </DialogDescription>
+              </DialogHeader>
+              <div className="overflow-auto">
+                <VisualExpanded visual={selected} />
               </div>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-xl text-muted transition-[color,background-color,transform] duration-150 hover:bg-surface hover:text-ink active:scale-[0.96]"
-                aria-label="Close"
-              >
-                <span className="text-2xl leading-none">×</span>
-              </button>
-            </div>
-
-            <div className="overflow-auto">
-              <VisualExpanded visual={selected} />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

@@ -21,7 +21,11 @@ function FeatureBadge({ badge }: { badge?: "coming-soon" | "officer" }) {
   return null;
 }
 
-const liveStudyHrefs = new Set(["/study/visuals", "/study/vocab"]);
+const liveStudyHrefs = new Set([
+  "/study/visuals",
+  "/study/vocab",
+  "/study/theories",
+]);
 
 export function PlatformFeatureGrid() {
   return (
@@ -85,7 +89,11 @@ export function PlatformFeatureGrid() {
   );
 }
 
-const liveQuickLinks = new Set(["/study/visuals", "/study/vocab"]);
+const liveQuickLinks = new Set([
+  "/study/visuals",
+  "/study/vocab",
+  "/study/theories",
+]);
 
 export function DashboardQuickLinks() {
   const quickLinks = [
@@ -94,6 +102,7 @@ export function DashboardQuickLinks() {
     { label: "Study PIs", href: "/study/pis" },
     { label: "Vocab flashcards", href: "/study/vocab" },
     { label: "Visual library", href: "/study/visuals" },
+    { label: "Theories library", href: "/study/theories" },
     { label: "View leaderboard", href: "/leaderboard" },
   ];
 

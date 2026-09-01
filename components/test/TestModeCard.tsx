@@ -19,33 +19,30 @@ export function TestModeCard({
   live = true,
 }: TestModeCardProps) {
   const body = (
-    <Card className="flex h-full flex-col p-6 transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover">
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-        {badge ? (
-          <Badge>{badge}</Badge>
-        ) : !live ? (
-          <Badge variant="muted">Soon</Badge>
-        ) : null}
+    <Card className="flex h-full flex-col p-5 transition-[box-shadow] duration-150 ease-out hover:shadow-border-hover">
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <h2 className="text-[15px] font-semibold tracking-tight">{title}</h2>
+        {!live ? <Badge variant="muted">Coming soon</Badge> : badge ? <Badge>{badge}</Badge> : null}
       </div>
       <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
       <span
         className={cn(
-          "mt-5 inline-flex min-h-10 items-center text-sm font-medium",
+          "mt-4 inline-flex min-h-10 items-center text-sm font-medium",
           live ? "text-primary" : "text-muted-foreground",
         )}
       >
-        {live ? "Open →" : "Coming soon"}
+        {live ? "Open" : "Coming soon"}
       </span>
     </Card>
   );
 
-  if (!live) {
-    return <div className="opacity-80">{body}</div>;
-  }
+  if (!live) return body;
 
   return (
-    <Link href={href} className="block h-full active:scale-[0.98]">
+    <Link
+      href={href}
+      className="block h-full transition-transform duration-150 ease-out active:scale-[0.96]"
+    >
       {body}
     </Link>
   );

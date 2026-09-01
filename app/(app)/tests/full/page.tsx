@@ -20,7 +20,7 @@ export default async function FullTestPage() {
         backLabel="Practice tests"
         eyebrow="Full test"
         title="Pick an official cluster exam"
-        description="Each exam includes 100 multiple-choice questions from a released DECA cluster sample test."
+        description="Each exam includes 100 multiple-choice questions from a released DECA cluster sample test. Timed mode is 90 minutes."
       />
       <ExamPicker exams={exams} />
     </SocialPage>

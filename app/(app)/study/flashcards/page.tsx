@@ -33,7 +33,7 @@ export default async function FlashcardsPage() {
             <li key={set.id}>
               <Link
                 href={`/study/flashcards/${set.id}`}
-                className="flex h-full flex-col rounded-2xl border border-border/60 bg-card p-5 shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover"
+                className="flex h-full flex-col rounded-2xl bg-card p-5 shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover"
               >
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                   {set.instructional_area_code ?? "PI set"}

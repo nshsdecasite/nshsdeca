@@ -13,7 +13,7 @@ export function ScenarioCard({ scenario }: ScenarioCardProps) {
     `${scenario.event_code} scenario ${scenario.scenario_number}`;
 
   return (
-    <Link href={`/roleplays/${scenario.id}`} className="group block h-full active:scale-[0.98]">
+    <Link href={`/roleplays/${scenario.id}`} className="group block h-full active:scale-[0.96]">
       <Card className="flex h-full flex-col p-5 transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge>{scenario.event_code}</Badge>

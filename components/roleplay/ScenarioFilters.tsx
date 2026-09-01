@@ -8,11 +8,13 @@ import { Label } from "@/components/ui/label";
 type ScenarioFiltersProps = {
   years: number[];
   events: { event_code: string; event_name: string }[];
+  clusters?: { slug: string; name: string }[];
   current: {
     search?: string;
     year?: string;
     event?: string;
     level?: string;
+    cluster?: string;
   };
 };
 
@@ -23,15 +25,16 @@ function buildHref(current: ScenarioFiltersProps["current"], patch: Record<strin
   if (merged.year) params.set("year", merged.year);
   if (merged.event) params.set("event", merged.event);
   if (merged.level) params.set("level", merged.level);
+  if (merged.cluster) params.set("cluster", merged.cluster);
   const query = params.toString();
   return query ? `/roleplays?${query}` : "/roleplays";
 }
 
-export function ScenarioFilters({ years, events, current }: ScenarioFiltersProps) {
+export function ScenarioFilters({ years, events, clusters = [], current }: ScenarioFiltersProps) {
   return (
     <Card className="p-5">
       <form action="/roleplays" method="get">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <div>
             <Label htmlFor="scenario-search">Search</Label>
             <Input
@@ -39,7 +42,7 @@ export function ScenarioFilters({ years, events, current }: ScenarioFiltersProps
               type="search"
               name="search"
               defaultValue={current.search ?? ""}
-              placeholder="Event, title, keywords…"
+              placeholder="Event, PI code, title, keywords…"
               className="mt-2"
             />
           </div>
@@ -79,6 +82,23 @@ export function ScenarioFilters({ years, events, current }: ScenarioFiltersProps
           </div>
 
           <div>
+            <Label htmlFor="scenario-cluster">Cluster</Label>
+            <select
+              id="scenario-cluster"
+              name="cluster"
+              defaultValue={current.cluster ?? ""}
+              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <option value="">All clusters</option>
+              {clusters.map((cluster) => (
+                <option key={cluster.slug} value={cluster.slug}>
+                  {cluster.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
             <Label htmlFor="scenario-level">Level</Label>
             <select
               id="scenario-level"
@@ -111,6 +131,7 @@ export function ScenarioFilterPills({ current }: { current: ScenarioFiltersProps
     current.year ? { label: `Year ${current.year}`, key: "year" } : null,
     current.event ? { label: current.event, key: "event" } : null,
     current.level ? { label: current.level, key: "level" } : null,
+    current.cluster ? { label: current.cluster, key: "cluster" } : null,
   ].filter(Boolean) as { label: string; key: keyof ScenarioFiltersProps["current"] }[];
 
   if (pills.length === 0) return null;

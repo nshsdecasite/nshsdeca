@@ -49,10 +49,10 @@ export default async function TestHistoryPage() {
               <li key={session.id}>
                 <Link
                   href={`/tests/${session.id}`}
-                  className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-5 shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.99] sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-xl bg-card p-4 shadow-border transition-[box-shadow,transform] duration-150 ease-out hover:shadow-border-hover active:scale-[0.96] sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                    <p className="eyebrow">
                       {session.cluster_name ?? "Practice test"}
                     </p>
                     <h2 className="mt-1 text-base font-semibold text-foreground">
@@ -75,7 +75,7 @@ export default async function TestHistoryPage() {
                       </span>
                     )}
                     <span className="text-sm font-medium text-primary">
-                      Open →
+                      Open
                     </span>
                   </div>
                 </Link>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SiteNav } from "@/components/deca/site-nav";
 import { LoginForm } from "@/components/login-form";
 
 export const metadata: Metadata = {
@@ -12,5 +13,10 @@ type LoginPageProps = {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
 
-  return <LoginForm nextPath={params.next} />;
+  return (
+    <>
+      <SiteNav active="none" />
+      <LoginForm nextPath={params.next} />
+    </>
+  );
 }

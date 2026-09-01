@@ -1,13 +1,6 @@
 import type { ReactNode } from "react";
-import { MarketingFooter } from "@/components/layout/marketing-footer";
-import { MarketingHeader } from "@/components/layout/marketing-header";
+import { DecaFrame } from "@/components/deca/frame";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <MarketingHeader />
-      <main className="flex-1">{children}</main>
-      <MarketingFooter />
-    </>
-  );
+  return <DecaFrame>{children}</DecaFrame>;
 }

@@ -1,6 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import {
+  isAllowedSchoolEmail,
+  schoolEmailHint,
+} from "@/lib/auth/school-email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -85,6 +89,10 @@ export async function signUp(
 
   if (![9, 10, 11, 12].includes(gradeLevel)) {
     return { error: "Select a valid grade level." };
+  }
+
+  if (!isAllowedSchoolEmail(email)) {
+    return { error: schoolEmailHint() };
   }
 
   const supabase = await createClient();

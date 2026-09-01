@@ -4,14 +4,12 @@ const schoolName =
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-border/60 bg-card/80">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} {schoolName} · {chapterName}
+    <footer className="mt-auto">
+      <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p>
+          © {new Date().getFullYear()} {schoolName}
         </p>
-        <p className="text-sm text-muted-foreground">
-          Built for DECA members, officers, and advisors.
-        </p>
+        <p>{chapterName}</p>
       </div>
     </footer>
   );

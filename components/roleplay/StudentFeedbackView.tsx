@@ -44,7 +44,7 @@ export function StudentFeedbackView({
           >
             ← Back to submissions
           </Link>
-          <h1 className="mt-2 text-2xl font-bold text-foreground">{scenario.title}</h1>
+          <h1 className="mt-2 text-2xl font-semibold text-foreground">{scenario.title}</h1>
           <p className="text-muted-foreground">
             {scenario.event} · Attempt #{submission.attempt_number}
           </p>
@@ -87,7 +87,7 @@ export function StudentFeedbackView({
             <>
               <Card className="p-4">
                 <div className="mb-4 text-center">
-                  <span className="text-4xl font-bold text-primary">
+                  <span className="text-4xl font-semibold text-primary">
                     {getTotalScore(grading.rubric)}
                   </span>
                   <span className="text-lg text-muted-foreground">

@@ -127,7 +127,7 @@ export default function RubricForm({
 
       <div className="flex items-center justify-between border-t border-border pt-3">
         <span className="font-semibold text-foreground">Total Score</span>
-        <span className="text-2xl font-bold text-primary">
+        <span className="text-2xl font-semibold text-primary">
           {total} <span className="text-base font-normal text-muted-foreground">/ {max}</span>
         </span>
       </div>

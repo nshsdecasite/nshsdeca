@@ -47,7 +47,7 @@ export default async function PiDetailPage({ params }: PiDetailPageProps) {
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Test questions
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-foreground">
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-foreground">
             {pi.question_count}
           </p>
         </SocialPanel>
@@ -55,7 +55,7 @@ export default async function PiDetailPage({ params }: PiDetailPageProps) {
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Roleplay events
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-foreground">
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-foreground">
             {pi.roleplay_count}
           </p>
         </SocialPanel>
@@ -76,7 +76,7 @@ export default async function PiDetailPage({ params }: PiDetailPageProps) {
                 <li key={`${context.event_code}-${context.year}`}>
                   <Link
                     href={`/roleplays?event=${context.event_code}&year=${context.year}`}
-                    className="flex flex-col gap-1 rounded-2xl border border-border/60 bg-muted px-4 py-3 transition-[border-color,transform] duration-150 hover:border-primary/30 hover:bg-primary/10 active:scale-[0.99] sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-1 rounded-2xl border border-border/60 bg-muted px-4 py-3 transition-[border-color,transform] duration-150 hover:border-primary/30 hover:bg-primary/10 active:scale-[0.96] sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div>
                       <p className="text-sm font-semibold text-foreground">

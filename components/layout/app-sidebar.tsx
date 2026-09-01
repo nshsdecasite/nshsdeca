@@ -8,9 +8,11 @@ import {
   GraduationCap,
   LayoutDashboard,
   Menu,
+  MessageSquare,
   NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
+  Settings,
   Trophy,
   User,
   Video,
@@ -42,23 +44,26 @@ const mainNav: NavItem[] = [
   { label: "Roleplays", href: "/roleplays", icon: Video },
   { label: "Study", href: "/study", icon: BookOpen },
   { label: "Notes", href: "/notes", icon: NotebookPen },
+  { label: "Messages", href: "/messages", icon: MessageSquare },
   { label: "Leaderboard", href: "/leaderboard", icon: Trophy },
   { label: "Profile", href: "/profile", icon: User },
 ];
 
 const officerNav: NavItem[] = [
   { label: "Grading", href: "/admin/grading", icon: GraduationCap, roles: ["officer", "advisor"] },
-  { label: "Admin", href: "/admin", icon: LayoutDashboard, roles: ["officer", "advisor"] },
+  { label: "Admin", href: "/admin", icon: Settings, roles: ["officer", "advisor"] },
 ];
 
 function NavLink({
   item,
   collapsed,
   onNavigate,
+  badge,
 }: {
   item: NavItem;
   collapsed: boolean;
   onNavigate?: () => void;
+  badge?: number;
 }) {
   const pathname = usePathname();
   const active =
@@ -71,16 +76,24 @@ function NavLink({
       href={item.href}
       onClick={onNavigate}
       className={cn(
-        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.98]",
+        "group flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.96]",
         active
-          ? "bg-primary/10 text-primary"
-          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-        collapsed && "justify-center px-2",
+          ? "bg-primary/8 text-primary"
+          : "text-muted-foreground hover:bg-accent hover:text-foreground",
+        collapsed && "justify-center px-0",
       )}
       title={collapsed ? item.label : undefined}
     >
-      <Icon className="h-4 w-4 shrink-0" />
-      {!collapsed ? <span>{item.label}</span> : null}
+      <span className="relative">
+        <Icon className="h-4 w-4 shrink-0" />
+        {collapsed && badge ? (
+          <span className="absolute -right-1 -top-1 h-1.5 w-1.5 rounded-full bg-primary" />
+        ) : null}
+      </span>
+      {!collapsed ? <span className="flex-1">{item.label}</span> : null}
+      {!collapsed && badge ? (
+        <span className="tabular-nums text-[11px] font-semibold text-primary">{badge}</span>
+      ) : null}
     </Link>
   );
 }
@@ -89,23 +102,31 @@ function SidebarNav({
   role,
   collapsed,
   onNavigate,
+  unreadCount = 0,
 }: {
   role: UserRole | null;
   collapsed: boolean;
   onNavigate?: () => void;
+  unreadCount?: number;
 }) {
   const visibleOfficer = officerNav.filter(
     (item) => !item.roles || (role && item.roles.includes(role)),
   );
 
   return (
-    <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
+    <nav className="flex flex-1 flex-col gap-0.5 px-2 py-3">
       {mainNav.map((item) => (
-        <NavLink key={item.href} item={item} collapsed={collapsed} onNavigate={onNavigate} />
+        <NavLink
+          key={item.href}
+          item={item}
+          collapsed={collapsed}
+          onNavigate={onNavigate}
+          badge={item.href === "/messages" ? unreadCount : undefined}
+        />
       ))}
       {visibleOfficer.length > 0 ? (
         <>
-          <Separator className="my-3" />
+          <Separator className="my-2" />
           {visibleOfficer.map((item) => (
             <NavLink key={item.href} item={item} collapsed={collapsed} onNavigate={onNavigate} />
           ))}
@@ -119,42 +140,45 @@ export function AppSidebar({
   role,
   collapsed,
   onToggleCollapse,
+  unreadCount = 0,
 }: {
   role: UserRole | null;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  unreadCount?: number;
 }) {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-border/60 bg-card/95 backdrop-blur-md transition-[width] duration-200 md:flex",
+        "fixed inset-y-0 left-0 z-40 hidden flex-col bg-card shadow-border transition-[width] duration-200 ease-out md:flex",
         collapsed ? "w-[var(--sidebar-width-collapsed)]" : "w-[var(--sidebar-width)]",
       )}
     >
       <div
         className={cn(
-          "flex h-16 items-center border-b border-border/60 px-4",
+          "flex h-14 items-center px-3",
           collapsed && "justify-center px-2",
         )}
       >
         {collapsed ? (
-          <Link href="/dashboard" className="flex items-center">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-xs font-bold text-primary-foreground">
-              D
-            </span>
+          <Link
+            href="/dashboard"
+            className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-[11px] font-semibold text-primary-foreground"
+          >
+            D
           </Link>
         ) : (
-          <LogoLink />
+          <LogoLink href="/dashboard" />
         )}
       </div>
 
-      <SidebarNav role={role} collapsed={collapsed} />
+      <SidebarNav role={role} collapsed={collapsed} unreadCount={unreadCount} />
 
-      <div className="border-t border-border/60 p-3">
+      <div className="p-2">
         <Button
           type="button"
           variant="ghost"
-          size={collapsed ? "icon" : "default"}
+          size={collapsed ? "icon" : "sm"}
           className={cn("w-full", !collapsed && "justify-start")}
           onClick={onToggleCollapse}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -164,7 +188,7 @@ export function AppSidebar({
           ) : (
             <>
               <PanelLeftClose className="h-4 w-4" />
-              <span>Collapse</span>
+              Collapse
             </>
           )}
         </Button>
@@ -173,7 +197,13 @@ export function AppSidebar({
   );
 }
 
-export function MobileSidebar({ role }: { role: UserRole | null }) {
+export function MobileSidebar({
+  role,
+  unreadCount = 0,
+}: {
+  role: UserRole | null;
+  unreadCount?: number;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -184,11 +214,16 @@ export function MobileSidebar({ role }: { role: UserRole | null }) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[var(--sidebar-width)] p-0">
-        <SheetHeader className="border-b border-border/60 px-4 py-4 text-left">
+        <SheetHeader className="px-4 py-4 text-left">
           <SheetTitle className="sr-only">Navigation</SheetTitle>
-          <LogoLink />
+          <LogoLink href="/dashboard" />
         </SheetHeader>
-        <SidebarNav role={role} collapsed={false} onNavigate={() => setOpen(false)} />
+        <SidebarNav
+          role={role}
+          collapsed={false}
+          onNavigate={() => setOpen(false)}
+          unreadCount={unreadCount}
+        />
       </SheetContent>
     </Sheet>
   );
@@ -199,9 +234,7 @@ export function useSidebarCollapsed() {
 
   useEffect(() => {
     const stored = localStorage.getItem("sidebar-collapsed");
-    if (stored === "true") {
-      setCollapsed(true);
-    }
+    if (stored === "true") setCollapsed(true);
   }, []);
 
   const toggleCollapse = () => {

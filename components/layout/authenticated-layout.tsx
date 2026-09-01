@@ -1,44 +1,46 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { AppSidebar, useSidebarCollapsed } from "@/components/layout/app-sidebar";
-import { AppTopbar } from "@/components/layout/app-topbar";
+import { usePathname } from "next/navigation";
+import { AppNav, usesFullFrame } from "@/components/deca/app-nav";
+import { DecaFrame } from "@/components/deca/frame";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
-import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/auth/roles";
 
 export function AuthenticatedLayout({
   children,
-  firstName,
+  displayName,
+  gradeLabel,
   role,
+  unreadCount = 0,
 }: {
   children: ReactNode;
-  firstName: string;
+  displayName: string;
+  gradeLabel?: string;
   role: UserRole | null;
+  unreadCount?: number;
 }) {
-  const { collapsed, toggleCollapse } = useSidebarCollapsed();
   const { isFocusMode } = useSessionFocus();
+  const pathname = usePathname();
+  const fullFrame = usesFullFrame(pathname);
+
+  if (isFocusMode) {
+    return <div className="min-h-screen bg-ground">{children}</div>;
+  }
+
+  if (fullFrame) {
+    return <DecaFrame>{children}</DecaFrame>;
+  }
 
   return (
-    <div className="min-h-screen">
-      {!isFocusMode ? (
-        <>
-          <AppSidebar role={role} collapsed={collapsed} onToggleCollapse={toggleCollapse} />
-          <div
-            className={cn(
-              "flex min-h-screen flex-col transition-[margin-left] duration-200",
-              collapsed
-                ? "md:ml-[var(--sidebar-width-collapsed)]"
-                : "md:ml-[var(--sidebar-width)]",
-            )}
-          >
-            <AppTopbar firstName={firstName} role={role} />
-            <div className="flex-1">{children}</div>
-          </div>
-        </>
-      ) : (
-        <div className="min-h-screen">{children}</div>
-      )}
-    </div>
+    <DecaFrame innerClassName="grid min-h-[calc(100vh-96px)] grid-cols-[224px_minmax(0,1fr)]">
+      <AppNav
+        displayName={displayName}
+        gradeLabel={gradeLabel}
+        role={role}
+        unreadCount={unreadCount}
+      />
+      <div className="min-w-0 bg-white">{children}</div>
+    </DecaFrame>
   );
 }

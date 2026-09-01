@@ -9,7 +9,7 @@ type PiCardProps = {
 
 export function PiCard({ pi }: PiCardProps) {
   return (
-    <Link href={`/study/pis/${pi.id}`} className="group block h-full active:scale-[0.98]">
+    <Link href={`/study/pis/${pi.id}`} className="group block h-full active:scale-[0.96]">
       <Card className="flex h-full flex-col p-5 transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge>{pi.pi_code}</Badge>

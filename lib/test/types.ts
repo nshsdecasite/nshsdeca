@@ -39,6 +39,8 @@ export type TestSession = {
   completed_at: string | null;
   score: number | null;
   total_questions: number;
+  timed: boolean;
+  time_limit_seconds: number | null;
   questions: TestQuestion[];
 };
 

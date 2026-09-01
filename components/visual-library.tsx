@@ -138,7 +138,7 @@ export function VisualLibrary() {
             <button
               type="button"
               onClick={() => setSelected(visual)}
-              className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card text-left shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.99]"
+              className="group flex h-full w-full flex-col overflow-hidden rounded-2xl bg-card text-left shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.96]"
             >
               <VisualPreview visual={visual} />
               <div className="flex flex-1 flex-col gap-2 p-5">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect, memo } from "react";
+import { useRef, useState, useCallback, useEffect, memo, type MutableRefObject } from "react";
 import type { TimestampedComment } from "@/lib/roleplay/types";
 import {
   COMMENT_TAG_LABELS,
@@ -32,6 +32,9 @@ interface VideoPlayerProps {
   externalComments?: boolean;
   /** When false, parent renders drive duration input below the player */
   showDurationInput?: boolean;
+  hideTimeline?: boolean;
+  onPlaybackTime?: (currentTime: number, duration: number) => void;
+  seekRef?: MutableRefObject<((time: number) => void) | null>;
 }
 
 export function DriveDurationInput({
@@ -53,11 +56,11 @@ export function DriveDurationInput({
   };
 
   return (
-    <Card className="p-4">
-      <h3 className="mb-1 text-sm font-semibold text-foreground">Video Length</h3>
-      <p className="mb-3 text-xs text-muted-foreground">
+    <div className="mt-4 rounded-[6px] border border-edge bg-white p-4">
+      <h3 className="mb-1 text-sm font-medium text-ink">Video length</h3>
+      <p className="mb-3 text-sm leading-[1.6] text-ink-2">
         Google Drive doesn&apos;t report video duration. Enter the length so you can
-        place timestamped comments on the timeline.
+        place timestamped comments on the rail.
       </p>
       <div className="flex items-end gap-3">
         <div>
@@ -88,10 +91,10 @@ export function DriveDurationInput({
           />
         </div>
         <Button type="button" size="sm" onClick={handleSave}>
-          Set Length
+          Set length
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -268,6 +271,9 @@ function YouTubeVideoPlayer(props: VideoPlayerProps) {
     },
   });
 
+  const onPlaybackTimeRef = useRef(props.onPlaybackTime);
+  onPlaybackTimeRef.current = props.onPlaybackTime;
+
   useEffect(() => {
     prevTimeRef.current = 0;
     shownRef.current.clear();
@@ -284,31 +290,41 @@ function YouTubeVideoPlayer(props: VideoPlayerProps) {
     prevTimeRef.current = t;
   };
 
+  if (props.seekRef) props.seekRef.current = handleSeek;
+
+  useEffect(() => {
+    onPlaybackTimeRef.current?.(currentTime, duration);
+  }, [currentTime, duration]);
+
   const activeCommentId = props.activeCommentId;
 
   return (
     <div className="space-y-0">
-      <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
+      <div className="relative aspect-video overflow-hidden rounded-[6px] bg-[#0f1f14]">
         <div id={containerId} className="h-full w-full" />
       </div>
-      <div className="mt-2 flex items-center gap-2">
-        <Badge className="bg-red-100 text-red-700">YouTube</Badge>
-        <span className="text-xs text-primary">
-          Comments appear in the panel during playback
-        </span>
-      </div>
-      <Timeline
-        duration={duration}
-        currentTime={currentTime}
-        comments={props.comments ?? []}
-        interactive={props.interactive ?? false}
-        activeCommentId={activeCommentId}
-        onSeek={handleSeek}
-        onTimelineClick={props.onTimelineClick}
-        onCommentClick={props.onCommentClick}
-        onActiveCommentChange={props.onActiveCommentChange}
-        setAutoPopup={() => {}}
-      />
+      {props.hideTimeline ? null : (
+        <>
+          <div className="mt-2 flex items-center gap-2">
+            <Badge className="bg-red-100 text-red-700">YouTube</Badge>
+            <span className="text-xs text-primary">
+              Comments appear in the panel during playback
+            </span>
+          </div>
+          <Timeline
+            duration={duration}
+            currentTime={currentTime}
+            comments={props.comments ?? []}
+            interactive={props.interactive ?? false}
+            activeCommentId={activeCommentId}
+            onSeek={handleSeek}
+            onTimelineClick={props.onTimelineClick}
+            onCommentClick={props.onCommentClick}
+            onActiveCommentChange={props.onActiveCommentChange}
+            setAutoPopup={() => {}}
+          />
+        </>
+      )}
     </div>
   );
 }
@@ -327,9 +343,15 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
     props.onActiveCommentChange?.(comment);
   };
 
+  if (props.seekRef) {
+    props.seekRef.current = (time) => {
+      props.onPlaybackTime?.(time, duration);
+    };
+  }
+
   return (
     <div className="space-y-3">
-      <div className="relative aspect-video overflow-hidden rounded-2xl bg-black">
+      <div className="relative aspect-video overflow-hidden rounded-[6px] bg-[#0f1f14]">
         <iframe
           src={embedUrl}
           className="h-full w-full"
@@ -339,12 +361,14 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <Badge className="bg-blue-100 text-blue-700">Google Drive</Badge>
-        <span className="text-xs text-muted-foreground">
-          Click comment markers to view feedback
-        </span>
-      </div>
+      {props.hideTimeline ? null : (
+        <div className="flex items-center gap-2">
+          <Badge className="bg-blue-100 text-blue-700">Google Drive</Badge>
+          <span className="text-xs text-muted-foreground">
+            Click comment markers to view feedback
+          </span>
+        </div>
+      )}
 
       {props.showDurationInput !== false &&
         props.interactive &&
@@ -356,7 +380,7 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
         />
       )}
 
-      {duration > 0 ? (
+      {duration > 0 && !props.hideTimeline ? (
         <>
           <Timeline
             duration={duration}

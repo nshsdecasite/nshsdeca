@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getSubmission } from "@/app/roleplay/actions";
 import { getScenario } from "@/app/roleplay/scenario-actions";
 import { OfficerGradingWorkspace } from "@/components/roleplay/OfficerGradingWorkspace";
-import { SocialPage } from "@/components/layout/social-ui";
 import { displayName, requireRole } from "@/lib/auth/roles";
 import {
   scenarioDetailToLegacy,
@@ -38,12 +37,10 @@ export default async function OfficerGradingDetailPage({
   );
 
   return (
-    <SocialPage size="wide">
-      <OfficerGradingWorkspace
-        submission={submission}
-        scenario={scenario}
-        officerName={officerName}
-      />
-    </SocialPage>
+    <OfficerGradingWorkspace
+      submission={submission}
+      scenario={scenario}
+      officerName={officerName}
+    />
   );
 }

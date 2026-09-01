@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth/roles";
 import type { ExamSummary, TestSession, TestSessionSummary } from "@/lib/test/types";
+import { FULL_EXAM_SECONDS } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
 async function getSupabase() {
@@ -36,10 +37,31 @@ export async function getTestSession(sessionId: string): Promise<TestSession | n
     p_session_id: sessionId,
   });
   if (error) throw new Error(error.message);
-  return (data as TestSession | null) ?? null;
+  if (!data) return null;
+  const session = data as TestSession;
+  return {
+    ...session,
+    timed: Boolean(session.timed),
+    time_limit_seconds: session.time_limit_seconds ?? null,
+  };
 }
 
-export async function startFullExam(examId: string) {
+async function applySessionTiming(
+  supabase: Awaited<ReturnType<typeof getSupabase>>,
+  sessionId: string,
+  timed: boolean,
+  timeLimitSeconds: number,
+) {
+  if (!timed) return;
+  const { error } = await supabase.rpc("configure_test_session_timing", {
+    p_session_id: sessionId,
+    p_timed: true,
+    p_time_limit_seconds: timeLimitSeconds,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function startFullExam(examId: string, timed = false) {
   await requireAuth();
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_test_session", {
@@ -48,6 +70,7 @@ export async function startFullExam(examId: string) {
   });
   if (error) throw new Error(error.message);
   const session = data as { id: string };
+  await applySessionTiming(supabase, session.id, timed, FULL_EXAM_SECONDS);
   redirect(`/tests/${session.id}`);
 }
 

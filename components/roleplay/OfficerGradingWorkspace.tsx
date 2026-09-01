@@ -8,74 +8,59 @@ import {
   saveGradingDraft,
   submitFinalGrading,
 } from "@/app/roleplay/actions";
-import RubricForm, { createEmptyRubric } from "@/components/roleplay/RubricForm";
+import { DecaButton } from "@/components/deca/button";
+import { ScrubRail } from "@/components/deca/rail";
+import { Segmented } from "@/components/deca/segmented";
+import { createEmptyRubric } from "@/components/roleplay/RubricForm";
 import VideoPlayer, { DriveDurationInput } from "@/components/roleplay/VideoPlayer";
+import { monoTime } from "@/lib/deca/format";
+import { RUBRIC_SCALE } from "@/lib/deca/placeholder";
 import { resolveVideoSource } from "@/lib/roleplay/submission";
 import type { Scenario } from "@/lib/roleplay/types";
 import {
   COMMENT_TAG_LABELS,
   createEmptyPiFeedback,
   formatTime,
+  getMaxScore,
+  getTotalScore,
   type CommentTag,
   type Grading,
   type RubricScores,
   type Submission,
   type TimestampedComment,
 } from "@/lib/roleplay/types";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 const AUTO_SAVE_DELAY = 1500;
 
-function ActiveCommentPanel({
-  comment,
-  onDelete,
-  canDelete,
-}: {
-  comment: TimestampedComment | null;
-  onDelete?: () => void;
-  canDelete?: boolean;
-}) {
-  if (!comment) {
+const SCALE_OPTIONS = RUBRIC_SCALE.map((item) => ({
+  value: item.key,
+  label: item.label,
+  gold: item.key === "exceeds",
+  score: item.score,
+}));
+
+type ScaleKey = (typeof RUBRIC_SCALE)[number]["key"];
+
+function scoreToScale(score: number): ScaleKey | null {
+  if (score >= 17) return "exceeds";
+  if (score >= 13) return "meets";
+  if (score >= 8) return "below";
+  if (score > 0) return "little";
+  return null;
+}
+
+function commentLabel(tag: CommentTag, scenario: Scenario) {
+  if (tag.startsWith("PI-")) {
+    const index = Number(tag.slice(3)) - 1;
     return (
-      <Card className="flex min-h-[200px] flex-col items-center justify-center p-6 text-center">
-        <span className="mb-2 text-3xl">💬</span>
-        <p className="text-sm text-muted-foreground">
-          Timestamped comments appear here during playback, or when you click a
-          marker on the timeline.
-        </p>
-      </Card>
+      scenario.performanceIndicators?.[index]?.pi_code ??
+      COMMENT_TAG_LABELS[tag]
     );
   }
-
-  return (
-    <Card className="border-amber-200 bg-amber-50 p-4">
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-sm font-medium text-amber-700">
-            {formatTime(comment.timestamp)}
-          </span>
-          <Badge className="bg-amber-200 text-amber-800">
-            {COMMENT_TAG_LABELS[comment.tag]}
-          </Badge>
-        </div>
-        {canDelete && onDelete && (
-          <button
-            type="button"
-            onClick={onDelete}
-            className="text-sm text-muted-foreground hover:text-destructive"
-            title="Delete comment"
-          >
-            ×
-          </button>
-        )}
-      </div>
-      <p className="text-sm leading-relaxed text-foreground">{comment.text}</p>
-    </Card>
-  );
+  if (tag === "21st-century") return "21ST CENTURY";
+  if (tag === "general") return "NOTE";
+  return COMMENT_TAG_LABELS[tag];
 }
 
 export function OfficerGradingWorkspace({
@@ -104,10 +89,14 @@ export function OfficerGradingWorkspace({
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "idle">(
     "idle",
   );
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [submitted, setSubmitted] = useState(submission.status === "reviewed");
   const [isPending, startTransition] = useTransition();
   const saveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const finalizedRef = useRef(submission.status === "reviewed");
+  const seekRef = useRef<((time: number) => void) | null>(null);
 
   useEffect(() => {
     const grading = submission.grading_data;
@@ -158,6 +147,7 @@ export function OfficerGradingWorkspace({
           await saveGradingDraft(submission.id, grading);
           if (finalizedRef.current) return;
           setSaveStatus("saved");
+          setSavedAt(new Date());
           setTimeout(() => setSaveStatus("idle"), 2000);
         });
       }, AUTO_SAVE_DELAY);
@@ -175,6 +165,7 @@ export function OfficerGradingWorkspace({
     const isDrive = resolveVideoSource(submission) === "google-drive";
     if (isDrive && !videoDuration) return;
     setPendingTimestamp(time);
+    setCurrentTime(time);
     setShowCommentForm(true);
     setNewCommentText("");
     setNewCommentTag("general");
@@ -198,6 +189,18 @@ export function OfficerGradingWorkspace({
   const deleteComment = (commentId: string) => {
     setComments((prev) => prev.filter((comment) => comment.id !== commentId));
     if (activeComment?.id === commentId) setActiveComment(null);
+  };
+
+  const handleSaveDraft = () => {
+    if (!rubric || submitted) return;
+    clearTimeout(saveTimer.current);
+    startTransition(async () => {
+      setSaveStatus("saving");
+      await saveGradingDraft(submission.id, buildGrading());
+      setSaveStatus("saved");
+      setSavedAt(new Date());
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    });
   };
 
   const handleSubmitGrading = () => {
@@ -245,206 +248,380 @@ export function OfficerGradingWorkspace({
   ];
   const videoSource = resolveVideoSource(submission);
   const isDrive = videoSource === "google-drive";
+  const railDuration = duration || videoDuration || 0;
+  const progress = railDuration > 0 ? currentTime / railDuration : 0.38;
+  const ticks = railDuration
+    ? comments.map((comment) => comment.timestamp / railDuration)
+    : [];
+
+  const playingComment =
+    comments.find((comment) => Math.abs(comment.timestamp - currentTime) < 2) ??
+    activeComment;
+
+  const total = getTotalScore(rubric);
+  const max = getMaxScore(rubric) || 100;
+  const student = submission.student_name ?? "Student";
+  const firstName = student.split(" ")[0] ?? student;
+  const eventBit = submission.event_code
+    ? `${submission.event_code}${submission.event_name ? ` ${submission.event_name}` : ""}`
+    : scenario.event;
+
+  const setPiScale = (index: number, key: ScaleKey) => {
+    const score = RUBRIC_SCALE.find((item) => item.key === key)?.score ?? 0;
+    const piKey = `PI-${index + 1}`;
+    setRubric({
+      ...rubric,
+      piScores: { ...rubric.piScores, [piKey]: score },
+    });
+  };
+
+  const setCenturyScale = (key: ScaleKey) => {
+    const score = RUBRIC_SCALE.find((item) => item.key === key)?.score ?? 0;
+    setRubric({ ...rubric, centurySkills: score });
+  };
+
+  const draftLabel =
+    saveStatus === "saving"
+      ? "SAVING"
+      : savedAt
+        ? `DRAFT SAVED ${monoTime(savedAt)}`
+        : submitted
+          ? "GRADE SENT"
+          : "DRAFT SAVED 12:04";
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between gap-4">
+    <>
+      <div className="flex items-end justify-between gap-8 border-b border-edge px-11 py-8">
         <div>
-          <Link href="/admin/grading" className="text-sm text-primary hover:underline">
-            ← Back to queue
-          </Link>
-          <h1 className="mt-2 text-2xl font-bold text-foreground">{scenario.title}</h1>
-          <p className="text-muted-foreground">
-            {submission.student_name ?? "Student"} · {scenario.event} · Attempt #
-            {submission.attempt_number}
+          <p className="eyebrow">
+            Submission · {eventBit} · attempt {submission.attempt_number}
+          </p>
+          <h1 className="mt-3 font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+            {scenario.title}
+          </h1>
+          <p className="mt-2.5 text-[15px] text-ink-2">
+            {student}, submitted {formatSubmitted(submission.submitted_at)}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {saveStatus === "saving" && (
-            <span className="text-xs text-muted-foreground">Saving...</span>
-          )}
-          {saveStatus === "saved" && (
-            <span className="text-xs text-primary">Saved</span>
-          )}
-          {submitted && <Badge variant="success">Submitted</Badge>}
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={handleDeleteSubmission}
-            disabled={isPending}
-            className="text-destructive hover:text-destructive"
-          >
-            Delete
-          </Button>
+        <div className="flex items-center gap-3.5">
+          <span className="whitespace-nowrap font-mono text-xs tabular text-mute">
+            {draftLabel}
+          </span>
+          {!submitted ? (
+            <DecaButton variant="outline" size="sm" onClick={handleSaveDraft} disabled={isPending}>
+              Save draft
+            </DecaButton>
+          ) : null}
+          {!submitted ? (
+            <DecaButton size="sm" onClick={handleSubmitGrading} disabled={isPending}>
+              Send grade
+            </DecaButton>
+          ) : null}
         </div>
       </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
-          <VideoPlayer
-            videoUrl={submission.video_url}
-            videoSource={videoSource}
-            comments={comments}
-            manualDuration={videoDuration}
-            onManualDurationChange={!submitted && isDrive ? setVideoDuration : undefined}
-            showDurationInput={false}
-            onTimelineClick={handleTimelineClick}
-            interactive={!submitted}
-            activeCommentId={activeComment?.id}
-            onCommentClick={setActiveComment}
-            onActiveCommentChange={setActiveComment}
-            externalComments
-          />
-
-          {isDrive && !submitted && (
-            <DriveDurationInput
-              onSave={setVideoDuration}
-              initialMinutes={Math.floor((videoDuration ?? 0) / 60)}
-              initialSeconds={Math.floor((videoDuration ?? 0) % 60)}
-            />
-          )}
-
-          <div className="space-y-4 border-t border-border pt-6">
-            <h2 className="text-lg font-semibold text-foreground">Scoring & feedback</h2>
-            <Card className="p-4">
-              <RubricForm
-                rubric={rubric}
-                piLabels={scenario.pis}
-                onChange={setRubric}
-                piFeedback={piFeedback}
-                onPiFeedbackChange={submitted ? undefined : (key, value) =>
-                  setPiFeedback((prev) => ({ ...prev, [key]: value }))
-                }
-                centuryFeedback={centuryFeedback}
-                onCenturyFeedbackChange={submitted ? undefined : setCenturyFeedback}
-                readOnly={submitted}
+      <div className="grid grid-cols-[1.5fr_1fr]">
+        <div className="border-r border-edge">
+          <div className="border-b border-edge px-10 py-8">
+            {submission.video_url ? (
+              <VideoPlayer
+                videoUrl={submission.video_url}
+                videoSource={videoSource}
+                comments={comments}
+                manualDuration={videoDuration}
+                onManualDurationChange={!submitted && isDrive ? setVideoDuration : undefined}
+                showDurationInput={false}
+                hideTimeline
+                seekRef={seekRef}
+                onPlaybackTime={(time, length) => {
+                  setCurrentTime(time);
+                  if (length > 0) setDuration(length);
+                }}
+                onTimelineClick={handleTimelineClick}
+                interactive={!submitted}
+                activeCommentId={activeComment?.id}
+                onCommentClick={setActiveComment}
+                onActiveCommentChange={setActiveComment}
+                externalComments
               />
-            </Card>
-
-            <Card className="p-4">
-              <Label htmlFor="overall-feedback" className="mb-1 block">
-                Overall feedback
-              </Label>
-              <textarea
-                id="overall-feedback"
-                value={overallFeedback}
-                onChange={(event) => setOverallFeedback(event.target.value)}
-                placeholder="Write overall feedback for the student..."
-                rows={3}
-                disabled={submitted}
-                className="w-full resize-none rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:bg-muted"
-              />
-            </Card>
-
-            {!submitted && (
-              <Button
-                type="button"
-                onClick={handleSubmitGrading}
-                disabled={isPending}
-                className="w-full"
-                size="lg"
-              >
-                Submit final grade
-              </Button>
+            ) : (
+              <div className="flex aspect-video items-center justify-center rounded-[6px] bg-[#0f1f14]">
+                <span className="font-mono text-xs tracking-[0.08em] text-white/45">
+                  GOOGLE DRIVE VIDEO
+                </span>
+              </div>
             )}
-          </div>
-        </div>
 
-        <div className="space-y-4 lg:sticky lg:top-20">
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-foreground">Active comment</h3>
-            <ActiveCommentPanel
-              comment={activeComment}
-              canDelete={!submitted && !!activeComment}
-              onDelete={
-                activeComment
-                  ? () => deleteComment(activeComment.id)
-                  : undefined
-              }
+            {isDrive && !submitted ? (
+              <div className="mt-4">
+                <DriveDurationInput
+                  onSave={(seconds) => {
+                    setVideoDuration(seconds);
+                    setDuration(seconds);
+                  }}
+                  initialMinutes={Math.floor((videoDuration ?? 0) / 60)}
+                  initialSeconds={Math.floor((videoDuration ?? 0) % 60)}
+                />
+              </div>
+            ) : null}
+
+            <ScrubRail
+              className="mt-6"
+              progress={progress}
+              ticks={ticks}
+              onSeek={(ratio) => {
+                if (!railDuration) return;
+                const time = ratio * railDuration;
+                seekRef.current?.(time);
+                setCurrentTime(time);
+                handleTimelineClick(time);
+              }}
             />
+            <div className="mt-3 flex items-center justify-between font-mono text-xs tabular text-mute">
+              <span>{formatTime(currentTime)}</span>
+              <span className="font-sans text-sm text-mute">
+                Click the rail to comment at that moment
+              </span>
+              <span>{railDuration > 0 ? formatTime(railDuration) : "0:00"}</span>
+            </div>
           </div>
 
-          {showCommentForm && !submitted && (
-            <Card className="border-primary/30 p-4">
-              <div className="mb-2 text-sm font-medium text-primary">
-                New comment at {formatTime(pendingTimestamp)}
-              </div>
-              <div className="mb-3 flex flex-wrap gap-2">
-                {tagOptions.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => setNewCommentTag(tag)}
-                    className={cn(
-                      "rounded-full border px-2 py-1 text-xs transition-colors",
-                      newCommentTag === tag
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:border-border",
-                    )}
-                  >
-                    {COMMENT_TAG_LABELS[tag]}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                value={newCommentText}
-                onChange={(event) => setNewCommentText(event.target.value)}
-                placeholder="Enter your feedback..."
-                rows={3}
-                className="w-full resize-none rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                autoFocus
-              />
-              <div className="mt-2 flex gap-2">
-                <Button type="button" size="sm" onClick={addComment}>
-                  Add comment
-                </Button>
-                <Button
+          <div className="px-10 py-8">
+            <div className="mb-2 flex items-baseline justify-between">
+              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
+                Comments
+              </h2>
+              {!submitted ? (
+                <button
                   type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowCommentForm(false)}
+                  className="text-sm text-ever hover:text-ever-dk"
+                  onClick={() => handleTimelineClick(currentTime || 0)}
                 >
-                  Cancel
-                </Button>
-              </div>
-            </Card>
-          )}
+                  Add comment
+                </button>
+              ) : null}
+            </div>
 
-          {comments.length > 0 && (
-            <div>
-              <h3 className="mb-2 text-sm font-semibold text-foreground">
-                All comments ({comments.length})
-              </h3>
-              <div className="max-h-64 space-y-1.5 overflow-y-auto">
-                {comments.map((comment) => (
+            {showCommentForm && !submitted ? (
+              <div className="mb-4 rounded-[6px] border border-edge p-4">
+                <p className="mb-3 font-mono text-xs text-ever">
+                  {formatTime(pendingTimestamp)}
+                </p>
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {tagOptions.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => setNewCommentTag(tag)}
+                      className={cn(
+                        "rounded-[6px] px-3 py-1.5 font-mono text-xs transition-[background-color,color] duration-150",
+                        newCommentTag === tag
+                          ? "bg-ever text-white"
+                          : "border border-edge text-ink-2 hover:bg-ever-lt hover:text-ever-dk",
+                      )}
+                    >
+                      {commentLabel(tag, scenario)}
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  value={newCommentText}
+                  onChange={(event) => setNewCommentText(event.target.value)}
+                  placeholder="Write the note for this moment"
+                  rows={3}
+                  className="w-full resize-none rounded-[6px] border border-edge bg-white px-3.5 py-3 text-[15px] leading-[1.6] text-ink"
+                />
+                <div className="mt-3 flex gap-2">
+                  <DecaButton size="sm" onClick={addComment}>
+                    Add comment
+                  </DecaButton>
+                  <DecaButton
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowCommentForm(false)}
+                  >
+                    Cancel
+                  </DecaButton>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="flex flex-col">
+              {comments.length === 0 && !showCommentForm ? (
+                <p className="py-6 text-[15px] leading-[1.6] text-ink-2">
+                  Click the rail to pin a comment to a moment in the recording.
+                </p>
+              ) : null}
+              {comments.map((comment, index) => {
+                const playing = playingComment?.id === comment.id;
+                return (
                   <button
                     key={comment.id}
                     type="button"
-                    onClick={() => setActiveComment(comment)}
+                    onClick={() => {
+                      setActiveComment(comment);
+                      seekRef.current?.(comment.timestamp);
+                      setCurrentTime(comment.timestamp);
+                    }}
                     className={cn(
-                      "w-full rounded-xl p-2.5 text-left transition-colors",
-                      activeComment?.id === comment.id
-                        ? "border border-amber-200 bg-amber-50"
-                        : "border border-border bg-card hover:border-border",
+                      "grid grid-cols-[64px_1fr] items-baseline gap-5 py-[18px] text-left",
+                      playing
+                        ? "my-0 -mx-5 rounded-[6px] bg-gold-lt px-5"
+                        : index < comments.length - 1
+                          ? "border-b border-hair"
+                          : "",
+                      !playing && index > 0 && comments[index - 1]?.id === playingComment?.id
+                        ? "border-t border-hair"
+                        : "",
                     )}
                   >
-                    <div className="mb-0.5 flex items-center gap-2">
-                      <span className="font-mono text-xs text-primary">
-                        {formatTime(comment.timestamp)}
-                      </span>
-                      <Badge variant="muted" className="normal-case">
-                        {COMMENT_TAG_LABELS[comment.tag]}
-                      </Badge>
+                    <span
+                      className={cn(
+                        "font-mono text-sm font-medium tabular",
+                        playing ? "font-semibold text-gold" : "text-ever",
+                      )}
+                    >
+                      {formatTime(comment.timestamp)}
+                    </span>
+                    <div>
+                      <p
+                        className={cn(
+                          "mb-1.5 font-mono text-xs uppercase tracking-[0.08em]",
+                          playing ? "text-gold" : "text-mute",
+                        )}
+                      >
+                        {commentLabel(comment.tag, scenario)}
+                        {playing ? " · PLAYING" : ""}
+                      </p>
+                      <p className="m-0 text-[15px] leading-[1.6] text-ink">
+                        {comment.text}
+                      </p>
+                      {!submitted ? (
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            deleteComment(comment.id);
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              deleteComment(comment.id);
+                            }
+                          }}
+                          className="mt-2 inline-block font-mono text-[11px] uppercase tracking-[0.08em] text-mute hover:text-ink"
+                        >
+                          Remove
+                        </span>
+                      ) : null}
                     </div>
-                    <p className="line-clamp-2 text-sm text-foreground">{comment.text}</p>
                   </button>
-                ))}
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="border-b border-edge px-9 py-8">
+            <div className="flex items-baseline justify-between">
+              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
+                Rubric
+              </h2>
+              <span className="font-mono text-xs text-mute">0–20 EACH</span>
+            </div>
+            <div className="mt-6 flex flex-col gap-6">
+              {scenario.pis.map((label, index) => {
+                const key = `PI-${index + 1}` as const;
+                const code =
+                  scenario.performanceIndicators?.[index]?.pi_code ?? key;
+                const selected = scoreToScale(rubric.piScores[key] ?? 0);
+                return (
+                  <div key={key}>
+                    <p className="m-0 text-sm leading-[1.55] text-ink">
+                      <span className="font-mono text-[13px] font-semibold text-ever">
+                        {code}
+                      </span>{" "}
+                      {label}
+                    </p>
+                    <div className="mt-2.5">
+                      <Segmented
+                        name={key}
+                        value={selected}
+                        options={SCALE_OPTIONS}
+                        onChange={submitted ? undefined : (value) => setPiScale(index, value)}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <div>
+                <p className="m-0 text-sm leading-[1.55] text-ink">
+                  21st Century Skills — overall presentation and judgment
+                </p>
+                <div className="mt-2.5">
+                  <Segmented
+                    name="century"
+                    value={scoreToScale(rubric.centurySkills)}
+                    options={SCALE_OPTIONS}
+                    onChange={submitted ? undefined : setCenturyScale}
+                  />
+                </div>
               </div>
             </div>
-          )}
+          </div>
+
+          <div className="flex items-end justify-between border-b border-edge bg-gold-lt px-9 py-7">
+            <span className="font-mono text-xs uppercase tracking-[0.08em] text-gold">
+              Total
+            </span>
+            <span className="font-display text-[44px] font-extrabold leading-none tracking-[-0.035em] tabular text-ink">
+              {total}
+              <span className="text-[18px] text-ink-2">/{max}</span>
+            </span>
+          </div>
+
+          <div className="px-9 py-8">
+            <h2 className="mb-4 font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
+              Feedback to {firstName}
+            </h2>
+            <textarea
+              value={overallFeedback}
+              onChange={(event) => setOverallFeedback(event.target.value)}
+              placeholder="Strong promotion section and a real budget. Two things before districts: connect buying behavior to the specific store openings, and close with an ask."
+              rows={6}
+              disabled={submitted}
+              className="min-h-[132px] w-full resize-none rounded-[6px] border border-edge bg-white px-[18px] py-[18px] text-[15px] leading-[1.7] text-ink disabled:bg-ground"
+            />
+            <p className="mt-4 font-mono text-xs uppercase tracking-[0.08em] text-mute">
+              {officerName} · {submission.status === "reviewed" ? "GRADED" : "GRADER"}
+            </p>
+            <Link
+              href="/admin/grading"
+              className="mt-4 inline-block text-sm text-ink-2 hover:text-ink"
+            >
+              Back to queue
+            </Link>
+            {!submitted ? (
+              <button
+                type="button"
+                onClick={handleDeleteSubmission}
+                disabled={isPending}
+                className="mt-3 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute hover:text-ink"
+              >
+                Delete submission
+              </button>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
+}
+
+function formatSubmitted(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 }

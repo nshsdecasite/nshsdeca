@@ -1,5 +1,3 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
 import { SocialHeader } from "@/components/layout/social-ui";
 
 type PageHeaderProps = {
@@ -14,5 +12,3 @@ type PageHeaderProps = {
 export function PageHeader(props: PageHeaderProps) {
   return <SocialHeader {...props} />;
 }
-
-export { Link };

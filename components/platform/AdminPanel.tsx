@@ -1,18 +1,72 @@
 "use client";
 
-import { useTransition } from "react";
-import { createAnnouncement, deleteAnnouncement } from "@/app/admin/actions";
-import type { AdminOverview } from "@/lib/platform/types";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { setMemberRole } from "@/app/admin/actions";
+import type { AdminOverview, ChapterMember } from "@/lib/platform/types";
+import { displayName } from "@/lib/auth/display-name";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 
 type AdminPanelProps = {
   overview: AdminOverview;
+  members: ChapterMember[];
+  currentUserId: string;
+  currentRole: "officer" | "advisor";
 };
 
-export function AdminPanel({ overview }: AdminPanelProps) {
+function downloadCsv(filename: string, rows: string[][]) {
+  const csv = rows
+    .map((row) =>
+      row
+        .map((cell) => `"${String(cell ?? "").replaceAll('"', '""')}"`)
+        .join(","),
+    )
+    .join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+export function AdminPanel({
+  overview,
+  members,
+  currentUserId,
+  currentRole,
+}: AdminPanelProps) {
+  const router = useRouter();
+  const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const canAssignAdvisor = currentRole === "advisor";
+
+  const exportMembers = () => {
+    downloadCsv("chapter-members.csv", [
+      ["First name", "Last name", "Email", "Grade", "Role", "Points"],
+      ...members.map((member) => [
+        member.first_name ?? "",
+        member.last_name ?? "",
+        member.email ?? "",
+        member.grade_level?.toString() ?? "",
+        member.role,
+        String(member.total_points),
+      ]),
+    ]);
+  };
+
+  const exportOverview = () => {
+    downloadCsv("chapter-overview.csv", [
+      ["Metric", "Value"],
+      ["Students", String(overview.student_count)],
+      ["Pending submissions", String(overview.pending_submissions)],
+      ["Tests this week", String(overview.tests_this_week)],
+      ["Members", String(members.length)],
+    ]);
+  };
 
   return (
     <div className="space-y-6">
@@ -26,93 +80,118 @@ export function AdminPanel({ overview }: AdminPanelProps) {
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {stat.label}
             </p>
-            <p className="mt-2 text-3xl font-bold tabular-nums text-foreground">{stat.value}</p>
+            <p className="mt-2 text-3xl font-semibold tabular-nums text-foreground">{stat.value}</p>
           </Card>
         ))}
       </div>
 
       <Card className="p-6">
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            startTransition(async () => {
-              await createAnnouncement(formData);
-              event.currentTarget.reset();
-              window.location.reload();
-            });
-          }}
-        >
-          <h2 className="text-lg font-semibold text-foreground">Post announcement</h2>
-          <div className="mt-4">
-            <Label htmlFor="announcement-message">Message</Label>
-            <textarea
-              id="announcement-message"
-              name="message"
-              rows={4}
-              required
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">Data export</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Download chapter stats and the member roster as CSV.
+            </p>
           </div>
-          <div className="mt-4">
-            <Label htmlFor="announcement-visible-to">Visible to</Label>
-            <select
-              id="announcement-visible-to"
-              name="visible_to"
-              defaultValue="all"
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="all">Everyone</option>
-              <option value="students">Students only</option>
-              <option value="officers">Officers only</option>
-            </select>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="secondary" onClick={exportOverview}>
+              Export stats
+            </Button>
+            <Button type="button" variant="secondary" onClick={exportMembers}>
+              Export members
+            </Button>
           </div>
-          <Button type="submit" disabled={isPending} className="mt-4">
-            {isPending ? "Posting…" : "Post announcement"}
-          </Button>
-        </form>
+        </div>
       </Card>
 
       <Card className="p-6">
-        <section>
-          <h2 className="text-lg font-semibold text-foreground">Recent announcements</h2>
-          {overview.announcements?.length ? (
-            <ul className="mt-4 space-y-3">
-              {overview.announcements.map((announcement) => (
-                <li
-                  key={announcement.id}
-                  className="flex items-start justify-between gap-4 rounded-2xl bg-muted px-4 py-3"
-                >
-                  <div>
-                    <p className="text-sm text-foreground">{announcement.message}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {announcement.visible_to} ·{" "}
-                      {new Date(announcement.created_at).toLocaleString()}
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    disabled={isPending}
-                    onClick={() =>
-                      startTransition(async () => {
-                        await deleteAnnouncement(announcement.id);
-                        window.location.reload();
-                      })
-                    }
-                    className="text-destructive hover:text-destructive"
-                  >
-                    Delete
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4 text-sm text-muted-foreground">No announcements yet.</p>
-          )}
-        </section>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">Announcements & messages</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Post chapter announcements and message members from one page.
+            </p>
+          </div>
+          <Button asChild>
+            <Link href="/messages">Open inbox</Link>
+          </Button>
+        </div>
       </Card>
+
+      <Card className="overflow-hidden p-0">
+        <div className="p-6 pb-3">
+          <h2 className="text-lg font-semibold text-foreground">Chapter members</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {canAssignAdvisor
+              ? "Change student, officer, and advisor roles."
+              : "Officers can promote students. Only advisors can assign the advisor role."}
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-muted text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <tr>
+                <th className="px-5 py-3">Member</th>
+                <th className="px-5 py-3">Grade</th>
+                <th className="px-5 py-3">Points</th>
+                <th className="px-5 py-3">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => (
+                <tr key={member.id} className="border-t border-border/60">
+                  <td className="px-5 py-3">
+                    <p className="font-medium text-foreground">
+                      {displayName(member.first_name, member.last_name, member.email)}
+                      {member.id === currentUserId ? (
+                        <span className="ml-2 text-xs font-semibold text-primary">You</span>
+                      ) : null}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{member.email}</p>
+                  </td>
+                  <td className="px-5 py-3 tabular-nums text-muted-foreground">
+                    {member.grade_level ?? "—"}
+                  </td>
+                  <td className="px-5 py-3 tabular-nums text-foreground">
+                    {member.total_points}
+                  </td>
+                  <td className="px-5 py-3">
+                    <select
+                      defaultValue={member.role}
+                      disabled={isPending || member.id === currentUserId}
+                      onChange={(event) => {
+                        const role = event.target.value as ChapterMember["role"];
+                        startTransition(async () => {
+                          try {
+                            await setMemberRole(member.id, role);
+                            router.refresh();
+                          } catch (roleError) {
+                            setError(
+                              roleError instanceof Error
+                                ? roleError.message
+                                : "Could not update role",
+                            );
+                            event.target.value = member.role;
+                          }
+                        });
+                      }}
+                      className="rounded-lg border border-input bg-card px-2 py-1.5 text-sm"
+                    >
+                      <option value="student">Student</option>
+                      <option value="officer">Officer</option>
+                      {canAssignAdvisor || member.role === "advisor" ? (
+                        <option value="advisor">Advisor</option>
+                      ) : null}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
     </div>
   );
 }

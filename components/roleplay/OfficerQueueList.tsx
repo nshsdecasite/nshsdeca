@@ -97,7 +97,7 @@ function SubmissionRow({
   disabled: boolean;
 }) {
   return (
-    <Card className="flex items-center gap-2 p-0 transition-all hover:shadow-border-hover">
+    <Card className="flex items-center gap-2 p-0 transition-[box-shadow] duration-150 ease-out hover:shadow-border-hover">
       <Link
         href={`/admin/grading/${submission.id}`}
         className="flex min-w-0 flex-1 items-center justify-between p-4"

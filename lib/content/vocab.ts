@@ -11,6 +11,7 @@ export type VocabFlashcard = {
   id: string;
   term: string;
   definition: string;
+  exampleUsage: string | null;
   clusterSlugs: ClusterSlug[];
   clusterLabels: string[];
 };
@@ -38,6 +39,7 @@ type VocabFlashcardRow = {
   id: string;
   term: string;
   definition: string;
+  example_usage: string | null;
   set_title: string;
 };
 
@@ -67,6 +69,7 @@ export async function getVocabFlashcards(): Promise<{
       id: row.id,
       term: row.term,
       definition: row.definition,
+      exampleUsage: row.example_usage?.trim() || null,
       clusterSlugs: clusters?.clusterSlugs ?? [
         "business-management-and-administration",
       ],

@@ -20,7 +20,7 @@ export default async function NotesPage() {
         backLabel="Study tools"
         eyebrow="Notes"
         title="Personal notes"
-        description="Keep tabbed notebooks for event prep, formulas, and study reminders."
+        description="Keep tabbed notebooks for event prep, formulas, and study reminders. Notes autosave and can be searched from the sidebar."
       />
       <NotesWorkspace notes={notes} />
     </SocialPage>

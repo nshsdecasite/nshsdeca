@@ -134,7 +134,7 @@ export function TheoryLibrary({
             <button
               type="button"
               onClick={() => setSelected(theory)}
-              className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.99]"
+              className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left shadow-border transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-border-hover active:scale-[0.96]"
             >
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <Badge>{theory.categoryLabel}</Badge>

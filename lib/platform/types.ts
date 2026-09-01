@@ -1,3 +1,13 @@
+export type PiHeatmapCell = {
+  id: string;
+  pi_code: string;
+  indicator_text: string;
+  instructional_area_code: string | null;
+  total_attempts: number;
+  correct_count: number;
+  accuracy: number;
+};
+
 export type DashboardStats = {
   total_points: number;
   tests_completed: number;
@@ -81,4 +91,43 @@ export type AdminOverview = {
   pending_submissions: number;
   tests_this_week: number;
   announcements: Announcement[];
+};
+
+export type ChapterMember = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  grade_level: number | null;
+  role: "student" | "officer" | "advisor";
+  total_points: number;
+  created_at: string;
+};
+
+export type MessageableMember = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  role: "student" | "officer" | "advisor";
+  grade_level: number | null;
+};
+
+export type MessageConversation = {
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  role: string | null;
+  last_body: string;
+  last_at: string;
+  unread_count: number;
+};
+
+export type DirectMessage = {
+  id: string;
+  sender_id: string;
+  recipient_id: string;
+  body: string;
+  created_at: string;
+  read_at: string | null;
 };

@@ -33,7 +33,12 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/roleplays") ||
     pathname.startsWith("/tests") ||
     pathname.startsWith("/submissions") ||
-    pathname.startsWith("/admin");
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/study") ||
+    pathname.startsWith("/notes") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/leaderboard") ||
+    pathname.startsWith("/messages");
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();

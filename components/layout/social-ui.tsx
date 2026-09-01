@@ -1,13 +1,14 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type SocialPageSize = "default" | "wide" | "narrow";
+type PageSize = "default" | "wide" | "narrow";
 
-const SHELL_WIDTH: Record<SocialPageSize, string> = {
+const WIDTH: Record<PageSize, string> = {
   default: "max-w-5xl",
-  wide: "max-w-7xl",
-  narrow: "max-w-3xl",
+  wide: "max-w-6xl",
+  narrow: "max-w-xl",
 };
 
 export function SocialPage({
@@ -15,14 +16,13 @@ export function SocialPage({
   children,
   className,
 }: {
-  size?: SocialPageSize;
+  size?: PageSize;
   children: ReactNode;
   className?: string;
 }) {
   return (
-    <div className={cn("social-page min-h-full pb-12", className)}>
-      <div className="social-page-glow pointer-events-none" aria-hidden />
-      <div className={cn("social-page-shell relative", SHELL_WIDTH[size])}>
+    <div className={cn("relative min-h-full pb-16", className)}>
+      <div className={cn("relative mx-auto px-4 py-8 sm:px-6 sm:py-10", WIDTH[size])}>
         {children}
       </div>
     </div>
@@ -47,33 +47,27 @@ export function SocialHeader({
   return (
     <header className={cn("mb-8", className)}>
       {backHref ? (
-        <Link
+          <Link
           href={backHref}
-          className="text-sm font-medium text-primary transition-colors hover:text-primary"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-2 transition-colors duration-150 hover:text-ink"
         >
-          ← {backLabel}
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {backLabel}
         </Link>
       ) : null}
       {eyebrow ? (
-        <p
-          className={cn(
-            "text-xs font-semibold uppercase tracking-[0.14em] text-primary",
-            backHref ? "mt-3" : "",
-          )}
-        >
-          {eyebrow}
-        </p>
+        <p className={cn("eyebrow", backHref ? "mt-3" : "")}>{eyebrow}</p>
       ) : null}
       <h1
         className={cn(
-          "text-3xl font-bold tracking-tight text-foreground sm:text-4xl",
-          backHref || eyebrow ? "mt-2" : "",
+          "font-display text-[32px] font-extrabold tracking-[-0.03em] text-ink sm:text-[40px]",
+          backHref || eyebrow ? "mt-1.5" : "",
         )}
       >
         {title}
       </h1>
       {description ? (
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <p className="mt-2 max-w-[46ch] text-sm leading-[1.65] text-ink-2 sm:text-[15px]">
           {description}
         </p>
       ) : null}
@@ -93,9 +87,7 @@ export function SocialPanel({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border/60 bg-card p-5 shadow-border sm:p-6",
-        interactive &&
-          "transition-[box-shadow,transform] duration-150 hover:shadow-border-hover active:scale-[0.995]",
+        "overflow-hidden rounded-[6px] border border-edge bg-white p-5",
         className,
       )}
     >

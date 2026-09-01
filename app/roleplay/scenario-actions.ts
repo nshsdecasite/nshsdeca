@@ -23,6 +23,7 @@ export async function listScenarios(input?: {
   year?: number;
   level?: string;
   search?: string;
+  clusterSlug?: string;
   limit?: number;
   offset?: number;
 }): Promise<ScenarioSummary[]> {
@@ -35,6 +36,7 @@ export async function listScenarios(input?: {
     p_search: optionalText(input?.search) ?? null,
     p_limit: input?.limit ?? 24,
     p_offset: input?.offset ?? 0,
+    p_cluster_slug: optionalText(input?.clusterSlug) ?? null,
   });
   if (error) throw new Error(error.message);
   return (data ?? []) as ScenarioSummary[];

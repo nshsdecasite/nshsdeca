@@ -9,8 +9,10 @@ import type {
   FlashcardSetSummary,
   LeaderboardEntry,
   Note,
+  PiHeatmapCell,
   UserProfile,
 } from "@/lib/platform/types";
+import { customTestSeconds } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
 async function getSupabase() {
@@ -52,15 +54,43 @@ export async function updateMyProfile(input: {
   revalidatePath("/leaderboard");
 }
 
+function mapLeaderboard(rows: LeaderboardEntry[] | null): LeaderboardEntry[] {
+  return ((rows ?? []) as LeaderboardEntry[]).map((row) => ({
+    ...row,
+    rank: Number(row.rank),
+    total_points: Number(row.total_points),
+  }));
+}
+
 export async function listLeaderboard(): Promise<LeaderboardEntry[]> {
   await requireAuth();
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_leaderboard", { p_limit: 50 });
   if (error) throw new Error(error.message);
-  return ((data ?? []) as LeaderboardEntry[]).map((row) => ({
+  return mapLeaderboard(data as LeaderboardEntry[] | null);
+}
+
+export async function listWeeklyLeaderboard(): Promise<LeaderboardEntry[]> {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { data, error } = await supabase.rpc("list_weekly_leaderboard", {
+    p_limit: 50,
+  });
+  if (error) return [];
+  return mapLeaderboard(data as LeaderboardEntry[] | null);
+}
+
+export async function getMyPiHeatmap(): Promise<PiHeatmapCell[]> {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { data, error } = await supabase.rpc("get_my_pi_heatmap");
+  if (error) return [];
+  const rows = Array.isArray(data) ? data : [];
+  return (rows as PiHeatmapCell[]).map((row) => ({
     ...row,
-    rank: Number(row.rank),
-    total_points: Number(row.total_points),
+    total_attempts: Number(row.total_attempts),
+    correct_count: Number(row.correct_count),
+    accuracy: Number(row.accuracy),
   }));
 }
 
@@ -76,16 +106,16 @@ export async function saveNote(input: {
   id?: string;
   tabName: string;
   text: string;
-}) {
+}): Promise<Note> {
   await requireAuth();
   const supabase = await getSupabase();
-  const { error } = await supabase.rpc("upsert_note", {
+  const { data, error } = await supabase.rpc("upsert_note", {
     p_id: input.id ?? null,
     p_tab_name: input.tabName,
     p_content: { text: input.text },
   });
   if (error) throw new Error(error.message);
-  revalidatePath("/notes");
+  return data as Note;
 }
 
 export async function deleteNote(id: string) {
@@ -142,11 +172,27 @@ export async function markFlashcardLearning(flashcardId: string) {
   if (error) throw new Error(error.message);
 }
 
+async function applySessionTiming(
+  supabase: Awaited<ReturnType<typeof getSupabase>>,
+  sessionId: string,
+  timed: boolean,
+  timeLimitSeconds: number,
+) {
+  if (!timed) return;
+  const { error } = await supabase.rpc("configure_test_session_timing", {
+    p_session_id: sessionId,
+    p_timed: true,
+    p_time_limit_seconds: timeLimitSeconds,
+  });
+  if (error) throw new Error(error.message);
+}
+
 export async function startCustomTest(input: {
   questionCount: number;
   clusterSlug?: string;
   iaCode?: string;
   piId?: string;
+  timed?: boolean;
 }) {
   await requireAuth();
   const supabase = await getSupabase();
@@ -157,17 +203,29 @@ export async function startCustomTest(input: {
     p_pi_id: input.piId ?? null,
   });
   if (error) throw new Error(error.message);
-  const session = data as { id: string };
+  const session = data as { id: string; total_questions?: number };
+  await applySessionTiming(
+    supabase,
+    session.id,
+    Boolean(input.timed),
+    customTestSeconds(session.total_questions ?? input.questionCount),
+  );
   redirect(`/tests/${session.id}`);
 }
 
-export async function startPiTargetedTest(questionCount = 15) {
+export async function startPiTargetedTest(questionCount = 15, timed = false) {
   await requireAuth();
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_pi_targeted_test_session", {
     p_question_count: questionCount,
   });
   if (error) throw new Error(error.message);
-  const session = data as { id: string };
+  const session = data as { id: string; total_questions?: number };
+  await applySessionTiming(
+    supabase,
+    session.id,
+    timed,
+    customTestSeconds(session.total_questions ?? questionCount),
+  );
   redirect(`/tests/${session.id}`);
 }

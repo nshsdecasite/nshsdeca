@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type UserRole = "student" | "officer" | "advisor";
+export { displayName } from "@/lib/auth/display-name";
 
 export async function getSessionUser() {
   const supabase = await createClient();
@@ -35,13 +36,4 @@ export async function requireRole(roles: UserRole[], next?: string) {
     redirect("/dashboard");
   }
   return { user, role };
-}
-
-export function displayName(
-  firstName?: string | null,
-  lastName?: string | null,
-  email?: string | null,
-) {
-  const name = [firstName, lastName].filter(Boolean).join(" ").trim();
-  return name || email?.split("@")[0] || "Member";
 }

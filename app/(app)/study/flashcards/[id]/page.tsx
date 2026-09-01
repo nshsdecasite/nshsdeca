@@ -30,9 +30,9 @@ export default async function FlashcardSetPage({ params }: FlashcardSetPageProps
         backLabel="PI flashcards"
         eyebrow="Study"
         title={set.title}
-        description="Flip each card, then mark whether you know the PI definition."
+        description="Flip each card, then mark whether you know the PI. Test and match modes are also available."
       />
-      <FlashcardStudy setId={set.id} title={set.title} cards={set.cards} />
+      <FlashcardStudy title={set.title} cards={set.cards} />
     </SocialPage>
   );
 }

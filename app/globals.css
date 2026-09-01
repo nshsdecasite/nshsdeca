@@ -1,74 +1,91 @@
 @import "tailwindcss";
 
 @theme {
-  /* Semantic tokens */
-  --color-background: hsl(120 20% 97%);
-  --color-foreground: hsl(222 47% 11%);
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(222 47% 11%);
-  --color-primary: hsl(120 40% 29%);
-  --color-primary-foreground: hsl(0 0% 100%);
-  --color-secondary: hsl(120 30% 94%);
-  --color-secondary-foreground: hsl(120 40% 22%);
-  --color-muted: hsl(120 15% 94%);
-  --color-muted-foreground: hsl(120 8% 40%);
-  --color-accent: hsl(120 30% 92%);
-  --color-accent-foreground: hsl(120 40% 22%);
-  --color-border: hsl(120 15% 88%);
-  --color-input: hsl(120 15% 88%);
-  --color-ring: hsl(120 40% 29%);
-  --color-destructive: hsl(0 72% 51%);
-  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-ink: #14261a;
+  --color-ink-2: #3d5344;
+  --color-mute: #6b8071;
+  --color-ground: #e6eee1;
+  --color-ground-2: #dde8d7;
+  --color-white: #ffffff;
+  --color-ever: #1d5a34;
+  --color-ever-dk: #123a22;
+  --color-ever-lt: #e4efe6;
+  --color-gold: #a67c14;
+  --color-gold-br: #d9a92c;
+  --color-gold-lt: #f7efd9;
+  --color-edge: #cddcc6;
+  --color-hair: rgba(20, 38, 26, 0.12);
 
-  /* Legacy aliases for migration */
-  --color-deca-green: hsl(120 40% 29%);
-  --color-deca-green-dark: hsl(120 45% 22%);
-  --color-deca-green-light: hsl(120 30% 94%);
-  --color-deca-green-muted: hsl(120 30% 45%);
-  --color-surface: hsl(120 20% 97%);
-  --color-ink: hsl(222 47% 11%);
-  --color-muted-legacy: hsl(120 8% 40%);
+  --color-background: #e6eee1;
+  --color-foreground: #14261a;
+  --color-card: #ffffff;
+  --color-card-foreground: #14261a;
+  --color-primary: #1d5a34;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #e4efe6;
+  --color-secondary-foreground: #123a22;
+  --color-muted: #dde8d7;
+  --color-muted-foreground: #6b8071;
+  --color-accent: #e4efe6;
+  --color-accent-foreground: #123a22;
+  --color-border: #cddcc6;
+  --color-input: #cddcc6;
+  --color-ring: #d9a92c;
+  --color-destructive: #b42318;
+  --color-destructive-foreground: #ffffff;
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 0.9rem;
-  --radius-xl: 1.25rem;
-  --radius-2xl: 1.5rem;
+  --color-deca-green: #1d5a34;
+  --color-deca-green-dark: #123a22;
+  --color-deca-green-light: #e4efe6;
+  --color-surface: #e6eee1;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 6px;
+  --radius-lg: 6px;
+  --radius-xl: 6px;
+  --radius-2xl: 6px;
 
-  --shadow-border: 0 0 0 1px hsl(120 15% 88% / 0.9), 0 1px 2px hsl(120 20% 20% / 0.04), 0 4px 12px hsl(120 20% 20% / 0.04);
-  --shadow-border-hover: 0 0 0 1px hsl(120 20% 80% / 0.95), 0 2px 4px hsl(120 20% 20% / 0.05), 0 8px 24px hsl(120 30% 20% / 0.08);
-  --shadow-soft: var(--shadow-border);
-  --shadow-soft-lg: var(--shadow-border-hover);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+
+  --animate-rail-fill: rail-fill 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  --animate-settle: settle 0.5s ease both;
+}
+
+@keyframes rail-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 :root {
-  --sidebar-width: 16rem;
-  --sidebar-width-collapsed: 4.5rem;
-  --gradient-from: hsl(120 25% 98%);
-  --gradient-via: hsl(120 20% 96%);
-  --gradient-to: hsl(120 30% 92%);
+  --sidebar-width: 224px;
 }
 
 @layer base {
   html {
-    font-size: 93.6%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply min-h-screen bg-ground font-sans text-ink antialiased;
     text-wrap: pretty;
-    background-image: linear-gradient(
-      135deg,
-      var(--gradient-from) 0%,
-      var(--gradient-via) 45%,
-      var(--gradient-to) 100%
-    );
-    background-attachment: fixed;
-    min-height: 100vh;
   }
 
   h1,
@@ -77,34 +94,52 @@
     text-wrap: balance;
   }
 
-  * {
-    @apply border-border;
+  p,
+  li,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--color-ever);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-ever-dk);
+  }
+
+  :where(a, button, input, textarea, select, [href], [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid #d9a92c;
+    outline-offset: 2px;
+  }
+
+  img:not(.no-outline) {
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    outline-offset: -1px;
   }
 }
 
 @layer utilities {
-  .shadow-border {
-    box-shadow: var(--shadow-border);
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-mute);
   }
 
-  .shadow-border-hover {
-    box-shadow: var(--shadow-border-hover);
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
+}
 
-  .social-page {
-    @apply relative min-h-full pb-12;
-  }
-
-  .social-page-glow {
-    @apply pointer-events-none absolute inset-0;
-    background: radial-gradient(
-      circle at top right,
-      hsl(120 40% 29% / 0.08),
-      transparent 55%
-    );
-  }
-
-  .social-page-shell {
-    @apply relative mx-auto px-4 py-8 sm:px-6 sm:py-10;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

@@ -26,7 +26,7 @@ export const platformSections: PlatformSection[] = [
       {
         title: "Custom test",
         description:
-          "Choose question count and filter by cluster, instructional area, PIs, or level.",
+          "Choose question count and filter by cluster, instructional area, or a specific PI.",
         href: "/tests/custom",
       },
       {
@@ -83,25 +83,25 @@ export const platformSections: PlatformSection[] = [
       {
         title: "PI browser",
         description:
-          "Search and filter the full Performance Indicator database by cluster, area, and tier.",
+          "Search and filter the full Performance Indicator database by cluster and instructional area.",
         href: "/study/pis",
       },
       {
         title: "PI flashcards",
         description:
-          "Premade sets by cluster and instructional area with learn, test, and match modes.",
+          "Premade sets by instructional area with learn, test, and match modes.",
         href: "/study/flashcards",
       },
       {
         title: "Vocab flashcards",
         description:
-          "Cluster and event vocab with definitions and example usage in context.",
+          "Cluster and event vocab with definitions and example usage when available.",
         href: "/study/vocab",
       },
       {
         title: "Theories & fallacies",
         description:
-          "Motivational frameworks, psychological principles, and logical fallacy drills.",
+          "Motivational frameworks, psychological principles, and logical fallacies to review.",
         href: "/study/theories",
       },
       {
@@ -113,7 +113,7 @@ export const platformSections: PlatformSection[] = [
       {
         title: "Personal notes",
         description:
-          "Tabbed notebooks with rich text, auto-save, and search across all notes.",
+          "Tabbed notebooks with autosave and search across all notes.",
         href: "/notes",
       },
     ],
@@ -126,7 +126,7 @@ export const platformSections: PlatformSection[] = [
       {
         title: "Your dashboard",
         description:
-          "Rolling PI accuracy, recent activity, weak PIs, and quick links to keep studying.",
+          "Rolling PI accuracy, recent activity, weak PIs, and a heatmap of what you’ve practiced.",
         href: "/dashboard",
       },
       {
@@ -138,15 +138,21 @@ export const platformSections: PlatformSection[] = [
       {
         title: "Profile & settings",
         description:
-          "Display name, grade, event, avatar, and leaderboard visibility preferences.",
+          "Display name, grade, and leaderboard visibility preferences.",
         href: "/profile",
       },
       {
         title: "Admin panel",
         description:
-          "Announcements, officer management, chapter dashboards, and data export.",
+          "Officer management, chapter dashboards, and data export.",
         href: "/admin",
         badge: "officer",
+      },
+      {
+        title: "Announcements & messages",
+        description:
+          "Chapter announcements and direct messages between officers, advisors, and members.",
+        href: "/messages",
       },
     ],
   },

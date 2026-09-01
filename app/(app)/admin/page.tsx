@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAdminOverview } from "@/app/admin/actions";
+import { getAdminOverview, listChapterMembers } from "@/app/admin/actions";
 import { AdminPanel } from "@/components/platform/AdminPanel";
 import { SocialPage } from "@/components/layout/social-ui";
 import { PageHeader } from "@/components/page-header";
@@ -10,19 +10,27 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPage() {
-  await requireRole(["officer", "advisor"], "/admin");
-  const overview = await getAdminOverview();
+  const { user, role } = await requireRole(["officer", "advisor"], "/admin");
+  const [overview, members] = await Promise.all([
+    getAdminOverview(),
+    listChapterMembers(),
+  ]);
 
   return (
-    <SocialPage>
+    <SocialPage size="wide">
       <PageHeader
         backHref="/dashboard"
         backLabel="Dashboard"
         eyebrow="Officers"
         title="Admin panel"
-        description="Post chapter announcements and monitor platform activity."
+        description="Member roles, chapter stats, and CSV export. Announcements and messages live on the inbox page."
       />
-      <AdminPanel overview={overview} />
+      <AdminPanel
+        overview={overview}
+        members={members}
+        currentUserId={user.id}
+        currentRole={role === "advisor" ? "advisor" : "officer"}
+      />
     </SocialPage>
   );
 }

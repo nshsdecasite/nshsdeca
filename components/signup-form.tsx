@@ -4,22 +4,57 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { signUp, type AuthActionState } from "@/app/auth/actions";
-import { TextField } from "@/components/text-field";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { DecaButton } from "@/components/deca/button";
 
 const initialState: AuthActionState = {};
-const chapterName = process.env.NEXT_PUBLIC_CHAPTER_NAME ?? "Newman Smith DECA";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-
   return (
-    <Button type="submit" disabled={pending} className="mt-2 w-full">
-      {pending ? "Creating account…" : "Create account"}
-    </Button>
+    <DecaButton type="submit" disabled={pending} className="mt-2 w-full">
+      {pending ? "Creating account" : "Create an account"}
+    </DecaButton>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type = "text",
+  autoComplete,
+  required,
+  placeholder,
+  minLength,
+  mono,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  autoComplete?: string;
+  required?: boolean;
+  placeholder?: string;
+  minLength?: number;
+  mono?: boolean;
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className="mb-2.5 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute"
+      >
+        {label}
+      </label>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        autoComplete={autoComplete}
+        required={required}
+        placeholder={placeholder}
+        minLength={minLength}
+        className={`w-full rounded-[6px] border border-edge bg-white px-3.5 py-[11px] text-sm text-ink ${mono ? "font-mono" : ""}`}
+      />
+    </div>
   );
 }
 
@@ -28,126 +63,98 @@ export function SignupForm() {
 
   if (state.message) {
     return (
-      <Card className="shadow-border-hover">
-        <CardContent className="pt-6">
-          <div className="rounded-2xl bg-primary/10 px-4 py-3">
-            <p className="text-sm font-semibold text-primary">Account created</p>
-            <p className="mt-1 text-sm text-muted-foreground">{state.message}</p>
-          </div>
-          <Button asChild className="mt-6">
-            <Link href="/login">Go to sign in</Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="px-14 py-16">
+        <h1 className="font-display text-[32px] font-extrabold tracking-[-0.03em] text-ink">
+          Account created
+        </h1>
+        <p className="mt-4 max-w-[46ch] text-[15px] leading-[1.65] text-ink-2">
+          {state.message}
+        </p>
+        <DecaButton href="/login" className="mt-8">
+          Sign in
+        </DecaButton>
+      </div>
     );
   }
 
   return (
-    <Card className="shadow-border-hover">
-      <CardHeader>
-        <CardTitle className="text-2xl">Create your account</CardTitle>
-        <CardDescription>
-          Sign up with your school email to get started.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-5">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <TextField
-              label="First name"
-              name="firstName"
-              autoComplete="given-name"
-              required
-            />
-            <TextField
-              label="Last name"
-              name="lastName"
-              autoComplete="family-name"
-              required
-            />
-          </div>
-
-          <TextField
-            label="School email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@student.dallasisd.org"
+    <div className="px-14 py-16">
+      <p className="eyebrow">New members</p>
+      <h1 className="mt-4 font-display text-[40px] font-extrabold leading-[1.02] tracking-[-0.03em] text-ink">
+        Create an account
+      </h1>
+      <p className="mt-4 max-w-[46ch] text-base leading-[1.65] text-ink-2">
+        Use your Dallas ISD school email.
+      </p>
+      <form action={formAction} className="mt-10 flex max-w-md flex-col gap-6">
+        <div className="grid grid-cols-2 gap-4">
+          <Field label="First name" name="firstName" autoComplete="given-name" required />
+          <Field label="Last name" name="lastName" autoComplete="family-name" required />
+        </div>
+        <Field
+          label="School email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@student.dallasisd.org"
+          required
+        />
+        <Field
+          label="Password"
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          minLength={8}
+          required
+        />
+        <Field
+          label="Confirm password"
+          name="confirmPassword"
+          type="password"
+          autoComplete="new-password"
+          required
+        />
+        <div>
+          <label
+            htmlFor="gradeLevel"
+            className="mb-2.5 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute"
+          >
+            Grade
+          </label>
+          <select
+            id="gradeLevel"
+            name="gradeLevel"
             required
-          />
-
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            hint="At least 8 characters"
-            minLength={8}
-            required
-          />
-
-          <TextField
-            label="Confirm password"
-            name="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            required
-          />
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="gradeLevel">Grade level</Label>
-            <select
-              id="gradeLevel"
-              name="gradeLevel"
-              required
-              defaultValue=""
-              className={cn(
-                "flex h-11 w-full rounded-xl border border-input bg-card px-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-              )}
-            >
-              <option value="" disabled>
-                Select grade
-              </option>
-              <option value="9">9th grade</option>
-              <option value="10">10th grade</option>
-              <option value="11">11th grade</option>
-              <option value="12">12th grade</option>
-            </select>
-          </div>
-
-          {state.error ? (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-              {state.error}
-            </p>
-          ) : null}
-
-          <SubmitButton />
-        </form>
-
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/login" className="font-medium text-primary hover:text-primary">
-            Sign in
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+            defaultValue=""
+            className="w-full rounded-[6px] border border-edge bg-white px-3.5 py-[11px] text-sm text-ink"
+          >
+            <option value="" disabled>
+              Select grade
+            </option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        {state.error ? (
+          <p className="text-sm leading-[1.6] text-[#b42318]">{state.error}</p>
+        ) : null}
+        <SubmitButton />
+      </form>
+      <p className="mt-6 text-sm text-ink-2">
+        Already have an account?{" "}
+        <Link
+          href="/login"
+          className="text-ink shadow-[inset_0_-1px_0_var(--color-hair)] hover:text-ink hover:shadow-[inset_0_-2px_0_var(--color-gold-br)]"
+        >
+          Sign in
+        </Link>
+      </p>
+    </div>
   );
 }
 
 export function SignupIntro() {
-  return (
-    <div className="max-w-xl">
-      <p className="text-sm font-semibold uppercase tracking-wide text-primary">
-        Join {chapterName}
-      </p>
-      <h1 className="mt-3 text-3xl font-bold text-foreground sm:text-4xl">
-        Create your student account
-      </h1>
-      <p className="mt-4 text-muted-foreground">
-        Sign up with your school email to access roleplay practice, tests, study
-        tools, and progress tracking.
-      </p>
-    </div>
-  );
+  return null;
 }

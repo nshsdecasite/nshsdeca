@@ -14,16 +14,22 @@ export function Logo({ className = "h-10 w-auto", priority = false }: LogoProps)
       width={220}
       height={48}
       priority={priority}
-      className={`${className} object-contain object-left`}
+      className={`${className} no-outline object-contain object-left outline-none`}
     />
   );
 }
 
-export function LogoLink({ className }: { className?: string }) {
+export function LogoLink({
+  className,
+  href = "/",
+}: {
+  className?: string;
+  href?: string;
+}) {
   return (
     <Link
-      href="/"
-      className="inline-flex min-h-10 items-center rounded-lg px-1 transition-transform active:scale-[0.96]"
+      href={href}
+      className="inline-flex min-h-10 items-center rounded-lg px-1 transition-transform duration-150 ease-out active:scale-[0.96]"
     >
       <Logo className={className ?? "h-10 w-auto sm:h-11"} priority />
     </Link>

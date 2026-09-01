@@ -26,25 +26,21 @@ export default async function TestsPage() {
           title="Full practice test"
           description="Pick any official cluster exam and work through all 100 multiple-choice questions with rationales after you submit."
           href="/tests/full"
-          badge="Live"
         />
         <TestModeCard
           title="Custom test"
           description="Choose question count and filter by cluster, instructional area, or specific Performance Indicators."
           href="/tests/custom"
-          badge="Live"
         />
         <TestModeCard
           title="PI-targeted test"
           description="Auto-generate a quiz focused on your weakest Performance Indicators."
           href="/tests/pi-targeted"
-          badge="Live"
         />
         <TestModeCard
           title="Test history"
           description="Review scores, answers, and rationales from your past practice sessions."
           href="/tests/history"
-          badge="Live"
         />
       </div>
     </SocialPage>

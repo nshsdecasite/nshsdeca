@@ -1,7 +1,8 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { startFullExam } from "@/app/test/actions";
+import { TimedModeField } from "@/components/test/TimedModeField";
 import type { ExamSummary } from "@/lib/test/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ type ExamPickerProps = {
 };
 
 export function ExamPicker({ exams }: ExamPickerProps) {
+  const [timed, setTimed] = useState(false);
   const [isPending, startTransition] = useTransition();
   const grouped = exams.reduce<Record<string, ExamSummary[]>>((acc, exam) => {
     const key = exam.cluster_name;
@@ -22,7 +24,7 @@ export function ExamPicker({ exams }: ExamPickerProps) {
 
   const handleStart = (examId: string) => {
     startTransition(async () => {
-      await startFullExam(examId);
+      await startFullExam(examId, timed);
     });
   };
 
@@ -36,6 +38,13 @@ export function ExamPicker({ exams }: ExamPickerProps) {
 
   return (
     <div className="space-y-10">
+      <TimedModeField
+        id="full-exam-timed"
+        hint="90 minutes, matching a standard DECA cluster exam. The test submits when time runs out."
+        checked={timed}
+        onCheckedChange={setTimed}
+      />
+
       {Object.entries(grouped).map(([clusterName, clusterExams]) => (
         <section key={clusterName}>
           <h2 className="mb-4 text-lg font-semibold text-foreground">{clusterName}</h2>
@@ -45,10 +54,8 @@ export function ExamPicker({ exams }: ExamPickerProps) {
                 <Card className="flex h-full flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-                        {exam.year}
-                      </p>
-                      <h3 className="mt-1 text-base font-semibold text-foreground">
+                      <p className="eyebrow">{exam.year}</p>
+                      <h3 className="mt-1 text-[15px] font-semibold tracking-tight">
                         {exam.title}
                       </h3>
                       <p className="mt-1 text-sm text-muted-foreground">{exam.exam_code}</p>
@@ -61,7 +68,7 @@ export function ExamPicker({ exams }: ExamPickerProps) {
                     onClick={() => handleStart(exam.id)}
                     className="mt-5"
                   >
-                    {isPending ? "Starting…" : "Start full test"}
+                    {isPending ? "Starting…" : timed ? "Start timed test" : "Start full test"}
                   </Button>
                 </Card>
               </li>

@@ -38,7 +38,7 @@ export function StudentHistoryList({
 
         return (
           <Link key={submission.id} href={`/submissions/${submission.id}`} className="block">
-            <Card className="p-4 transition-all hover:shadow-border-hover">
+            <Card className="p-4 transition-[box-shadow] duration-150 ease-out hover:shadow-border-hover">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <h3 className="truncate font-medium text-foreground">

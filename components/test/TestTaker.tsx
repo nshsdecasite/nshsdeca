@@ -2,12 +2,21 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { completeTest, saveAnswer } from "@/app/test/actions";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { formatCountdown, remainingSeconds } from "@/lib/test/timing";
 import { cn } from "@/lib/utils";
 import type { TestSession } from "@/lib/test/types";
 
@@ -20,8 +29,11 @@ export function TestTaker({ session }: TestTakerProps) {
   const { setFocusMode } = useSessionFocus();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const completed = Boolean(session.completed_at);
+  const timed = Boolean(session.timed && session.time_limit_seconds);
+  const submittingRef = useRef(false);
 
   const questions = useMemo(
     () => [...session.questions].sort((a, b) => a.display_order - b.display_order),
@@ -30,11 +42,63 @@ export function TestTaker({ session }: TestTakerProps) {
 
   const current = questions[currentIndex];
   const answeredCount = questions.filter((q) => q.chosen_choice_id).length;
+  const unansweredCount = questions.length - answeredCount;
+
+  const [secondsLeft, setSecondsLeft] = useState(() =>
+    timed && session.time_limit_seconds
+      ? remainingSeconds(session.started_at, session.time_limit_seconds)
+      : null,
+  );
 
   useEffect(() => {
     setFocusMode(!completed);
     return () => setFocusMode(false);
   }, [completed, setFocusMode]);
+
+  useEffect(() => {
+    if (completed || !timed || !session.time_limit_seconds) return;
+
+    const tick = () => {
+      const remaining = remainingSeconds(session.started_at, session.time_limit_seconds!);
+      setSecondsLeft(remaining);
+      if (remaining <= 0 && !submittingRef.current) {
+        submittingRef.current = true;
+        startTransition(async () => {
+          try {
+            await completeTest(session.id);
+          } catch (completeError) {
+            submittingRef.current = false;
+            setError(
+              completeError instanceof Error
+                ? completeError.message
+                : "Time is up — could not submit automatically",
+            );
+          }
+        });
+      }
+    };
+
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [completed, session.id, session.started_at, session.time_limit_seconds, timed]);
+
+  const submitSession = () => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setConfirmOpen(false);
+    setError("");
+    startTransition(async () => {
+      try {
+        await completeTest(session.id);
+      } catch (completeError) {
+        submittingRef.current = false;
+        setError(
+          completeError instanceof Error ? completeError.message : "Could not submit test",
+        );
+      }
+    });
+  };
 
   const handleChoose = (choiceId: string) => {
     if (completed || !current) return;
@@ -44,133 +108,121 @@ export function TestTaker({ session }: TestTakerProps) {
         await saveAnswer(session.id, current.id, choiceId);
         router.refresh();
       } catch (saveError) {
-        setError(
-          saveError instanceof Error ? saveError.message : "Could not save answer",
-        );
+        setError(saveError instanceof Error ? saveError.message : "Could not save answer");
       }
     });
   };
 
-  const handleComplete = () => {
-    setError("");
-    startTransition(async () => {
-      try {
-        await completeTest(session.id);
-      } catch (completeError) {
-        setError(
-          completeError instanceof Error
-            ? completeError.message
-            : "Could not submit test",
-        );
-      }
-    });
+  const requestComplete = () => {
+    if (unansweredCount > 0) {
+      setConfirmOpen(true);
+      return;
+    }
+    submitSession();
   };
 
   if (!current) {
     return (
-      <Card className="p-8 text-center">
-        <p className="text-muted-foreground">This test has no questions yet.</p>
-      </Card>
+      <div className="mx-auto max-w-3xl px-4 py-16">
+        <p className="text-sm text-muted-foreground">This test has no questions yet.</p>
+      </div>
     );
   }
 
   return (
-    <div className={cn("mx-auto max-w-5xl px-4 pb-32 pt-6 sm:px-6", completed && "pb-12")}>
-      <Card className="mb-6">
-        <CardHeader className="pb-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-                {session.exam_title ?? "Practice test"}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {session.cluster_name} · {session.exam_year}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-medium tabular-nums text-foreground">
-                Question {current.display_order} of {session.total_questions}
-              </p>
-              <p className="text-xs tabular-nums text-muted-foreground">
-                {answeredCount} answered
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-secondary">
-            <div
-              className="h-full rounded-full bg-primary transition-[width] duration-200"
-              style={{
-                width: `${(current.display_order / session.total_questions) * 100}%`,
-              }}
-            />
-          </div>
-        </CardHeader>
-      </Card>
+    <div className={cn("mx-auto max-w-3xl px-4 pt-8 sm:px-6", completed ? "pb-12" : "pb-36")}>
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="eyebrow">{session.exam_title ?? "Practice test"}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {session.cluster_name} · {session.exam_year}
+          </p>
+        </div>
+        <div className="text-right">
+          {timed && secondsLeft !== null && !completed ? (
+            <p
+              className={cn(
+                "text-sm font-semibold tabular-nums",
+                secondsLeft <= 60 ? "text-destructive" : "text-foreground",
+              )}
+            >
+              {formatCountdown(secondsLeft)}
+            </p>
+          ) : null}
+          <p className="text-sm tabular-nums text-muted-foreground">
+            {current.display_order} / {session.total_questions}
+            <span className="ml-2 text-xs">· {answeredCount} answered</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-6 h-1 overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full bg-primary transition-[width] duration-200 ease-out"
+          style={{ width: `${(current.display_order / session.total_questions) * 100}%` }}
+        />
+      </div>
 
       {completed ? (
-        <>
-          <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary to-deca-green-dark text-primary-foreground">
-            <CardContent className="p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground/80">
-                Test complete
-              </p>
-              <p className="mt-2 text-3xl font-bold tabular-nums">
-                {session.score ?? 0}/{session.total_questions}
-              </p>
-              <p className="mt-2 text-sm text-primary-foreground/80">
-                Review your answers below. Correct choices are highlighted in green.
-              </p>
-            </CardContent>
-          </Card>
+        <Card className="mb-6 bg-primary text-primary-foreground">
+          <CardContent className="p-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-primary-foreground/70">
+              Complete
+            </p>
+            <p className="mt-1 text-3xl font-semibold tabular-nums">
+              {session.score ?? 0}
+              <span className="text-lg font-medium text-primary-foreground/70">
+                /{session.total_questions}
+              </span>
+            </p>
+          </CardContent>
+        </Card>
+      ) : null}
 
-          <div className="mb-6 flex flex-wrap gap-2">
-            {questions.map((question, index) => {
-              const answered = Boolean(question.chosen_choice_id);
-              const correct = question.choices.find(
-                (c) => c.id === question.chosen_choice_id,
-              )?.is_correct;
-              return (
-                <button
-                  key={question.id}
-                  type="button"
-                  onClick={() => setCurrentIndex(index)}
-                  className={cn(
-                    "inline-flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-xs font-semibold tabular-nums transition-colors",
-                    index === currentIndex && "ring-2 ring-primary ring-offset-2",
-                    correct
-                      ? "bg-primary/15 text-primary"
-                      : answered
-                        ? "bg-red-100 text-red-700"
-                        : "bg-muted text-muted-foreground",
-                  )}
-                >
-                  {question.display_order}
-                </button>
-              );
-            })}
-          </div>
-        </>
+      {completed ? (
+        <div className="mb-6 flex flex-wrap gap-1.5">
+          {questions.map((question, index) => {
+            const answered = Boolean(question.chosen_choice_id);
+            const correct = question.choices.find(
+              (c) => c.id === question.chosen_choice_id,
+            )?.is_correct;
+            return (
+              <button
+                key={question.id}
+                type="button"
+                onClick={() => setCurrentIndex(index)}
+                className={cn(
+                  "inline-flex h-8 min-w-8 items-center justify-center rounded-md px-1.5 text-xs font-medium tabular-nums transition-colors duration-150",
+                  index === currentIndex && "ring-2 ring-primary ring-offset-1",
+                  correct
+                    ? "bg-primary/15 text-primary"
+                    : answered
+                      ? "bg-red-50 text-red-700"
+                      : "bg-muted text-muted-foreground",
+                )}
+              >
+                {question.display_order}
+              </button>
+            );
+          })}
+        </div>
       ) : null}
 
       <Card>
-        <CardContent className="p-6 sm:p-8">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            {current.pi_id && current.pi_code ? (
+        <CardContent className="p-5 sm:p-6">
+          {current.pi_code ? (
+            current.pi_id ? (
               <Link href={`/study/pis/${current.pi_id}`}>
-                <Badge variant="default">PI: {current.pi_code}</Badge>
+                <Badge>PI {current.pi_code}</Badge>
               </Link>
-            ) : current.pi_code ? (
-              <Badge variant="muted">PI: {current.pi_code}</Badge>
             ) : (
-              <span />
-            )}
-          </div>
+              <Badge variant="muted">PI {current.pi_code}</Badge>
+            )
+          ) : null}
 
-          <p className="text-lg font-medium leading-relaxed text-foreground">
-            {current.question_text}
-          </p>
+          <p className="mt-4 text-[17px] font-medium leading-relaxed">{current.question_text}</p>
 
-          <div className="mt-6 space-y-3">
+          <div className="mt-5 space-y-2">
             {current.choices.map((choice) => {
               const selected = current.chosen_choice_id === choice.id;
               const showCorrect = completed && choice.is_correct;
@@ -183,33 +235,25 @@ export function TestTaker({ session }: TestTakerProps) {
                   disabled={completed || isPending}
                   onClick={() => handleChoose(choice.id)}
                   className={cn(
-                    "flex w-full items-start gap-3 rounded-2xl border-2 px-4 py-4 text-left transition-[border-color,background-color,transform,box-shadow] duration-150 active:scale-[0.99] disabled:cursor-default",
-                    showCorrect && "border-primary bg-primary/10 shadow-border",
-                    showIncorrect && "border-red-300 bg-red-50",
-                    !showCorrect &&
-                      !showIncorrect &&
-                      selected &&
-                      "border-primary bg-primary/10 shadow-border",
-                    !showCorrect &&
-                      !showIncorrect &&
-                      !selected &&
-                      "border-border bg-card shadow-border hover:shadow-border-hover",
+                    "flex w-full items-start gap-3 rounded-lg px-3.5 py-3 text-left shadow-border transition-[box-shadow,background-color,transform] duration-150 ease-out active:scale-[0.96] disabled:cursor-default",
+                    showCorrect && "bg-primary/8",
+                    showIncorrect && "bg-red-50",
+                    !showCorrect && !showIncorrect && selected && "bg-primary/8",
+                    !showCorrect && !showIncorrect && !selected && "bg-card hover:shadow-border-hover",
                   )}
                 >
-                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-foreground">
+                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-semibold">
                     {choice.label}
                   </span>
-                  <span className="text-sm leading-relaxed text-foreground">{choice.text}</span>
+                  <span className="text-sm leading-relaxed">{choice.text}</span>
                 </button>
               );
             })}
           </div>
 
           {completed && current.rationale ? (
-            <div className="mt-6 rounded-2xl bg-muted p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-                Rationale
-              </p>
+            <div className="mt-5 rounded-lg bg-muted p-4">
+              <p className="eyebrow">Rationale</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {current.rationale}
               </p>
@@ -219,12 +263,12 @@ export function TestTaker({ session }: TestTakerProps) {
           {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
           {completed ? (
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2">
               <Button variant="secondary" asChild>
-                <Link href="/tests/history">View test history</Link>
+                <Link href="/tests/history">History</Link>
               </Button>
               <Button asChild>
-                <Link href="/tests/full">Take another test</Link>
+                <Link href="/tests/full">Another test</Link>
               </Button>
             </div>
           ) : null}
@@ -232,9 +276,9 @@ export function TestTaker({ session }: TestTakerProps) {
       </Card>
 
       {!completed ? (
-        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/60 bg-card/95 backdrop-blur-md shadow-border-hover">
-          <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-4 sm:px-6">
-            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1">
+        <div className="fixed inset-x-0 bottom-0 z-50 bg-card/95 shadow-border backdrop-blur-md">
+          <div className="mx-auto flex max-w-3xl flex-col gap-3 px-4 py-3 sm:px-6">
+            <div className="flex gap-1 overflow-x-auto">
               {questions.map((question, index) => {
                 const answered = Boolean(question.chosen_choice_id);
                 return (
@@ -243,11 +287,11 @@ export function TestTaker({ session }: TestTakerProps) {
                     type="button"
                     onClick={() => setCurrentIndex(index)}
                     className={cn(
-                      "inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl px-2 text-xs font-semibold tabular-nums transition-colors",
+                      "inline-flex h-8 min-w-8 shrink-0 items-center justify-center rounded-md text-xs font-medium tabular-nums transition-colors duration-150",
                       index === currentIndex
                         ? "bg-primary text-primary-foreground"
                         : answered
-                          ? "bg-primary/15 text-primary"
+                          ? "bg-primary/12 text-primary"
                           : "bg-muted text-muted-foreground",
                     )}
                   >
@@ -256,40 +300,53 @@ export function TestTaker({ session }: TestTakerProps) {
                 );
               })}
             </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center justify-between">
               <Button
                 type="button"
                 variant="ghost"
                 disabled={currentIndex === 0}
-                onClick={() => setCurrentIndex((index) => Math.max(0, index - 1))}
+                onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
               >
                 Back
               </Button>
-
-              <div className="flex gap-2">
-                {currentIndex === questions.length - 1 ? (
-                  <Button type="button" disabled={isPending} onClick={handleComplete}>
-                    {isPending ? "Submitting…" : "Submit test"}
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    disabled={currentIndex >= questions.length - 1}
-                    onClick={() =>
-                      setCurrentIndex((index) =>
-                        Math.min(questions.length - 1, index + 1),
-                      )
-                    }
-                  >
-                    Next
-                  </Button>
-                )}
-              </div>
+              {currentIndex === questions.length - 1 ? (
+                <Button type="button" disabled={isPending} onClick={requestComplete}>
+                  {isPending ? "Submitting…" : "Submit"}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))
+                  }
+                >
+                  Next
+                </Button>
+              )}
             </div>
           </div>
         </div>
       ) : null}
+
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Submit with unanswered questions?</DialogTitle>
+            <DialogDescription>
+              {unansweredCount} question{unansweredCount === 1 ? "" : "s"} still blank.
+              Blank answers are scored as incorrect.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setConfirmOpen(false)}>
+              Keep working
+            </Button>
+            <Button type="button" disabled={isPending} onClick={submitSession}>
+              Submit anyway
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

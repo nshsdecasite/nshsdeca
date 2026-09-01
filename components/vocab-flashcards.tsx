@@ -160,7 +160,7 @@ export function VocabFlashcards({
         <button
           type="button"
           onClick={() => setFlipped((value) => !value)}
-          className="group min-h-[320px] rounded-2xl border border-border/60 bg-card p-8 text-left shadow-border-hover transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 active:scale-[0.995] sm:min-h-[360px] sm:p-10"
+          className="group min-h-[320px] rounded-2xl bg-card p-8 text-left shadow-border-hover transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 active:scale-[0.96] sm:min-h-[360px] sm:p-10"
         >
           <div className="flex h-full min-h-[240px] flex-col sm:min-h-[280px]">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -175,6 +175,12 @@ export function VocabFlashcards({
                 {flipped ? currentCard.definition : currentCard.term}
               </p>
             </div>
+
+            {flipped && currentCard.exampleUsage ? (
+              <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
+                Example: {currentCard.exampleUsage}
+              </p>
+            ) : null}
 
             <p className="text-center text-sm text-muted-foreground">
               {flipped ? "Showing definition" : "Showing term"} · Click or

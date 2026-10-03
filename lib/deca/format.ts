@@ -16,6 +16,20 @@ export function monoTime(value: Date) {
   return `${hour12}:${minutes}`;
 }
 
+export function initialsFromName(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "NS";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}
+
+export function weeksUntil(isoDate: string) {
+  const target = new Date(isoDate);
+  if (Number.isNaN(target.getTime())) return 0;
+  const diff = target.getTime() - Date.now();
+  return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24 * 7)));
+}
+
 export function sessionKind(sessionType: string, totalQuestions?: number) {
   if (sessionType === "full" || sessionType === "official_exam") return "Full test";
   if (sessionType === "custom") {

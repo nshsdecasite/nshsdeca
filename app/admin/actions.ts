@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth/roles";
 import type {
   AdminOverview,
   Announcement,
+  ChapterActivity,
   ChapterMember,
 } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
@@ -21,7 +22,17 @@ export async function getAdminOverview(): Promise<AdminOverview> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_admin_overview");
   if (error) throw new Error(error.message);
-  return data as AdminOverview;
+  const overview = data as AdminOverview;
+  return {
+    ...overview,
+    student_count: Number(overview.student_count ?? 0),
+    pending_submissions: Number(overview.pending_submissions ?? 0),
+    tests_this_week: Number(overview.tests_this_week ?? 0),
+    tests_completed_total: Number(overview.tests_completed_total ?? 0),
+    roleplays_submitted_total: Number(overview.roleplays_submitted_total ?? 0),
+    roleplays_graded_total: Number(overview.roleplays_graded_total ?? 0),
+    tab_blur_events_total: Number(overview.tab_blur_events_total ?? 0),
+  };
 }
 
 export async function createAnnouncement(formData: FormData) {
@@ -40,6 +51,24 @@ export async function createAnnouncement(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/dashboard");
   revalidatePath("/messages");
+}
+
+export async function listChapterActivity(): Promise<ChapterActivity[]> {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_chapter_activity");
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as ChapterActivity[]).map((row) => ({
+    ...row,
+    total_points: Number(row.total_points),
+    tests_completed: Number(row.tests_completed),
+    roleplays_submitted: Number(row.roleplays_submitted),
+    roleplays_graded: Number(row.roleplays_graded),
+    avg_test_pct: row.avg_test_pct != null ? Number(row.avg_test_pct) : null,
+    avg_roleplay_score:
+      row.avg_roleplay_score != null ? Number(row.avg_roleplay_score) : null,
+    tab_blur_count: Number(row.tab_blur_count),
+  }));
 }
 
 export async function listChapterMembers(): Promise<ChapterMember[]> {

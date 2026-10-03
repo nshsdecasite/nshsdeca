@@ -6,8 +6,6 @@ import {
   listMyConversations,
 } from "@/app/messages/actions";
 import { ChapterInbox } from "@/components/platform/ChapterInbox";
-import { SocialPage } from "@/components/layout/social-ui";
-import { PageHeader } from "@/components/page-header";
 import { getUserRole, requireAuth } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
@@ -33,18 +31,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
     ]);
 
   return (
-    <SocialPage size="wide">
-      <PageHeader
-        backHref="/dashboard"
-        backLabel="Dashboard"
-        eyebrow="Chapter"
-        title="Announcements & messages"
-        description={
-          role === "officer" || role === "advisor"
-            ? "Post chapter announcements and message members from the same page."
-            : "Chapter announcements and messages from officers and advisors."
-        }
-      />
+    <div className="px-9 py-9">
       <ChapterInbox
         currentUserId={user.id}
         role={role}
@@ -54,6 +41,6 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
         activeUserId={activeUserId}
         activeMessages={activeMessages}
       />
-    </SocialPage>
+    </div>
   );
 }

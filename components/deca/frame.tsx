@@ -11,10 +11,10 @@ export function DecaFrame({
   innerClassName?: string;
 }) {
   return (
-    <div className={cn("min-h-screen bg-ground px-10 py-12 text-ink", className)}>
+    <div className={cn("min-h-screen bg-ground px-4 py-6 text-ink sm:px-6 lg:px-10", className)}>
       <div
         className={cn(
-          "mx-auto w-full max-w-[1440px] overflow-hidden rounded-[6px] border border-edge bg-white",
+          "mx-auto min-h-[calc(100vh-3rem)] w-full max-w-[1440px] overflow-hidden rounded-[28px] bg-ground",
           innerClassName,
         )}
       >
@@ -32,12 +32,7 @@ export function DecaPanel({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-[6px] border border-edge bg-white",
-        className,
-      )}
-    >
+    <div className={cn("deca-card overflow-hidden", className)}>
       {children}
     </div>
   );

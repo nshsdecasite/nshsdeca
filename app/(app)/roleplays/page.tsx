@@ -37,7 +37,7 @@ export default async function RoleplaysPage({ searchParams }: RoleplaysPageProps
       year: Number.isFinite(yearNumber) ? yearNumber : undefined,
       eventCode: params.event?.trim() || undefined,
       level: params.level?.trim() || undefined,
-      limit: 48,
+      limit: 500,
       offset: 0,
     }),
     getScenarioFilterOptions(),

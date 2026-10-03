@@ -8,6 +8,8 @@ import {
   sendBroadcastMessage,
   sendDirectMessage,
 } from "@/app/messages/actions";
+import { DecaButton } from "@/components/deca/button";
+import { initialsFromName } from "@/lib/deca/format";
 import { displayName } from "@/lib/auth/display-name";
 import type { UserRole } from "@/lib/auth/roles";
 import type {
@@ -16,10 +18,6 @@ import type {
   MessageConversation,
   MessageableMember,
 } from "@/lib/platform/types";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { SocialPanel } from "@/components/layout/social-ui";
 import { cn } from "@/lib/utils";
 
 type ChapterInboxProps = {
@@ -33,9 +31,9 @@ type ChapterInboxProps = {
 };
 
 const VISIBILITY_LABEL: Record<string, string> = {
-  all: "Everyone",
-  students: "Students",
-  officers: "Officers",
+  all: "CHAPTER",
+  students: "STUDENTS",
+  officers: "OFFICERS",
 };
 
 export function ChapterInbox({
@@ -50,6 +48,7 @@ export function ChapterInbox({
   const router = useRouter();
   const isOfficer = role === "officer" || role === "advisor";
   const [error, setError] = useState("");
+  const [composeOpen, setComposeOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const activeMember = useMemo(
@@ -70,117 +69,133 @@ export function ChapterInbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeUserId]);
 
-  const openConversation = (userId: string) => {
-    router.push(`/messages?with=${userId}`);
-  };
-
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
-      <SocialPanel>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-[15px] font-semibold tracking-tight">Announcements</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Chapter-wide posts everyone can see here and on the dashboard.
-            </p>
-          </div>
+    <div>
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <h1 className="font-display text-[40px] font-black tracking-[-0.04em]">
+            Announcements
+          </h1>
+          <p className="mt-2.5 text-sm text-ink-2">
+            From the officer team. Members get these here and on the dashboard.
+          </p>
         </div>
-
         {isOfficer ? (
-          <form
-            className="mt-5 space-y-3"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const form = event.currentTarget;
-              const formData = new FormData(form);
-              setError("");
-              startTransition(async () => {
-                try {
-                  await createAnnouncement(formData);
-                  form.reset();
-                  router.refresh();
-                } catch (saveError) {
-                  setError(
-                    saveError instanceof Error
-                      ? saveError.message
-                      : "Could not post announcement",
-                  );
-                }
-              });
-            }}
-          >
-            <div>
-              <Label htmlFor="announcement-message">New announcement</Label>
-              <textarea
-                id="announcement-message"
-                name="message"
-                rows={3}
-                required
-                placeholder="Meeting moved to Thursday in room 214…"
-                className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              />
-            </div>
-            <div className="flex flex-wrap items-end gap-3">
-              <div className="min-w-40 flex-1">
-                <Label htmlFor="announcement-visible-to">Visible to</Label>
-                <select
-                  id="announcement-visible-to"
-                  name="visible_to"
-                  defaultValue="all"
-                  className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <option value="all">Everyone</option>
-                  <option value="students">Students only</option>
-                  <option value="officers">Officers only</option>
-                </select>
-              </div>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Posting…" : "Post"}
-              </Button>
-            </div>
-          </form>
+          <DecaButton onClick={() => setComposeOpen((value) => !value)}>
+            New announcement
+          </DecaButton>
         ) : null}
+      </div>
 
-        {announcements.length ? (
-          <ul className="mt-5 space-y-3">
-            {announcements.map((announcement) => (
-              <li key={announcement.id} className="rounded-xl bg-muted px-4 py-3">
-                <p className="text-sm leading-relaxed text-pretty">{announcement.message}</p>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-xs text-muted-foreground">
-                    {announcement.author_name || "Officer"} ·{" "}
-                    {VISIBILITY_LABEL[announcement.visible_to] ?? announcement.visible_to} ·{" "}
-                    {new Date(announcement.created_at).toLocaleString()}
-                  </p>
-                  {isOfficer ? (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      disabled={isPending}
-                      onClick={() =>
-                        startTransition(async () => {
-                          await deleteAnnouncement(announcement.id);
-                          router.refresh();
-                        })
-                      }
-                      className="text-destructive hover:text-destructive"
-                    >
-                      Delete
-                    </Button>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
+      {isOfficer && composeOpen ? (
+        <form
+          className="deca-card mt-6 max-w-[900px] px-8 py-7"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const formData = new FormData(form);
+            setError("");
+            startTransition(async () => {
+              try {
+                await createAnnouncement(formData);
+                form.reset();
+                setComposeOpen(false);
+                router.refresh();
+              } catch (saveError) {
+                setError(
+                  saveError instanceof Error
+                    ? saveError.message
+                    : "Could not post announcement",
+                );
+              }
+            });
+          }}
+        >
+          <textarea
+            name="message"
+            rows={3}
+            required
+            placeholder="Bus forms are due Friday…"
+            className="deca-field resize-none"
+          />
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <select name="visible_to" defaultValue="all" className="deca-field max-w-xs">
+              <option value="all">Everyone</option>
+              <option value="students">Students only</option>
+              <option value="officers">Officers only</option>
+            </select>
+            <DecaButton type="submit" disabled={isPending}>
+              {isPending ? "Posting…" : "Post"}
+            </DecaButton>
+          </div>
+        </form>
+      ) : null}
+
+      <div className="mt-[26px] flex max-w-[900px] flex-col gap-3.5">
+        {announcements.length === 0 ? (
+          <div className="deca-card px-8 py-7 text-sm text-mute">No announcements yet.</div>
         ) : (
-          <p className="mt-5 text-sm text-muted-foreground">No announcements yet.</p>
+          announcements.map((announcement, index) => {
+            const author = announcement.author_name || "Officer";
+            return (
+              <article
+                key={announcement.id}
+                className={cn(
+                  "deca-card px-8 py-7",
+                  index === 0 && "border-[1.5px] border-ever",
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-full bg-ever-lt text-[13px] font-extrabold text-ever-dk">
+                    {initialsFromName(author)}
+                  </div>
+                  <div className="flex-1">
+                    <p className="m-0 text-[13px] font-bold">{author}</p>
+                    <p className="mt-0.5 text-xs text-mute">
+                      {new Date(announcement.created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  {index === 0 ? (
+                    <span className="rounded-full bg-ever-dk px-3 py-1 text-[10px] font-extrabold text-white">
+                      PINNED
+                    </span>
+                  ) : null}
+                  <span className="rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
+                    {VISIBILITY_LABEL[announcement.visible_to] ?? "CHAPTER"}
+                  </span>
+                </div>
+                <p className="mt-4 max-w-[64ch] text-sm leading-[1.65] text-ink-2">
+                  {announcement.message}
+                </p>
+                {isOfficer ? (
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={() =>
+                      startTransition(async () => {
+                        await deleteAnnouncement(announcement.id);
+                        router.refresh();
+                      })
+                    }
+                    className="mt-3 text-[11px] font-bold text-mute hover:text-ink"
+                  >
+                    Delete
+                  </button>
+                ) : null}
+              </article>
+            );
+          })
         )}
-      </SocialPanel>
+      </div>
 
-      <SocialPanel className="flex min-h-[32rem] flex-col">
-        <h2 className="text-[15px] font-semibold tracking-tight">Messages</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+      <div className="deca-card mt-8 px-8 py-7">
+        <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+          Messages
+        </h2>
+        <p className="mt-1 text-sm text-ink-2">
           {isOfficer
             ? "Message a member, all students, or the whole chapter."
             : "Read and reply to messages from officers and advisors."}
@@ -217,54 +232,46 @@ export function ChapterInbox({
             });
           }}
         >
-          <div>
-            <Label htmlFor="message-to">To</Label>
-            <select
-              id="message-to"
-              name="to"
-              required
-              defaultValue={activeUserId ?? ""}
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <option value="" disabled>
-                Choose a member
+          <select
+            name="to"
+            required
+            defaultValue={activeUserId ?? ""}
+            className="deca-field"
+          >
+            <option value="" disabled>
+              Choose a member
+            </option>
+            {isOfficer ? (
+              <>
+                <option value="students">All students</option>
+                <option value="all">Everyone</option>
+              </>
+            ) : null}
+            {members.map((member) => (
+              <option key={member.id} value={member.id}>
+                {displayName(member.first_name, member.last_name, member.email)}
+                {member.role === "student" ? "" : ` · ${member.role}`}
               </option>
-              {isOfficer ? (
-                <>
-                  <option value="students">All students</option>
-                  <option value="all">Everyone</option>
-                </>
-              ) : null}
-              {members.map((member) => (
-                <option key={member.id} value={member.id}>
-                  {displayName(member.first_name, member.last_name, member.email)}
-                  {member.role === "student" ? "" : ` · ${member.role}`}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <Label htmlFor="message-body">Message</Label>
-            <textarea
-              id="message-body"
-              name="body"
-              rows={3}
-              required
-              placeholder={isOfficer ? "Write a message to a member…" : "Write a reply…"}
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </div>
-          <Button type="submit" disabled={isPending}>
+            ))}
+          </select>
+          <textarea
+            name="body"
+            rows={3}
+            required
+            placeholder={isOfficer ? "Write a message to a member…" : "Write a reply…"}
+            className="deca-field resize-none"
+          />
+          <DecaButton type="submit" disabled={isPending}>
             {isPending ? "Sending…" : "Send"}
-          </Button>
+          </DecaButton>
         </form>
 
-        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-[#b42318]">{error}</p> : null}
 
-        <div className="mt-5 grid min-h-0 flex-1 gap-3 sm:grid-cols-[minmax(0,11rem)_1fr]">
+        <div className="mt-5 grid min-h-0 gap-3 sm:grid-cols-[minmax(0,12rem)_1fr]">
           <ul className="space-y-1">
             {conversations.length === 0 ? (
-              <li className="px-2 py-3 text-sm text-muted-foreground">No messages yet.</li>
+              <li className="px-2 py-3 text-sm text-mute">No messages yet.</li>
             ) : (
               conversations.map((conversation) => {
                 const selected = conversation.user_id === activeUserId;
@@ -272,16 +279,14 @@ export function ChapterInbox({
                   <li key={conversation.user_id}>
                     <button
                       type="button"
-                      onClick={() => openConversation(conversation.user_id)}
+                      onClick={() => router.push(`/messages?with=${conversation.user_id}`)}
                       className={cn(
-                        "flex w-full min-h-10 items-start justify-between gap-2 rounded-lg px-2.5 py-2 text-left transition-colors duration-150",
-                        selected
-                          ? "bg-primary/8 text-foreground"
-                          : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                        "flex w-full items-start justify-between gap-2 rounded-2xl px-3 py-2 text-left",
+                        selected ? "bg-ever-lt text-ink" : "text-mute hover:bg-ground",
                       )}
                     >
                       <span className="min-w-0">
-                        <span className="block truncate text-sm font-medium text-foreground">
+                        <span className="block truncate text-sm font-bold text-ink">
                           {displayName(conversation.first_name, conversation.last_name)}
                         </span>
                         <span className="mt-0.5 block truncate text-xs">
@@ -289,7 +294,9 @@ export function ChapterInbox({
                         </span>
                       </span>
                       {conversation.unread_count > 0 ? (
-                        <Badge className="tabular-nums">{conversation.unread_count}</Badge>
+                        <span className="rounded-full bg-ever px-2 py-px text-[11px] font-extrabold text-white">
+                          {conversation.unread_count}
+                        </span>
                       ) : null}
                     </button>
                   </li>
@@ -298,19 +305,17 @@ export function ChapterInbox({
             )}
           </ul>
 
-          <div className="flex min-h-64 flex-col rounded-xl bg-muted p-3">
+          <div className="flex min-h-64 flex-col rounded-2xl bg-ground p-4">
             {activeUserId ? (
               <>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-bold">
                   {activeMember
                     ? displayName(activeMember.first_name, activeMember.last_name)
                     : "Conversation"}
                 </p>
                 <ul className="mt-3 flex-1 space-y-2 overflow-y-auto">
                   {activeMessages.length === 0 ? (
-                    <li className="text-sm text-muted-foreground">
-                      No messages in this thread yet. Send one above.
-                    </li>
+                    <li className="text-sm text-mute">No messages in this thread yet.</li>
                   ) : (
                     activeMessages.map((message) => {
                       const mine = message.sender_id === currentUserId;
@@ -321,23 +326,11 @@ export function ChapterInbox({
                         >
                           <div
                             className={cn(
-                              "max-w-[85%] rounded-xl px-3 py-2 text-sm leading-relaxed",
-                              mine
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-card text-foreground shadow-border",
+                              "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed",
+                              mine ? "bg-ever-dk text-white" : "bg-white text-ink shadow-card",
                             )}
                           >
-                            <p className="text-pretty">{message.body}</p>
-                            <p
-                              className={cn(
-                                "mt-1 text-[11px] tabular-nums",
-                                mine
-                                  ? "text-primary-foreground/70"
-                                  : "text-muted-foreground",
-                              )}
-                            >
-                              {new Date(message.created_at).toLocaleString()}
-                            </p>
+                            <p>{message.body}</p>
                           </div>
                         </li>
                       );
@@ -346,13 +339,13 @@ export function ChapterInbox({
                 </ul>
               </>
             ) : (
-              <p className="m-auto max-w-xs text-center text-sm text-muted-foreground">
+              <p className="m-auto max-w-xs text-center text-sm text-mute">
                 Choose a conversation or send a new message.
               </p>
             )}
           </div>
         </div>
-      </SocialPanel>
+      </div>
     </div>
   );
 }

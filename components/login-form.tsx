@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { signIn, type AuthActionState } from "@/app/auth/actions";
 import { DecaButton } from "@/components/deca/button";
+import { Logo } from "@/components/logo";
 
 const initialState: AuthActionState = {};
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <DecaButton type="submit" disabled={pending} className="mt-2 w-full">
+    <DecaButton type="submit" disabled={pending} className="mt-1.5 w-full">
       {pending ? "Signing in" : "Sign in"}
     </DecaButton>
   );
@@ -19,62 +20,72 @@ function SubmitButton() {
 
 export function LoginForm({ nextPath }: { nextPath?: string }) {
   const [state, formAction] = useActionState(signIn, initialState);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="px-14 py-16">
-      <p className="eyebrow">Members</p>
-      <h1 className="mt-4 max-w-[14ch] font-display text-[40px] font-extrabold leading-[1.02] tracking-[-0.03em] text-ink">
-        Sign in and pick up where you left off
-      </h1>
-      <p className="mt-4 max-w-[36ch] text-base leading-[1.65] text-ink-2">
-        Scores, notes, and every piece of feedback stay with your account all four
-        years.
-      </p>
-      <form action={formAction} className="mt-10 flex max-w-md flex-col gap-6">
-        <input type="hidden" name="next" value={nextPath ?? "/dashboard"} />
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-2.5 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className="w-full rounded-[6px] border border-edge bg-white px-3.5 py-[11px] text-sm text-ink"
-          />
+    <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-lg items-center px-4 py-12 sm:px-6">
+      <div className="w-full rounded-3xl bg-white px-10 py-11 shadow-card">
+        <div className="flex justify-center">
+          <Logo className="no-outline h-12 w-auto" priority />
         </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="mb-2.5 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className="w-full rounded-[6px] border border-edge bg-white px-3.5 py-[11px] text-sm text-ink"
-          />
-        </div>
-        {state.error ? (
-          <p className="text-sm leading-[1.6] text-[#b42318]">{state.error}</p>
-        ) : null}
-        <SubmitButton />
-      </form>
-      <p className="mt-6 text-sm text-ink-2">
-        No account?{" "}
-        <Link href="/signup" className="text-ink shadow-[inset_0_-1px_0_var(--color-hair)] hover:text-ink hover:shadow-[inset_0_-2px_0_var(--color-gold-br)]">
-          Create an account
-        </Link>
-      </p>
+        <h1 className="mt-8 text-center font-display text-[30px] font-black tracking-[-0.03em]">
+          Welcome back
+        </h1>
+        <p className="mt-2 text-center text-sm text-ink-2">
+          Sign in with your school email to continue.
+        </p>
+
+        <form action={formAction} className="mt-7 flex flex-col gap-4">
+          <input type="hidden" name="next" value={nextPath ?? "/dashboard"} />
+          <div>
+            <label htmlFor="email" className="mb-[7px] block text-xs font-bold text-ink-2">
+              School email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="deca-field"
+            />
+          </div>
+          <div>
+            <div className="mb-[7px] flex items-center justify-between gap-3">
+              <label htmlFor="password" className="text-xs font-bold text-ink-2">
+                Password
+              </label>
+              <Link
+                href="/login/forgot-password"
+                className="text-xs font-bold text-ever-dk hover:text-acc-deep"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                className="deca-field pr-16"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold text-ever-dk"
+              >
+                {showPassword ? "HIDE" : "SHOW"}
+              </button>
+            </div>
+          </div>
+          {state.error ? (
+            <p className="text-sm leading-[1.6] text-[#b42318]">{state.error}</p>
+          ) : null}
+          <SubmitButton />
+        </form>
+      </div>
     </div>
   );
 }

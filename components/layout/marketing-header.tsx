@@ -8,11 +8,8 @@ export function MarketingHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <LogoLink href="/" />
         <nav className="flex items-center gap-1">
-          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
+          <Button variant="ghost" size="sm" asChild>
             <Link href="/login">Sign in</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/signup">Get started</Link>
           </Button>
         </nav>
       </div>

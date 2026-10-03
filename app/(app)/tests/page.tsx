@@ -14,11 +14,10 @@ export default async function TestsPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/dashboard"
-        backLabel="Dashboard"
-        eyebrow="Practice tests"
-        title="Choose how you want to practice"
-        description="Take a full cluster exam, build a custom quiz, or target your weakest PIs."
+        backHref="/study"
+        backLabel="Study"
+        title="Practice exams"
+        description="Full cluster exams, custom quizzes, and drills built from the indicators you keep missing."
       />
 
       <div className="grid gap-4 sm:grid-cols-2">

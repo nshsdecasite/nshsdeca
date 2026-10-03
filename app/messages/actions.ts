@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAuth, requireRole } from "@/lib/auth/roles";
+import { loadUnreadMessageCount } from "@/lib/data/request-cache";
 import type {
   DirectMessage,
   MessageConversation,
@@ -77,8 +78,5 @@ export async function markConversationRead(otherUserId: string) {
 }
 
 export async function getUnreadMessageCount(): Promise<number> {
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("unread_message_count");
-  if (error) return 0;
-  return Number(data ?? 0);
+  return loadUnreadMessageCount();
 }

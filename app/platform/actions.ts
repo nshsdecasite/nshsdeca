@@ -12,6 +12,7 @@ import type {
   PiHeatmapCell,
   UserProfile,
 } from "@/lib/platform/types";
+import { loadMyProfile } from "@/lib/data/request-cache";
 import { customTestSeconds } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
@@ -24,15 +25,20 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("get_dashboard_stats");
   if (error) throw new Error(error.message);
-  return data as DashboardStats;
+  const stats = data as DashboardStats;
+  return {
+    ...stats,
+    total_points: Number(stats.total_points ?? 0),
+    tests_completed: Number(stats.tests_completed ?? 0),
+    roleplays_submitted: Number(stats.roleplays_submitted ?? 0),
+    roleplays_graded: Number(stats.roleplays_graded ?? 0),
+    total_pi_count: Number(stats.total_pi_count ?? 0),
+  };
 }
 
 export async function getMyProfile(): Promise<UserProfile | null> {
   await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("get_my_profile");
-  if (error) throw new Error(error.message);
-  return (data as UserProfile | null) ?? null;
+  return loadMyProfile();
 }
 
 export async function updateMyProfile(input: {

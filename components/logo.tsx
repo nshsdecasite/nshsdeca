@@ -6,13 +6,14 @@ type LogoProps = {
   priority?: boolean;
 };
 
-export function Logo({ className = "h-10 w-auto", priority = false }: LogoProps) {
+export function Logo({ className = "h-[2.125rem] w-auto", priority = false }: LogoProps) {
   return (
     <Image
       src="/images/nshsdecanobg.png"
       alt="Newman Smith DECA"
-      width={220}
-      height={48}
+      width={930}
+      height={283}
+      sizes="180px"
       priority={priority}
       className={`${className} no-outline object-contain object-left outline-none`}
     />
@@ -31,7 +32,7 @@ export function LogoLink({
       href={href}
       className="inline-flex min-h-10 items-center rounded-lg px-1 transition-transform duration-150 ease-out active:scale-[0.96]"
     >
-      <Logo className={className ?? "h-10 w-auto sm:h-11"} priority />
+      <Logo className={className ?? "h-[2.125rem] w-auto sm:h-[2.3375rem]"} priority />
     </Link>
   );
 }

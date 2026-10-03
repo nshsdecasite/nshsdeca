@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
 import { requireAuth } from "@/lib/auth/roles";
 import type {
   ScenarioDetail,
@@ -7,6 +8,7 @@ import type {
   ScenarioFilterOptions,
   ScenarioSummary,
 } from "@/lib/roleplay/scenario-types";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 async function getSupabase() {
@@ -18,6 +20,33 @@ function optionalText(value: string | undefined) {
   return trimmed ? trimmed : undefined;
 }
 
+const loadScenarioCatalog = unstable_cache(
+  async (
+    eventCode: string,
+    year: number,
+    level: string,
+    search: string,
+    clusterSlug: string,
+    limit: number,
+    offset: number,
+  ): Promise<ScenarioSummary[]> => {
+    const admin = createAdminClient();
+    const { data, error } = await admin.rpc("list_scenarios", {
+      p_event_code: eventCode || null,
+      p_year: year > 0 ? year : null,
+      p_level: level || null,
+      p_search: search || null,
+      p_limit: limit,
+      p_offset: offset,
+      p_cluster_slug: clusterSlug || null,
+    });
+    if (error) throw new Error(error.message);
+    return (data ?? []) as ScenarioSummary[];
+  },
+  ["scenario-catalog"],
+  { revalidate: 60 },
+);
+
 export async function listScenarios(input?: {
   eventCode?: string;
   year?: number;
@@ -28,18 +57,38 @@ export async function listScenarios(input?: {
   offset?: number;
 }): Promise<ScenarioSummary[]> {
   await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("list_scenarios", {
-    p_event_code: optionalText(input?.eventCode) ?? null,
-    p_year: input?.year ?? null,
-    p_level: optionalText(input?.level) ?? null,
-    p_search: optionalText(input?.search) ?? null,
-    p_limit: input?.limit ?? 24,
-    p_offset: input?.offset ?? 0,
-    p_cluster_slug: optionalText(input?.clusterSlug) ?? null,
-  });
-  if (error) throw new Error(error.message);
-  return (data ?? []) as ScenarioSummary[];
+  const eventCode = optionalText(input?.eventCode) ?? "";
+  const year = input?.year ?? 0;
+  const level = optionalText(input?.level) ?? "";
+  const search = optionalText(input?.search) ?? "";
+  const clusterSlug = optionalText(input?.clusterSlug) ?? "";
+  const limit = input?.limit ?? 24;
+  const offset = input?.offset ?? 0;
+
+  try {
+    return await loadScenarioCatalog(
+      eventCode,
+      year,
+      level,
+      search,
+      clusterSlug,
+      limit,
+      offset,
+    );
+  } catch {
+    const supabase = await getSupabase();
+    const { data, error } = await supabase.rpc("list_scenarios", {
+      p_event_code: eventCode || null,
+      p_year: year > 0 ? year : null,
+      p_level: level || null,
+      p_search: search || null,
+      p_limit: limit,
+      p_offset: offset,
+      p_cluster_slug: clusterSlug || null,
+    });
+    if (error) throw new Error(error.message);
+    return (data ?? []) as ScenarioSummary[];
+  }
 }
 
 function normalizePerformanceIndicators(
@@ -78,10 +127,18 @@ export async function getScenario(id: string): Promise<ScenarioDetail | null> {
   };
 }
 
+const getCachedScenarioFilterOptions = unstable_cache(
+  async () => {
+    const admin = createAdminClient();
+    const { data, error } = await admin.rpc("list_scenario_filter_options");
+    if (error) throw new Error(error.message);
+    return data as ScenarioFilterOptions;
+  },
+  ["scenario-filter-options"],
+  { revalidate: 300 },
+);
+
 export async function getScenarioFilterOptions(): Promise<ScenarioFilterOptions> {
   await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("list_scenario_filter_options");
-  if (error) throw new Error(error.message);
-  return data as ScenarioFilterOptions;
+  return getCachedScenarioFilterOptions();
 }

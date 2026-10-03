@@ -1,148 +1,132 @@
+import Image from "next/image";
 import { DecaButton } from "@/components/deca/button";
-import { Rail } from "@/components/deca/rail";
 import { SiteNav } from "@/components/deca/site-nav";
-import {
-  PLACEHOLDER_EVENTS,
-  PLACEHOLDER_FEATURES,
-  PLACEHOLDER_SEASON,
-} from "@/lib/deca/placeholder";
+import { formatStat, type SiteStats } from "@/lib/site-stats";
 
-export function HomeScreen() {
+const STEPS = [
+  {
+    step: "STEP 1",
+    title: "Pick a real scenario",
+    body: "Every released case study from 2017 on, filed by event, year and conference level.",
+  },
+  {
+    step: "STEP 2",
+    title: "Record and submit",
+    body: "Ten minutes on your phone, drop the link, and it lands in the officer queue.",
+  },
+  {
+    step: "STEP 3",
+    title: "Get the rubric back",
+    body: "Scored on the official evaluation form, with the two things to fix before next time.",
+  },
+];
+
+type HomeScreenProps = {
+  stats: SiteStats;
+};
+
+export function HomeScreen({ stats }: HomeScreenProps) {
+  const statCards = [
+    { value: formatStat(stats.scenarios), label: "Roleplay scenarios" },
+    { value: formatStat(stats.examQuestions), label: "Exam questions" },
+    { value: formatStat(stats.competitiveEvents), label: "Competitive events" },
+    {
+      value: formatStat(stats.performanceIndicators),
+      label: "Performance indicators",
+      dark: true,
+    },
+  ];
+
   return (
     <>
-      <SiteNav active="chapter" />
+      <SiteNav
+        active="program"
+        logoClassName="no-outline h-[2.55rem] w-auto sm:h-[2.975rem] md:h-[3.4rem]"
+      />
 
-      <div className="grid animate-settle grid-cols-[1.55fr_1fr]">
-        <div className="border-r border-edge px-14 pb-16 pt-20">
-          <p className="font-mono text-xs uppercase tracking-[0.1em] text-mute">
-            Newman Smith High School · Carrollton, TX · District 6
-          </p>
-          <h1 className="mt-6 max-w-[13ch] font-display text-[76px] font-extrabold leading-[0.96] tracking-[-0.035em] text-ink">
+      <div className="grid animate-settle grid-cols-1 items-stretch gap-4 px-10 pt-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        <div className="deca-card flex flex-col items-start px-12 py-14">
+          <h1 className="max-w-[13ch] font-display text-[72px] font-black leading-[0.95] tracking-[-0.045em] text-ink">
             Practice the event, not just the test.
           </h1>
-          <p className="mt-6 max-w-[46ch] text-lg leading-[1.65] text-ink-2">
-            Record a roleplay, submit it, and an officer sends back a rubric with
-            comments pinned to the second they happened. Exams and study tools sit
-            in the same account.
+          <p className="mt-6 max-w-[46ch] text-lg leading-[1.6] text-ink-2">
+            {formatStat(stats.scenarios)} released roleplays, {stats.exams} exams,{" "}
+            {formatStat(stats.performanceIndicators)} performance indicators,{" "}
+            {stats.competitiveEvents} competitive events — and a chapter officer who sends
+            the rubric back with comments pinned to the minute they happened.
           </p>
-          <div className="mt-10 flex items-center gap-4">
-            <DecaButton href="/signup" size="lg">
-              Create an account
+          <div className="mt-auto flex flex-wrap gap-3 pt-10">
+            <DecaButton href="/login?next=/roleplays" size="lg">
+              Sign in
             </DecaButton>
-            <DecaButton href="/#coming-up" variant="underline">
-              See the chapter
+            <DecaButton href="/login?next=/roleplays" variant="tint" size="lg">
+              Browse the library
             </DecaButton>
           </div>
         </div>
-
-        <div className="flex flex-col">
-          <div className="border-b border-edge px-10 py-9">
-            <p className="eyebrow mb-5">2025 season</p>
-            <div className="flex flex-col gap-5">
-              {PLACEHOLDER_SEASON.map((row, index) => (
-                <div key={row.label}>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[15px] text-ink">{row.label}</span>
-                    <span
-                      className={`font-mono text-xl font-semibold tabular ${row.goldCount ? "text-gold" : "text-ink"}`}
-                    >
-                      {row.count}
-                    </span>
-                  </div>
-                  <Rail fill={row.fill} tone={row.tone} delay={index * 100} />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col justify-center bg-ever-lt px-10 py-9">
-            <p className="font-mono text-xs uppercase tracking-[0.08em] text-ever">
-              In the library right now
-            </p>
-            <p className="mt-4 font-display text-[52px] font-extrabold leading-none tracking-[-0.035em] text-ink">
-              1,284
-            </p>
-            <p className="mt-2.5 text-[15px] leading-[1.6] text-ink-2">
-              released roleplay scenarios, every event, 2017 through 2026.
-            </p>
-          </div>
+        <div className="relative min-h-[360px] overflow-hidden rounded-[20px] bg-[#e3e1d6] shadow-card lg:min-h-[520px]">
+          <Image
+            src="/images/chapter-hero.webp"
+            alt="Newman Smith DECA chapter"
+            fill
+            priority
+            sizes="(min-width: 1024px) 46vw, 100vw"
+            className="no-outline object-cover grayscale"
+          />
         </div>
       </div>
 
-      <div
-        id="compete"
-        className="grid grid-cols-4 border-t border-edge"
-      >
-        {PLACEHOLDER_FEATURES.map((feature, index) => (
-          <a
-            key={feature.title}
-            href={feature.href}
-            className={`px-8 py-9 text-ink transition-colors duration-150 hover:bg-ever-lt hover:text-ink ${index < PLACEHOLDER_FEATURES.length - 1 ? "border-r border-edge" : ""}`}
+      <div className="mt-4 grid grid-cols-2 gap-4 px-10 lg:grid-cols-4">
+        {statCards.map((stat) => (
+          <div
+            key={stat.label}
+            className={
+              stat.dark
+                ? "rounded-[20px] bg-ever-dk px-7 py-[26px] text-white"
+                : "deca-card px-7 py-[26px]"
+            }
           >
-            <h3 className="mb-2.5 font-display text-[21px] font-semibold tracking-[-0.02em]">
-              {feature.title}
-            </h3>
-            <p className="m-0 text-sm leading-[1.65] text-ink-2">{feature.body}</p>
-          </a>
+            <p className="font-display text-[42px] font-black tracking-[-0.035em]">
+              {stat.value}
+            </p>
+            <p
+              className={
+                stat.dark
+                  ? "mt-1.5 text-[13px] font-semibold text-white/92"
+                  : "mt-1.5 text-[13px] font-semibold text-mute"
+              }
+            >
+              {stat.label}
+            </p>
+          </div>
         ))}
       </div>
 
-      <div
-        id="coming-up"
-        className="grid grid-cols-[1.4fr_1fr] border-t border-edge"
-      >
-        <div className="border-r border-edge px-14 py-12">
-          <div className="mb-2 flex items-baseline justify-between">
-            <h2 className="font-display text-[30px] font-extrabold tracking-[-0.03em] text-ink">
-              Coming up
-            </h2>
-            <a href="#coming-up" className="text-sm text-ink-2 hover:text-ink">
-              Full calendar
-            </a>
+      <div className="mt-4 grid grid-cols-1 gap-4 px-10 md:grid-cols-3">
+        {STEPS.map((step) => (
+          <div key={step.step} className="deca-card px-7 py-[26px]">
+            <span className="rounded-full bg-ever-lt px-3 py-1 text-xs font-extrabold text-ever-dk">
+              {step.step}
+            </span>
+            <h3 className="mt-3.5 font-display text-[21px] font-extrabold tracking-[-0.02em]">
+              {step.title}
+            </h3>
+            <p className="mt-2 text-sm leading-[1.55] text-ink-2">{step.body}</p>
           </div>
-          <div className="flex flex-col">
-            {PLACEHOLDER_EVENTS.map((event, index) => (
-              <div
-                key={event.date}
-                className={`grid grid-cols-[104px_1fr] items-baseline gap-7 py-6 ${index < PLACEHOLDER_EVENTS.length - 1 ? "border-b border-hair" : ""}`}
-              >
-                <span className="font-mono text-sm font-medium tabular text-gold">
-                  {event.date}
-                </span>
-                <div>
-                  <p className="m-0 font-display text-[19px] font-semibold tracking-[-0.015em] text-ink">
-                    {event.name}
-                  </p>
-                  <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-2">
-                    {event.detail}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
+      </div>
 
-        <div className="flex flex-col justify-between gap-10 bg-ever-dk px-12 py-12 text-white">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.1em] text-gold-br">
-              Members
-            </p>
-            <h2 className="mt-5 max-w-[14ch] font-display text-[40px] font-extrabold leading-[1.02] tracking-[-0.03em] text-white">
-              Sign in and pick up where you left off
-            </h2>
-            <p className="mt-[18px] max-w-[36ch] text-base leading-[1.65] text-white/78">
-              Scores, notes, and every piece of feedback stay with your account all
-              four years.
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <DecaButton href="/login" variant="white">
-              Member sign in
-            </DecaButton>
-            <DecaButton href="/login?next=/admin/grading" variant="ghost">
-              Officer sign in
-            </DecaButton>
-          </div>
-        </div>
+      <div className="mx-10 my-10 flex flex-col items-center justify-center gap-8 rounded-[20px] bg-acc-deep px-14 py-14 text-center text-white md:flex-row md:text-left">
+        <h2 className="max-w-[22ch] font-display text-5xl font-black leading-none tracking-[-0.04em]">
+          Every member competes. Nobody walks in cold.
+        </h2>
+        <DecaButton href="/login" variant="white" size="lg" className="flex-none">
+          Sign in
+        </DecaButton>
+      </div>
+
+      <div className="px-10 pb-8 text-center text-xs font-semibold uppercase tracking-[0.06em] text-mute">
+        Newman Smith High School DECA · Carrollton, TX
       </div>
     </>
   );

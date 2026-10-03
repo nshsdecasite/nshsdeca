@@ -147,6 +147,59 @@ export async function signUp(
   redirect("/dashboard");
 }
 
+export async function requestPasswordReset(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const lastName = String(formData.get("lastName") ?? "").trim();
+
+  if (!email || !lastName) {
+    return { error: "Email and last name are required." };
+  }
+
+  if (!isAllowedSchoolEmail(email)) {
+    return { error: schoolEmailHint() };
+  }
+
+  const admin = createAdminClient();
+  const { data: profile, error: profileError } = await admin
+    .schema("core")
+    .from("users")
+    .select("last_name")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (profileError) {
+    return { error: "Could not verify your account right now. Try again later." };
+  }
+
+  if (
+    !profile?.last_name ||
+    profile.last_name.trim().toLowerCase() !== lastName.toLowerCase()
+  ) {
+    return { error: "That email and last name do not match our chapter roster." };
+  }
+
+  const supabase = await createClient();
+  const siteUrl =
+    process.env.SITE_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "http://localhost:3000";
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl.replace(/\/$/, "")}/login`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {
+    message: `If ${email} is on the chapter roster, a password reset link is on its way. Open it from the same device and choose a new password.`,
+  };
+}
+
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

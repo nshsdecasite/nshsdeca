@@ -290,39 +290,40 @@ export function OfficerGradingWorkspace({
           : "DRAFT SAVED 12:04";
 
   return (
-    <>
-      <div className="flex items-end justify-between gap-8 border-b border-edge px-11 py-8">
+    <div className="px-9 py-9">
+      <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="eyebrow">
+          <p className="text-xs font-bold tracking-[0.1em] uppercase text-mute">
             Submission · {eventBit} · attempt {submission.attempt_number}
           </p>
-          <h1 className="mt-3 font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+          <h1 className="mt-2.5 font-display text-[32px] font-black tracking-[-0.035em]">
             {scenario.title}
           </h1>
-          <p className="mt-2.5 text-[15px] text-ink-2">
-            {student}, submitted {formatSubmitted(submission.submitted_at)}
+          <p className="mt-2 text-sm text-ink-2">
+            {student} · submitted {formatSubmitted(submission.submitted_at)}
           </p>
         </div>
-        <div className="flex items-center gap-3.5">
-          <span className="whitespace-nowrap font-mono text-xs tabular text-mute">
-            {draftLabel}
+        <div className="flex items-center gap-2.5">
+          <span className="rounded-full bg-ever-lt px-3.5 py-1.5 text-[11px] font-extrabold text-ever-dk">
+            {submitted ? "GRADED" : "IN REVIEW"}
           </span>
           {!submitted ? (
-            <DecaButton variant="outline" size="sm" onClick={handleSaveDraft} disabled={isPending}>
+            <DecaButton variant="outline" onClick={handleSaveDraft} disabled={isPending}>
               Save draft
             </DecaButton>
           ) : null}
           {!submitted ? (
-            <DecaButton size="sm" onClick={handleSubmitGrading} disabled={isPending}>
-              Send grade
+            <DecaButton onClick={handleSubmitGrading} disabled={isPending}>
+              Release score
             </DecaButton>
           ) : null}
         </div>
       </div>
+      <p className="mt-3 text-xs font-bold text-mute">{draftLabel}</p>
 
-      <div className="grid grid-cols-[1.5fr_1fr]">
-        <div className="border-r border-edge">
-          <div className="border-b border-edge px-10 py-8">
+      <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_400px]">
+        <div className="flex flex-col gap-4">
+          <div className="relative overflow-hidden rounded-[20px] bg-[#33322b]">
             {submission.video_url ? (
               <VideoPlayer
                 videoUrl={submission.video_url}
@@ -345,15 +346,33 @@ export function OfficerGradingWorkspace({
                 externalComments
               />
             ) : (
-              <div className="flex aspect-video items-center justify-center rounded-[6px] bg-[#0f1f14]">
-                <span className="font-mono text-xs tracking-[0.08em] text-white/45">
-                  GOOGLE DRIVE VIDEO
+              <div className="flex aspect-video items-center justify-center">
+                <span className="text-xs font-bold tracking-[0.14em] text-white/62">
+                  RECORDED ROLEPLAY
                 </span>
               </div>
             )}
+            <div className="px-[22px] pb-[18px]">
+              <ScrubRail
+                progress={progress}
+                ticks={ticks}
+                onSeek={(ratio) => {
+                  if (!railDuration) return;
+                  const time = ratio * railDuration;
+                  seekRef.current?.(time);
+                  setCurrentTime(time);
+                  handleTimelineClick(time);
+                }}
+              />
+              <div className="mt-2 flex justify-between text-[11px] font-bold text-white/85">
+                <span>{formatTime(currentTime)}</span>
+                <span>{railDuration > 0 ? formatTime(railDuration) : "0:00"}</span>
+              </div>
+            </div>
+          </div>
 
             {isDrive && !submitted ? (
-              <div className="mt-4">
+              <div className="deca-card px-6 py-4">
                 <DriveDurationInput
                   onSave={(seconds) => {
                     setVideoDuration(seconds);
@@ -365,46 +384,25 @@ export function OfficerGradingWorkspace({
               </div>
             ) : null}
 
-            <ScrubRail
-              className="mt-6"
-              progress={progress}
-              ticks={ticks}
-              onSeek={(ratio) => {
-                if (!railDuration) return;
-                const time = ratio * railDuration;
-                seekRef.current?.(time);
-                setCurrentTime(time);
-                handleTimelineClick(time);
-              }}
-            />
-            <div className="mt-3 flex items-center justify-between font-mono text-xs tabular text-mute">
-              <span>{formatTime(currentTime)}</span>
-              <span className="font-sans text-sm text-mute">
-                Click the rail to comment at that moment
-              </span>
-              <span>{railDuration > 0 ? formatTime(railDuration) : "0:00"}</span>
-            </div>
-          </div>
-
-          <div className="px-10 py-8">
-            <div className="mb-2 flex items-baseline justify-between">
-              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
-                Comments
+          <div className="deca-card px-[30px] py-[26px]">
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+                Pinned comments
               </h2>
               {!submitted ? (
                 <button
                   type="button"
-                  className="text-sm text-ever hover:text-ever-dk"
+                  className="text-xs font-bold text-ever-dk hover:text-ever"
                   onClick={() => handleTimelineClick(currentTime || 0)}
                 >
-                  Add comment
+                  Add at {formatTime(currentTime)}
                 </button>
               ) : null}
             </div>
 
             {showCommentForm && !submitted ? (
-              <div className="mb-4 rounded-[6px] border border-edge p-4">
-                <p className="mb-3 font-mono text-xs text-ever">
+              <div className="mb-4 rounded-2xl bg-ground p-4">
+                <p className="mb-3 text-xs font-extrabold text-ever-dk">
                   {formatTime(pendingTimestamp)}
                 </p>
                 <div className="mb-3 flex flex-wrap gap-2">
@@ -414,10 +412,10 @@ export function OfficerGradingWorkspace({
                       type="button"
                       onClick={() => setNewCommentTag(tag)}
                       className={cn(
-                        "rounded-[6px] px-3 py-1.5 font-mono text-xs transition-[background-color,color] duration-150",
+                        "rounded-full px-3 py-1.5 text-xs font-bold transition-colors duration-150",
                         newCommentTag === tag
-                          ? "bg-ever text-white"
-                          : "border border-edge text-ink-2 hover:bg-ever-lt hover:text-ever-dk",
+                          ? "bg-ever-dk text-white"
+                          : "bg-white text-ink-2 shadow-card",
                       )}
                     >
                       {commentLabel(tag, scenario)}
@@ -429,7 +427,7 @@ export function OfficerGradingWorkspace({
                   onChange={(event) => setNewCommentText(event.target.value)}
                   placeholder="Write the note for this moment"
                   rows={3}
-                  className="w-full resize-none rounded-[6px] border border-edge bg-white px-3.5 py-3 text-[15px] leading-[1.6] text-ink"
+                  className="deca-field resize-none"
                 />
                 <div className="mt-3 flex gap-2">
                   <DecaButton size="sm" onClick={addComment}>
@@ -446,13 +444,13 @@ export function OfficerGradingWorkspace({
               </div>
             ) : null}
 
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2.5">
               {comments.length === 0 && !showCommentForm ? (
-                <p className="py-6 text-[15px] leading-[1.6] text-ink-2">
+                <p className="py-2 text-sm leading-[1.6] text-ink-2">
                   Click the rail to pin a comment to a moment in the recording.
                 </p>
               ) : null}
-              {comments.map((comment, index) => {
+              {comments.map((comment) => {
                 const playing = playingComment?.id === comment.id;
                 return (
                   <button
@@ -464,38 +462,15 @@ export function OfficerGradingWorkspace({
                       setCurrentTime(comment.timestamp);
                     }}
                     className={cn(
-                      "grid grid-cols-[64px_1fr] items-baseline gap-5 py-[18px] text-left",
-                      playing
-                        ? "my-0 -mx-5 rounded-[6px] bg-gold-lt px-5"
-                        : index < comments.length - 1
-                          ? "border-b border-hair"
-                          : "",
-                      !playing && index > 0 && comments[index - 1]?.id === playingComment?.id
-                        ? "border-t border-hair"
-                        : "",
+                      "flex gap-3.5 rounded-[14px] bg-ground px-4 py-3.5 text-left",
+                      playing && "bg-gold-lt",
                     )}
                   >
-                    <span
-                      className={cn(
-                        "font-mono text-sm font-medium tabular",
-                        playing ? "font-semibold text-gold" : "text-ever",
-                      )}
-                    >
+                    <span className="h-max flex-none rounded-full bg-white px-2.5 py-[3px] text-xs font-extrabold text-ever-dk">
                       {formatTime(comment.timestamp)}
                     </span>
-                    <div>
-                      <p
-                        className={cn(
-                          "mb-1.5 font-mono text-xs uppercase tracking-[0.08em]",
-                          playing ? "text-gold" : "text-mute",
-                        )}
-                      >
-                        {commentLabel(comment.tag, scenario)}
-                        {playing ? " · PLAYING" : ""}
-                      </p>
-                      <p className="m-0 text-[15px] leading-[1.6] text-ink">
-                        {comment.text}
-                      </p>
+                    <span className="text-sm leading-[1.5]">
+                      {comment.text}
                       {!submitted ? (
                         <span
                           role="button"
@@ -510,12 +485,12 @@ export function OfficerGradingWorkspace({
                               deleteComment(comment.id);
                             }
                           }}
-                          className="mt-2 inline-block font-mono text-[11px] uppercase tracking-[0.08em] text-mute hover:text-ink"
+                          className="mt-2 block text-[11px] font-bold text-mute hover:text-ink"
                         >
                           Remove
                         </span>
                       ) : null}
-                    </div>
+                    </span>
                   </button>
                 );
               })}
@@ -523,29 +498,35 @@ export function OfficerGradingWorkspace({
           </div>
         </div>
 
-        <div>
-          <div className="border-b border-edge px-9 py-8">
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
-                Rubric
+        <div className="flex flex-col gap-4">
+          <div className="deca-card px-7 py-[26px]">
+            <div className="mb-[18px] flex items-baseline justify-between">
+              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+                Evaluation form
               </h2>
-              <span className="font-mono text-xs text-mute">0–20 EACH</span>
+              <span className="text-[11px] font-bold text-mute">0–20 each</span>
             </div>
-            <div className="mt-6 flex flex-col gap-6">
+            <div className="flex flex-col gap-[18px]">
               {scenario.pis.map((label, index) => {
                 const key = `PI-${index + 1}` as const;
-                const code =
-                  scenario.performanceIndicators?.[index]?.pi_code ?? key;
-                const selected = scoreToScale(rubric.piScores[key] ?? 0);
+                const score = rubric.piScores[key] ?? 0;
+                const selected = scoreToScale(score);
                 return (
                   <div key={key}>
-                    <p className="m-0 text-sm leading-[1.55] text-ink">
-                      <span className="font-mono text-[13px] font-semibold text-ever">
-                        {code}
-                      </span>{" "}
-                      {label}
-                    </p>
-                    <div className="mt-2.5">
+                    <div className="flex items-baseline justify-between">
+                      <span className="max-w-[24ch] text-[13px] font-semibold">{label}</span>
+                      <span className="text-sm font-extrabold">{score || "—"}</span>
+                    </div>
+                    <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-ground">
+                      <div
+                        className={cn(
+                          "h-[9px] rounded-full",
+                          score >= 16 ? "bg-ever" : "bg-acc-mid",
+                        )}
+                        style={{ width: `${(score / 20) * 100}%` }}
+                      />
+                    </div>
+                    <div className="mt-2">
                       <Segmented
                         name={key}
                         value={selected}
@@ -557,10 +538,21 @@ export function OfficerGradingWorkspace({
                 );
               })}
               <div>
-                <p className="m-0 text-sm leading-[1.55] text-ink">
-                  21st Century Skills — overall presentation and judgment
-                </p>
-                <div className="mt-2.5">
+                <div className="flex items-baseline justify-between">
+                  <span className="max-w-[24ch] text-[13px] font-semibold">
+                    Overall impression
+                  </span>
+                  <span className="text-sm font-extrabold">
+                    {rubric.centurySkills || "—"}
+                  </span>
+                </div>
+                <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-ground">
+                  <div
+                    className="h-[9px] rounded-full bg-ever"
+                    style={{ width: `${(rubric.centurySkills / 20) * 100}%` }}
+                  />
+                </div>
+                <div className="mt-2">
                   <Segmented
                     name="century"
                     value={scoreToScale(rubric.centurySkills)}
@@ -570,36 +562,44 @@ export function OfficerGradingWorkspace({
                 </div>
               </div>
             </div>
+            <div className="mt-[22px] flex items-center justify-between rounded-2xl bg-ever-lt px-5 py-4">
+              <span className="text-xs font-bold tracking-[0.1em] uppercase text-ever-dk">
+                Total
+              </span>
+              <span className="font-display text-[30px] font-black tracking-[-0.035em]">
+                {total}
+                <span className="text-base text-mute">/{max}</span>
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-end justify-between border-b border-edge bg-gold-lt px-9 py-7">
-            <span className="font-mono text-xs uppercase tracking-[0.08em] text-gold">
-              Total
-            </span>
-            <span className="font-display text-[44px] font-extrabold leading-none tracking-[-0.035em] tabular text-ink">
-              {total}
-              <span className="text-[18px] text-ink-2">/{max}</span>
-            </span>
-          </div>
-
-          <div className="px-9 py-8">
-            <h2 className="mb-4 font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
+          <div className="deca-card flex-1 px-7 py-[26px]">
+            <h2 className="mb-3.5 font-display text-[19px] font-extrabold tracking-[-0.02em]">
               Feedback to {firstName}
             </h2>
             <textarea
               value={overallFeedback}
               onChange={(event) => setOverallFeedback(event.target.value)}
-              placeholder="Strong promotion section and a real budget. Two things before districts: connect buying behavior to the specific store openings, and close with an ask."
-              rows={6}
+              placeholder="Strong promotion section and a real media plan. Two things before district: put a dollar figure on the budget and defend it."
+              rows={5}
               disabled={submitted}
-              className="min-h-[132px] w-full resize-none rounded-[6px] border border-edge bg-white px-[18px] py-[18px] text-[15px] leading-[1.7] text-ink disabled:bg-ground"
+              className="min-h-[110px] w-full resize-none rounded-2xl border-[1.5px] border-edge bg-white p-4 text-sm leading-[1.65] text-ink disabled:bg-ground"
             />
-            <p className="mt-4 font-mono text-xs uppercase tracking-[0.08em] text-mute">
-              {officerName} · {submission.status === "reviewed" ? "GRADED" : "GRADER"}
-            </p>
+            <div className="mt-4 flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ever-lt text-xs font-extrabold text-ever-dk">
+                {officerName
+                  .split(" ")
+                  .filter(Boolean)
+                  .map((part) => part[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase() || "OF"}
+              </div>
+              <p className="m-0 text-xs font-bold text-ink-2">{officerName}</p>
+            </div>
             <Link
               href="/admin/grading"
-              className="mt-4 inline-block text-sm text-ink-2 hover:text-ink"
+              className="mt-4 inline-block text-[13px] font-bold text-ever-dk hover:text-ever"
             >
               Back to queue
             </Link>
@@ -608,7 +608,7 @@ export function OfficerGradingWorkspace({
                 type="button"
                 onClick={handleDeleteSubmission}
                 disabled={isPending}
-                className="mt-3 block font-mono text-[11px] uppercase tracking-[0.08em] text-mute hover:text-ink"
+                className="mt-3 block text-[11px] font-bold text-mute hover:text-ink"
               >
                 Delete submission
               </button>
@@ -616,7 +616,7 @@ export function OfficerGradingWorkspace({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,13 +1,8 @@
 import Link from "next/link";
 import { DecaButton } from "@/components/deca/button";
 import { Rail } from "@/components/deca/rail";
-import {
-  accuracyTone,
-  PLACEHOLDER_ACCURACY,
-  PLACEHOLDER_SESSIONS,
-  PLACEHOLDER_WAITING,
-  PLACEHOLDER_WEAK_PIS,
-} from "@/lib/deca/placeholder";
+import { accuracyTone, NEXT_CONFERENCE } from "@/lib/deca/placeholder";
+import { weeksUntil } from "@/lib/deca/format";
 import { cn } from "@/lib/utils";
 
 export type DashboardAccuracy = {
@@ -15,13 +10,9 @@ export type DashboardAccuracy = {
   accuracy: number;
 };
 
-export type DashboardSession = {
-  name: string;
-  kind: string;
-  date: string;
-  score: string;
-  gold?: boolean;
-  href?: string;
+export type DashboardTrendPoint = {
+  label: string;
+  score: number;
 };
 
 export type DashboardWeakPi = {
@@ -39,213 +30,223 @@ export type DashboardWaiting = {
 
 export function DashboardScreen({
   name,
-  eventLabel = "Marketing Communications Series",
-  points,
-  testsTaken,
-  roleplaysGraded,
+  examAccuracy,
+  roleplayAverage,
+  roleplayAttempts,
   streak,
+  bestStreak,
+  masteredCount,
+  masteredTotal,
   questionCount,
   accuracy,
-  sessions,
+  trend,
   weakPis,
   waiting,
   standingRank,
   standingOf,
   standingNote,
+  points,
+  testsTaken,
+  roleplaysGraded,
 }: {
   name: string;
-  eventLabel?: string;
-  points: number;
-  testsTaken: number;
-  roleplaysGraded: number;
+  examAccuracy: number | null;
+  roleplayAverage: number | null;
+  roleplayAttempts: number;
   streak: number;
+  bestStreak?: number;
+  masteredCount: number;
+  masteredTotal: number;
   questionCount?: number;
   accuracy: DashboardAccuracy[];
-  sessions: DashboardSession[];
+  trend: DashboardTrendPoint[];
   weakPis: DashboardWeakPi[];
   waiting: DashboardWaiting[];
   standingRank?: number | null;
   standingOf?: number | null;
   standingNote?: string;
+  points?: number;
+  testsTaken?: number;
+  roleplaysGraded?: number;
 }) {
-  const accuracyRows = accuracy.length ? accuracy : PLACEHOLDER_ACCURACY;
-  const sessionRows = sessions.length ? sessions : PLACEHOLDER_SESSIONS;
-  const weakRows = weakPis.length ? weakPis : PLACEHOLDER_WEAK_PIS;
-  const waitingRows = waiting.length ? waiting : PLACEHOLDER_WAITING;
-  const rank = standingRank ?? 4;
-  const of = standingOf ?? 148;
+  const weeks = weeksUntil(NEXT_CONFERENCE.iso);
+  const masteredPct = masteredTotal
+    ? Math.round((masteredCount / masteredTotal) * 100)
+    : 0;
 
   return (
-    <div>
-      <div className="flex items-end justify-between gap-8 border-b border-edge px-11 pb-8 pt-10">
+    <div className="px-9 py-9">
+      <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="eyebrow">{eventLabel}</p>
-          <h1 className="mt-3.5 font-display text-[40px] font-extrabold leading-none tracking-[-0.035em] text-ink">
-            {name}
+          <p className="text-xs font-bold tracking-[0.1em] uppercase text-ever-dk">
+            {standingRank && standingOf
+              ? `#${standingRank} of ${standingOf} · ${points ?? 0} points`
+              : `${points ?? 0} chapter points`}
+          </p>
+          <h1 className="mt-2.5 font-display text-[40px] font-black tracking-[-0.04em]">
+            {weeks > 0 ? `${weeks} weeks to district` : `Welcome back, ${name.split(" ")[0]}`}
           </h1>
+          {standingNote ? (
+            <p className="mt-2 text-sm text-ink-2">{standingNote}</p>
+          ) : null}
         </div>
-        <div className="flex gap-3">
-          <DecaButton href="/tests">Start a test</DecaButton>
-          <DecaButton href="/roleplays/submit" variant="outline">
-            Submit a roleplay
+        <div className="flex gap-2.5">
+          <DecaButton href="/tests" variant="outline">
+            Practice exam
           </DecaButton>
+          <DecaButton href="/roleplays">New roleplay</DecaButton>
         </div>
       </div>
 
-      <div className="grid grid-cols-4 border-b border-edge">
-        <Stat value={String(points)} label="Chapter points" gold />
-        <Stat value={String(testsTaken)} label="Tests taken" />
-        <Stat value={String(roleplaysGraded)} label="Roleplays graded" />
-        <Stat value={String(streak)} label="Day streak" last />
+      <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard
+          label="Exam accuracy"
+          value={examAccuracy != null ? String(examAccuracy) : "—"}
+          suffix={examAccuracy != null ? "%" : undefined}
+          note={questionCount ? `${questionCount} questions answered` : "Take a practice exam"}
+        />
+        <StatCard
+          label="Roleplay average"
+          value={roleplayAverage != null ? String(roleplayAverage) : "—"}
+          suffix={roleplayAverage != null ? "/100" : undefined}
+          note={
+            roleplayAttempts
+              ? `${roleplayAttempts} graded · ${roleplaysGraded ?? 0} total submitted`
+              : "Submit a roleplay"
+          }
+        />
+        <StatCard
+          label="Study streak"
+          value={String(streak)}
+          suffix=" days"
+          note={bestStreak ? `best: ${bestStreak} days` : "Practice today to start"}
+        />
+        <StatCard
+          label="Tests completed"
+          value={String(testsTaken ?? 0)}
+          note={`${masteredCount} PIs at 70%+ accuracy`}
+          rail={masteredPct / 100}
+        />
       </div>
 
-      <div className="grid grid-cols-[1.5fr_1fr]">
-        <div className="border-r border-edge">
-          <div className="border-b border-edge px-11 py-9">
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
+        <div className="flex flex-col gap-4">
+          <div className="deca-card px-[30px] py-7">
+            <div className="mb-5 flex items-baseline justify-between">
+              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
                 Accuracy by instructional area
               </h2>
-              <span className="font-mono text-xs tabular text-mute">
-                {questionCount ?? 412} QUESTIONS
+              <span className="text-xs font-bold text-mute">
+                {questionCount ?? 0} questions
               </span>
             </div>
-            <div className="mt-7 flex flex-col gap-5">
-              {accuracyRows.map((row, index) => {
-                const tone = accuracyTone(row.accuracy);
-                return (
-                  <div key={row.name}>
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[15px] text-ink">{row.name}</span>
-                      <span
-                        className={cn(
-                          "font-mono text-[15px] font-medium tabular",
-                          tone === "ever-dim" ? "text-mute" : "text-ink",
-                        )}
-                      >
-                        {row.accuracy}%
-                      </span>
-                    </div>
+            {accuracy.length === 0 ? (
+              <p className="text-sm text-ink-2">
+                Complete a practice test to see accuracy by instructional area.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-[13px]">
+                {accuracy.map((row, index) => (
+                  <div
+                    key={row.name}
+                    className="grid grid-cols-[minmax(0,210px)_1fr_44px] items-center gap-4"
+                  >
+                    <span className="truncate text-[13px] font-semibold">{row.name}</span>
                     <Rail
                       fill={row.accuracy / 100}
-                      tone={tone}
+                      tone={accuracyTone(row.accuracy)}
                       delay={index * 60}
+                      height="h-[14px]"
+                      className="mt-0"
                     />
+                    <span className="text-right text-[13px] font-bold">{row.accuracy}%</span>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="px-11 py-9">
-            <div className="mb-2 flex items-baseline justify-between">
-              <h2 className="font-display text-2xl font-extrabold tracking-[-0.025em] text-ink">
-                Recent sessions
+          <div className="deca-card px-[30px] py-7">
+            <div className="mb-1.5 flex items-baseline justify-between">
+              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+                Last eight practice exams
               </h2>
-              <Link href="/tests/history" className="text-sm text-ink-2 hover:text-ink">
-                All history
-              </Link>
+              <span className="text-xs font-bold text-mute">score out of 100</span>
             </div>
-            <div className="flex flex-col">
-              {sessionRows.map((session, index) => (
-                <Link
-                  key={`${session.name}-${session.date}`}
-                  href={session.href ?? "/tests/history"}
-                  className={cn(
-                    "grid grid-cols-[1fr_116px_84px_88px] items-center gap-4 py-4 text-ink hover:text-ink",
-                    index < sessionRows.length - 1 && "border-b border-hair",
-                  )}
-                >
-                  <span className="text-[15px]">{session.name}</span>
-                  <span className="text-sm text-mute">{session.kind}</span>
-                  <span className="font-mono text-[13px] tabular text-mute">
-                    {session.date}
-                  </span>
-                  <span
-                    className={cn(
-                      "text-right font-mono text-[15px] font-medium tabular",
-                      session.gold ? "text-gold" : "text-ink",
-                    )}
-                  >
-                    {session.score}
-                  </span>
-                </Link>
-              ))}
-            </div>
+            <ExamTrend points={trend} />
           </div>
         </div>
 
-        <div>
-          <div className="border-b border-edge px-8 py-9">
-            <h2 className="mb-1 font-display text-[22px] font-extrabold tracking-[-0.025em] text-ink">
+        <div className="flex flex-col gap-4">
+          <div className="deca-card px-[26px] py-6">
+            <h2 className="font-display text-[17px] font-extrabold tracking-[-0.02em]">
               Work on these next
             </h2>
-            <p className="mb-5 text-sm text-ink-2">
-              Indicators under 70% accuracy.
+            <p className="mt-1 mb-4 text-xs text-mute">
+              Indicators under 70% accuracy
             </p>
-            <div className="flex flex-col">
-              {weakRows.map((pi, index) => (
-                <Link
-                  key={pi.code}
-                  href={pi.href ?? "/tests/pi-targeted"}
-                  className={cn(
-                    "text-ink hover:text-ink",
-                    index === 0 && "border-b border-hair pb-4",
-                    index > 0 && index < weakRows.length - 1 && "border-b border-hair py-4",
-                    index === weakRows.length - 1 && index > 0 && "pt-4",
-                  )}
-                >
-                  <span className="font-mono text-[13px] font-semibold text-ever">
-                    {pi.code}
-                  </span>
-                  <p className="mt-1.5 text-sm leading-[1.55] text-ink">{pi.text}</p>
-                  <p className="mt-1.5 font-mono text-xs tabular text-mute">
-                    {pi.meta}
-                  </p>
-                </Link>
-              ))}
-            </div>
-            <DecaButton href="/tests/pi-targeted" className="mt-5 w-full">
-              Build a test from these
-            </DecaButton>
+            {weakPis.length === 0 ? (
+              <p className="text-sm text-ink-2">
+                No weak indicators yet — keep practicing or take a PI-targeted quiz.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {weakPis.map((pi) => (
+                  <Link
+                    key={pi.code}
+                    href={pi.href ?? "/tests/pi-targeted"}
+                    className="flex items-center justify-between gap-2.5 text-ink hover:text-ink"
+                  >
+                    <span className="text-[13px] leading-[1.4]">{pi.text}</span>
+                    <span className="flex-none rounded-full bg-gold-lt px-2.5 py-[3px] text-xs font-extrabold text-gold">
+                      {pi.meta.split(" · ")[0]}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="border-b border-edge px-8 py-9">
-            <h2 className="mb-[18px] font-display text-[22px] font-extrabold tracking-[-0.025em] text-ink">
+          <div className="deca-card px-[26px] py-6">
+            <h2 className="mb-3.5 font-display text-[17px] font-extrabold tracking-[-0.02em]">
               Waiting on an officer
             </h2>
-            <div className="flex flex-col gap-3.5">
-              {waitingRows.map((item) => (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between gap-3"
-                >
-                  <span className="text-[15px] text-ink">{item.name}</span>
-                  <span
-                    className={cn(
-                      "font-mono text-xs uppercase tracking-[0.08em]",
-                      item.live ? "text-gold" : "text-mute",
-                    )}
-                  >
-                    {item.status}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {waiting.length === 0 ? (
+              <p className="text-sm text-ink-2">No roleplays waiting for a grade.</p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {waiting.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between gap-2.5">
+                    <span className="text-[13px]">{item.name}</span>
+                    <span
+                      className={cn(
+                        "rounded-full px-2.5 py-[3px] text-[11px] font-extrabold",
+                        item.live
+                          ? "bg-ever-lt text-ever-dk"
+                          : "bg-ground text-mute",
+                      )}
+                    >
+                      {item.live ? "IN REVIEW" : "QUEUED"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="bg-gold-lt px-8 py-9">
-            <p className="font-mono text-xs uppercase tracking-[0.08em] text-gold">
-              Chapter standing
+          <div className="flex flex-1 flex-col rounded-[20px] bg-ever-dk p-[26px] text-white">
+            <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-white/95">
+              Next up
             </p>
-            <p className="mt-4 font-display text-[44px] font-extrabold leading-none tracking-[-0.035em] text-ink">
-              {ordinal(rank)}{" "}
-              <span className="text-[17px] font-semibold text-ink-2">of {of}</span>
+            <p className="mt-2.5 font-display text-[19px] font-extrabold leading-[1.25] tracking-[-0.02em]">
+              {NEXT_CONFERENCE.name}
             </p>
-            <p className="mt-3.5 text-sm leading-[1.6] text-ink-2">
-              {standingNote ??
-                "35 points behind third. A graded roleplay is worth 15."}
+            <p className="mt-2 mb-[18px] text-[13px] text-white/95">
+              {NEXT_CONFERENCE.when}
             </p>
+            <DecaButton href="/events" variant="white" size="sm" className="mt-auto self-start">
+              See checklist
+            </DecaButton>
           </div>
         </div>
       </div>
@@ -253,45 +254,111 @@ export function DashboardScreen({
   );
 }
 
-function Stat({
-  value,
+function StatCard({
   label,
-  gold,
-  last,
+  value,
+  suffix,
+  note,
+  rail,
 }: {
-  value: string;
   label: string;
-  gold?: boolean;
-  last?: boolean;
+  value: string;
+  suffix?: string;
+  note?: string;
+  rail?: number;
 }) {
   return (
-    <div className={cn("px-7 py-6", !last && "border-r border-hair")}>
-      <p
-        className={cn(
-          "m-0 font-mono text-[32px] font-semibold leading-none tabular",
-          gold ? "text-gold" : "text-ink",
-        )}
-      >
+    <div className="deca-card px-[26px] py-6">
+      <p className="text-xs font-semibold text-mute">{label}</p>
+      <p className="mt-2 font-display text-4xl font-black tracking-[-0.035em]">
         {value}
+        {suffix ? <span className="text-lg text-mute">{suffix}</span> : null}
       </p>
-      <p className="mt-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
-        {label}
-      </p>
+      {note ? <p className="mt-[11px] text-xs text-mute">{note}</p> : null}
+      {rail != null ? <Rail fill={rail} height="h-[7px]" className="mt-3.5" /> : null}
     </div>
   );
 }
 
-function ordinal(n: number) {
-  const v = n % 100;
-  if (v >= 11 && v <= 13) return `${n}th`;
-  switch (n % 10) {
-    case 1:
-      return `${n}st`;
-    case 2:
-      return `${n}nd`;
-    case 3:
-      return `${n}rd`;
-    default:
-      return `${n}th`;
+function ExamTrend({ points }: { points: DashboardTrendPoint[] }) {
+  if (points.length === 0) {
+    return (
+      <p className="mt-4 text-sm text-ink-2">
+        Complete a full or custom test to see your score trend.
+      </p>
+    );
   }
+
+  const width = 620;
+  const height = 150;
+  const pad = 10;
+  const xs = points.map((_, i) =>
+    points.length === 1 ? width / 2 : pad + (i * (width - pad * 2)) / (points.length - 1),
+  );
+  const ys = points.map((point) => {
+    const t = (100 - Math.max(0, Math.min(100, point.score))) / 100;
+    return 20 + t * 100;
+  });
+  const line = xs.map((x, i) => `${x},${ys[i]}`).join(" ");
+  const area = `M${xs[0]},${ys[0]} ${xs
+    .map((x, i) => `L${x},${ys[i]}`)
+    .join(" ")} L${xs[xs.length - 1]},${height} L${xs[0]},${height} Z`;
+  const last = points[points.length - 1];
+
+  return (
+    <>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="mt-2 block h-[150px] w-full overflow-visible"
+        aria-label="Practice exam trend"
+      >
+        <defs>
+          <linearGradient id="v8g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#7d9068" stopOpacity="0.22" />
+            <stop offset="1" stopColor="#7d9068" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={area} fill="url(#v8g)" />
+        <polyline
+          points={line}
+          fill="none"
+          stroke="#7d9068"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx={xs[xs.length - 1]}
+          cy={ys[ys.length - 1]}
+          r="6"
+          fill="#47583c"
+          stroke="#fff"
+          strokeWidth="2.5"
+        />
+        <text
+          x={xs[xs.length - 1]}
+          y={Math.max(14, ys[ys.length - 1] - 16)}
+          textAnchor="end"
+          fontSize="13"
+          fontWeight="800"
+          fill="#2b2a25"
+        >
+          {last?.score ?? ""}
+        </text>
+      </svg>
+      <div className="mt-1.5 flex justify-between text-[11px] font-bold text-mute">
+        {points
+          .filter(
+            (_, i) =>
+              i === 0 ||
+              i === points.length - 1 ||
+              i === Math.floor(points.length / 3) ||
+              i === Math.floor((points.length * 2) / 3),
+          )
+          .map((point) => (
+            <span key={`${point.label}-${point.score}`}>{point.label}</span>
+          ))}
+      </div>
+    </>
+  );
 }

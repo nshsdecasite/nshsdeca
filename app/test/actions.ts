@@ -87,7 +87,19 @@ export async function saveAnswer(
     p_choice_id: choiceId,
   });
   if (error) throw new Error(error.message);
-  revalidatePath(`/tests/${sessionId}`);
+}
+
+export async function recordTabEvent(
+  sessionId: string,
+  eventType: "blur" | "hidden",
+) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("record_session_tab_event", {
+    p_session_id: sessionId,
+    p_event_type: eventType,
+  });
+  if (error) throw new Error(error.message);
 }
 
 export async function completeTest(sessionId: string) {

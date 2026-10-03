@@ -57,6 +57,47 @@ export const PLACEHOLDER_EVENTS = [
   },
 ];
 
+export const SEASON_EVENTS = [
+  {
+    date: "Oct 26",
+    weekday: "MONDAY",
+    name: "DECA Day",
+    detail: "Statewide chapter celebration and membership drive",
+    badge: "CHAPTER",
+    tone: "open" as const,
+  },
+  {
+    date: "Dec 9–10",
+    weekday: "TUES–WED",
+    name: "District 11 Career Development Conference",
+    detail: "District competition · all prepared events",
+    badge: "CONFERENCE",
+    tone: "now" as const,
+  },
+  {
+    date: "Feb 25–27",
+    weekday: "WED–FRI",
+    name: "Texas CDC — State Career Development Conference",
+    detail: "State qualifiers only · three-day conference",
+    badge: "CONFERENCE",
+    tone: "later" as const,
+  },
+  {
+    date: "Apr 17–20",
+    weekday: "FRI–MON",
+    name: "ICDC — International Career Development Conference",
+    detail: "International qualifiers only",
+    badge: "CONFERENCE",
+    tone: "later" as const,
+  },
+];
+
+export const NEXT_CONFERENCE = {
+  name: "District 11 Career Development Conference",
+  when: "December 9–10",
+  iso: "2026-12-09",
+};
+
 export const PLACEHOLDER_FEATURES = [
   {
     title: "Take a test",
@@ -267,7 +308,6 @@ export function iaName(code: string | null | undefined) {
 }
 
 export function accuracyTone(accuracy: number): "gold" | "ever" | "ever-dim" {
-  if (accuracy >= 84) return "gold";
-  if (accuracy >= 61) return "ever";
+  if (accuracy >= 70) return "ever";
   return "ever-dim";
 }

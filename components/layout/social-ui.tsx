@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -7,7 +6,7 @@ type PageSize = "default" | "wide" | "narrow";
 
 const WIDTH: Record<PageSize, string> = {
   default: "max-w-5xl",
-  wide: "max-w-6xl",
+  wide: "max-w-none",
   narrow: "max-w-xl",
 };
 
@@ -22,7 +21,7 @@ export function SocialPage({
 }) {
   return (
     <div className={cn("relative min-h-full pb-16", className)}>
-      <div className={cn("relative mx-auto px-4 py-8 sm:px-6 sm:py-10", WIDTH[size])}>
+      <div className={cn("relative mx-auto px-6 py-9 sm:px-9", WIDTH[size])}>
         {children}
       </div>
     </div>
@@ -47,27 +46,26 @@ export function SocialHeader({
   return (
     <header className={cn("mb-8", className)}>
       {backHref ? (
-          <Link
+        <Link
           href={backHref}
-          className="inline-flex items-center gap-1.5 text-sm text-ink-2 transition-colors duration-150 hover:text-ink"
+          className="inline-flex items-center text-[13px] font-bold text-ever-dk hover:text-ever"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          {backLabel}
+          ← {backLabel}
         </Link>
       ) : null}
       {eyebrow ? (
-        <p className={cn("eyebrow", backHref ? "mt-3" : "")}>{eyebrow}</p>
+        <p className={cn("eyebrow", backHref ? "mt-3.5" : "")}>{eyebrow}</p>
       ) : null}
       <h1
         className={cn(
-          "font-display text-[32px] font-extrabold tracking-[-0.03em] text-ink sm:text-[40px]",
-          backHref || eyebrow ? "mt-1.5" : "",
+          "font-display text-[40px] font-black tracking-[-0.04em] text-ink",
+          backHref || eyebrow ? "mt-2.5" : "",
         )}
       >
         {title}
       </h1>
       {description ? (
-        <p className="mt-2 max-w-[46ch] text-sm leading-[1.65] text-ink-2 sm:text-[15px]">
+        <p className="mt-2.5 max-w-[46ch] text-sm leading-[1.65] text-ink-2">
           {description}
         </p>
       ) : null}
@@ -87,7 +85,8 @@ export function SocialPanel({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[6px] border border-edge bg-white p-5",
+        "deca-card p-[26px]",
+        interactive && "transition-transform duration-150 hover:-translate-y-0.5",
         className,
       )}
     >

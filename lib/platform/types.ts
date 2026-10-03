@@ -12,6 +12,8 @@ export type DashboardStats = {
   total_points: number;
   tests_completed: number;
   roleplays_submitted: number;
+  roleplays_graded?: number;
+  total_pi_count?: number;
   weak_pis: {
     id: string;
     pi_code: string;
@@ -90,7 +92,29 @@ export type AdminOverview = {
   student_count: number;
   pending_submissions: number;
   tests_this_week: number;
+  tests_completed_total?: number;
+  roleplays_submitted_total?: number;
+  roleplays_graded_total?: number;
+  tab_blur_events_total?: number;
   announcements: Announcement[];
+};
+
+export type ChapterActivity = {
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  grade_level: number | null;
+  role: string;
+  total_points: number;
+  tests_completed: number;
+  roleplays_submitted: number;
+  roleplays_graded: number;
+  avg_test_pct: number | null;
+  avg_roleplay_score: number | null;
+  tab_blur_count: number;
+  last_test_at: string | null;
+  last_roleplay_at: string | null;
 };
 
 export type ChapterMember = {

@@ -16,11 +16,10 @@ export function Segmented<T extends string>({
   return (
     <div
       role={onChange ? "radiogroup" : undefined}
-      className="flex overflow-hidden rounded-[6px] border border-edge text-[13px]"
+      className="flex rounded-full bg-ground p-1 text-[13px] font-bold"
     >
-      {options.map((option, index) => {
+      {options.map((option) => {
         const selected = option.value === value;
-        const exceeds = Boolean(option.gold && selected);
         return (
           <button
             key={option.value}
@@ -31,19 +30,10 @@ export function Segmented<T extends string>({
             disabled={!onChange}
             onClick={() => onChange?.(option.value)}
             className={cn(
-              "flex-1 px-0 py-[9px] text-center transition-[background-color,color] duration-150 disabled:cursor-default",
-              index > 0 && "border-l border-edge",
-              exceeds && "bg-gold-br text-ever-dk",
-              selected &&
-                !exceeds &&
-                appearance === "solid" &&
-                "bg-ever text-white",
-              selected &&
-                !exceeds &&
-                appearance === "tint" &&
-                "bg-ever-lt text-ever-dk",
-              !selected &&
-                "bg-white text-ink-2 hover:bg-ever-lt hover:text-ever-dk",
+              "flex-1 rounded-full px-3 py-2 text-center transition-[background-color,color] duration-150 disabled:cursor-default",
+              selected && appearance === "solid" && "bg-ever-dk text-white",
+              selected && appearance === "tint" && "bg-white text-ever-dk shadow-card",
+              !selected && "text-ink-2 hover:text-ever-dk",
             )}
           >
             {option.label}

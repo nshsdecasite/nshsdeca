@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getPiFilterOptions, listPerformanceIndicators } from "@/app/study/actions";
+import { getPiFilterOptions } from "@/app/study/actions";
 import { CustomTestForm } from "@/components/test/CustomTestForm";
 import { SocialPage } from "@/components/layout/social-ui";
 import { PageHeader } from "@/components/page-header";
@@ -11,10 +11,7 @@ export const metadata: Metadata = {
 
 export default async function CustomTestPage() {
   await requireAuth("/tests/custom");
-  const [filters, performanceIndicators] = await Promise.all([
-    getPiFilterOptions(),
-    listPerformanceIndicators({ limit: 400 }),
-  ]);
+  const filters = await getPiFilterOptions();
 
   return (
     <SocialPage>
@@ -28,7 +25,6 @@ export default async function CustomTestPage() {
       <CustomTestForm
         clusters={filters.clusters}
         instructionalAreas={filters.instructional_areas}
-        performanceIndicators={performanceIndicators.filter((pi) => pi.question_count > 0)}
       />
     </SocialPage>
   );

@@ -6,10 +6,7 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
     return (
       <input
         type={type}
-        className={cn(
-          "flex h-10 w-full rounded-[6px] border border-edge bg-white px-3.5 text-sm text-ink transition-[border-color,background-color] duration-150 placeholder:text-mute disabled:cursor-not-allowed disabled:opacity-50",
-          className,
-        )}
+        className={cn("deca-field", className)}
         ref={ref}
         {...props}
       />

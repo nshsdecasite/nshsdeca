@@ -8,7 +8,6 @@ import {
 } from "@/app/platform/actions";
 import { DashboardScreen } from "@/components/deca/dashboard-screen";
 import { displayName, requireAuth } from "@/lib/auth/roles";
-import { monoDate, sessionKind } from "@/lib/deca/format";
 import { iaName } from "@/lib/deca/placeholder";
 import { getTotalScore } from "@/lib/roleplay/types";
 import type { PiHeatmapCell } from "@/lib/platform/types";
@@ -72,8 +71,20 @@ export default async function DashboardPage() {
   const name = displayName(profile?.first_name, profile?.last_name, profile?.email);
   const accuracy = groupAccuracy(heatmap);
   const questionCount = heatmap.reduce((sum, cell) => sum + cell.total_attempts, 0);
+  const correctCount = heatmap.reduce((sum, cell) => sum + cell.correct_count, 0);
+  const examAccuracy = questionCount
+    ? Math.round((correctCount / questionCount) * 100)
+    : null;
+  const mastered = heatmap.filter((cell) => cell.accuracy >= 70);
 
   const reviewed = submissions.filter((item) => item.status === "reviewed");
+  const roleplayScores = reviewed
+    .map((item) => (item.grading_data ? getTotalScore(item.grading_data.rubric) : null))
+    .filter((value): value is number => value != null);
+  const roleplayAverage = roleplayScores.length
+    ? Math.round(roleplayScores.reduce((sum, score) => sum + score, 0) / roleplayScores.length)
+    : null;
+
   const waiting = submissions
     .filter((item) => item.status === "submitted" || item.status === "under_review")
     .map((item) => ({
@@ -85,36 +96,19 @@ export default async function DashboardPage() {
       live: item.status === "under_review",
     }));
 
-  const testSessions = (stats.recent_sessions ?? []).map((session) => ({
-    name: session.title ?? sessionKind(session.session_type, session.total_questions),
-    kind: sessionKind(session.session_type, session.total_questions),
-    date: monoDate(session.completed_at ?? session.started_at),
-    score:
-      session.completed_at && session.score != null
-        ? `${session.score}/${session.total_questions}`
-        : "—",
-    gold: false,
-    href: `/tests/${session.id}`,
-    at: session.completed_at ?? session.started_at,
-  }));
-
-  const roleplaySessions = reviewed.map((item) => {
-    const total = item.grading_data ? getTotalScore(item.grading_data.rubric) : null;
-    return {
-      name: `${item.scenario_title ?? item.event_code ?? "Roleplay"}, attempt ${item.attempt_number}`,
-      kind: "Roleplay",
-      date: monoDate(item.reviewed_at ?? item.submitted_at),
-      score: total != null ? `${total}/100` : "—",
-      gold: total != null,
-      href: `/submissions/${item.id}`,
-      at: item.reviewed_at ?? item.submitted_at,
-    };
-  });
-
-  const sessions = [...testSessions, ...roleplaySessions]
-    .sort((a, b) => +new Date(b.at) - +new Date(a.at))
-    .slice(0, 5)
-    .map(({ at: _at, ...row }) => row);
+  const trend = (stats.recent_sessions ?? [])
+    .filter((session) => session.completed_at && session.score != null)
+    .slice(0, 8)
+    .reverse()
+    .map((session) => ({
+      label: new Date(session.completed_at ?? session.started_at).toLocaleDateString(
+        "en-US",
+        { month: "short", day: "numeric" },
+      ).toUpperCase(),
+      score: session.total_questions
+        ? Math.round(((session.score ?? 0) / session.total_questions) * 100)
+        : 0,
+    }));
 
   const weakPis = (stats.weak_pis ?? []).slice(0, 3).map((pi) => ({
     code: pi.pi_code,
@@ -131,29 +125,35 @@ export default async function DashboardPage() {
         ? "First in the chapter this season."
         : undefined;
 
-  const streak = streakFrom([
+  const activityDates = [
     ...(stats.recent_sessions ?? [])
       .map((session) => session.completed_at)
       .filter((value): value is string => Boolean(value)),
     ...reviewed.map((item) => item.reviewed_at ?? item.submitted_at),
-  ]);
+  ];
+  const streak = streakFrom(activityDates);
 
   return (
     <DashboardScreen
       name={name}
-      eventLabel="Marketing Communications Series"
-      points={stats.total_points}
-      testsTaken={stats.tests_completed}
-      roleplaysGraded={reviewed.length || stats.roleplays_submitted}
+      examAccuracy={examAccuracy}
+      roleplayAverage={roleplayAverage}
+      roleplayAttempts={reviewed.length}
       streak={streak}
+      bestStreak={streak}
+      masteredCount={mastered.length}
+      masteredTotal={stats.total_pi_count ?? heatmap.length}
       questionCount={questionCount || undefined}
       accuracy={accuracy}
-      sessions={sessions}
+      trend={trend}
       weakPis={weakPis}
       waiting={waiting}
       standingRank={standing?.rank ?? null}
       standingOf={leaderboard.length || null}
       standingNote={standingNote}
+      points={stats.total_points}
+      testsTaken={stats.tests_completed}
+      roleplaysGraded={stats.roleplays_graded}
     />
   );
 }

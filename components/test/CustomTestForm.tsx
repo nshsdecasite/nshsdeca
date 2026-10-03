@@ -1,40 +1,50 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { startCustomTest } from "@/app/platform/actions";
+import { searchPisForTest } from "@/app/study/actions";
 import { TimedModeField } from "@/components/test/TimedModeField";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { PiSummary } from "@/lib/study/pi-types";
+
+type PiOption = {
+  id: string;
+  pi_code: string;
+  indicator_text: string;
+  question_count: number;
+};
 
 type CustomTestFormProps = {
   clusters: { slug: string; name: string }[];
   instructionalAreas: { code: string; name: string }[];
-  performanceIndicators: PiSummary[];
 };
 
-export function CustomTestForm({
-  clusters,
-  instructionalAreas,
-  performanceIndicators,
-}: CustomTestFormProps) {
+export function CustomTestForm({ clusters, instructionalAreas }: CustomTestFormProps) {
   const [error, setError] = useState("");
   const [piQuery, setPiQuery] = useState("");
+  const [matchingPis, setMatchingPis] = useState<PiOption[]>([]);
+  const [piLoading, setPiLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const matchingPis = useMemo(() => {
-    const query = piQuery.trim().toLowerCase();
-    if (!query) return performanceIndicators.slice(0, 40);
-    return performanceIndicators
-      .filter(
-        (pi) =>
-          pi.pi_code.toLowerCase().includes(query) ||
-          pi.indicator_text.toLowerCase().includes(query),
-      )
-      .slice(0, 40);
-  }, [performanceIndicators, piQuery]);
+  useEffect(() => {
+    const query = piQuery.trim();
+    if (query.length < 2) {
+      setMatchingPis([]);
+      return;
+    }
+
+    setPiLoading(true);
+    const timer = window.setTimeout(() => {
+      searchPisForTest(query)
+        .then(setMatchingPis)
+        .catch(() => setMatchingPis([]))
+        .finally(() => setPiLoading(false));
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [piQuery]);
 
   return (
     <Card className="p-6 sm:p-8">
@@ -114,13 +124,13 @@ export function CustomTestForm({
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="pi-search">Performance indicator</Label>
+            <Label htmlFor="pi-search">Performance indicator (optional)</Label>
             <Input
               id="pi-search"
               type="search"
               value={piQuery}
               onChange={(event) => setPiQuery(event.target.value)}
-              placeholder="Search PI code or wording…"
+              placeholder="Type at least 2 characters to search PIs…"
               className="mt-2"
             />
             <select
@@ -129,11 +139,19 @@ export function CustomTestForm({
               defaultValue=""
               className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <option value="">All PIs</option>
+              <option value="">
+                {piLoading
+                  ? "Searching…"
+                  : piQuery.trim().length < 2
+                    ? "All PIs in selected filters"
+                    : matchingPis.length
+                      ? "Pick a PI (optional)"
+                      : "No matching PIs with questions"}
+              </option>
               {matchingPis.map((pi) => (
                 <option key={pi.id} value={pi.id}>
                   {pi.pi_code} — {pi.indicator_text.slice(0, 80)}
-                  {pi.indicator_text.length > 80 ? "…" : ""}
+                  {pi.indicator_text.length > 80 ? "…" : ""} ({pi.question_count})
                 </option>
               ))}
             </select>

@@ -56,7 +56,7 @@ export function DriveDurationInput({
   };
 
   return (
-    <div className="mt-4 rounded-[6px] border border-edge bg-white p-4">
+    <div className="mt-4 rounded-2xl bg-ground p-4">
       <h3 className="mb-1 text-sm font-medium text-ink">Video length</h3>
       <p className="mb-3 text-sm leading-[1.6] text-ink-2">
         Google Drive doesn&apos;t report video duration. Enter the length so you can
@@ -300,7 +300,7 @@ function YouTubeVideoPlayer(props: VideoPlayerProps) {
 
   return (
     <div className="space-y-0">
-      <div className="relative aspect-video overflow-hidden rounded-[6px] bg-[#0f1f14]">
+      <div className="relative aspect-video overflow-hidden rounded-[20px] bg-[#33322b]">
         <div id={containerId} className="h-full w-full" />
       </div>
       {props.hideTimeline ? null : (
@@ -351,7 +351,7 @@ function DriveVideoPlayer(props: VideoPlayerProps) {
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-video overflow-hidden rounded-[6px] bg-[#0f1f14]">
+      <div className="relative aspect-video overflow-hidden rounded-[20px] bg-[#33322b]">
         <iframe
           src={embedUrl}
           className="h-full w-full"

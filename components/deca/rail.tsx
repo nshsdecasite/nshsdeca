@@ -7,25 +7,27 @@ export function Rail({
   tone = "ever",
   delay = 0,
   className,
+  height = "h-[9px]",
 }: {
   fill: number;
   tone?: RailTone;
   delay?: number;
   className?: string;
+  height?: string;
 }) {
   const clamped = Math.max(0, Math.min(1, fill));
 
   return (
     <span
-      className={cn("mt-2 block h-1 overflow-hidden bg-ground-2", className)}
+      className={cn("mt-2 block overflow-hidden rounded-full bg-ground", height, className)}
       aria-hidden
     >
       <span
         className={cn(
-          "block h-1 origin-left animate-rail-fill",
-          tone === "gold" && "bg-gold-br",
+          "block h-full origin-left animate-rail-fill rounded-full",
+          tone === "gold" && "bg-ever",
           tone === "ever" && "bg-ever",
-          tone === "ever-dim" && "bg-ever opacity-55",
+          tone === "ever-dim" && "bg-acc-mid",
         )}
         style={{
           width: `${clamped * 100}%`,
@@ -64,26 +66,18 @@ export function ScrubRail({
           onSeek?.(ratio);
         }}
       />
-      <span className="pointer-events-none absolute inset-x-0 h-1 bg-ground-2" />
+      <span className="pointer-events-none absolute inset-x-0 h-[5px] rounded-full bg-white/25" />
       <span
-        className="pointer-events-none absolute left-0 h-1 bg-ever"
+        className="pointer-events-none absolute left-0 h-[5px] rounded-full bg-ever"
         style={{ width: `${clamped * 100}%` }}
       />
       {ticks.map((tick) => (
         <span
           key={tick}
-          className="pointer-events-none absolute h-3.5 w-0.5 bg-ever opacity-50"
+          className="pointer-events-none absolute top-1/2 h-[13px] w-[3px] -translate-y-1/2 rounded-[2px] bg-white"
           style={{ left: `${Math.max(0, Math.min(1, tick)) * 100}%` }}
         />
       ))}
-      <span
-        className="pointer-events-none absolute h-3 w-3 rounded-full bg-gold-br"
-        style={{
-          left: `${clamped * 100}%`,
-          transform: "translateX(-6px)",
-          boxShadow: "0 0 0 4px var(--color-gold-lt)",
-        }}
-      />
     </div>
   );
 }

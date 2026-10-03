@@ -6,7 +6,6 @@ import RubricForm from "@/components/roleplay/RubricForm";
 import VideoPlayer from "@/components/roleplay/VideoPlayer";
 import { SubmissionStatusBadge } from "@/components/roleplay/SubmissionStatusBadge";
 import { resolveVideoSource } from "@/lib/roleplay/submission";
-import { getScenario } from "@/lib/roleplay/scenarios";
 import type { Scenario } from "@/lib/roleplay/types";
 import {
   COMMENT_TAG_LABELS,
@@ -16,6 +15,7 @@ import {
   type Submission,
   type TimestampedComment,
 } from "@/lib/roleplay/types";
+import { criterionDisplayText, extraCriteria } from "@/lib/roleplay/rubric";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -101,6 +101,17 @@ export function StudentFeedbackView({
                   onChange={() => {}}
                   piFeedback={grading.piFeedback}
                   centuryFeedback={grading.centuryFeedback}
+                  extraItems={
+                    scenario.rubric
+                      ? extraCriteria(scenario.rubric).map((criterion) => ({
+                          id: criterion.id,
+                          group: criterion.criterion_group,
+                          label: criterionDisplayText(criterion),
+                          score: grading.rubric.extraScores?.[criterion.id] ?? 0,
+                          max: criterion.max_points,
+                        }))
+                      : undefined
+                  }
                   readOnly
                 />
               </Card>
@@ -128,7 +139,7 @@ export function StudentFeedbackView({
                             {formatTime(comment.timestamp)}
                           </span>
                           <Badge variant="muted" className="normal-case">
-                            {COMMENT_TAG_LABELS[comment.tag]}
+                            {COMMENT_TAG_LABELS[comment.tag] ?? comment.tag}
                           </Badge>
                         </div>
                         <p className="text-sm text-foreground">{comment.text}</p>

@@ -9,12 +9,24 @@ import {
   submitFinalGrading,
 } from "@/app/roleplay/actions";
 import { DecaButton } from "@/components/deca/button";
+import { PointScale } from "@/components/deca/point-scale";
 import { ScrubRail } from "@/components/deca/rail";
-import { Segmented } from "@/components/deca/segmented";
-import { createEmptyRubric } from "@/components/roleplay/RubricForm";
 import VideoPlayer, { DriveDurationInput } from "@/components/roleplay/VideoPlayer";
 import { monoTime } from "@/lib/deca/format";
-import { RUBRIC_SCALE } from "@/lib/deca/placeholder";
+import {
+  clampScore,
+  createEmptyRubric,
+  criterionDisplayText,
+  defaultNumericLevels,
+  extraCriteria,
+  GROUP_LABELS,
+  levelsForCriterion,
+  piCriteria,
+  scoreToPointValue,
+  splitCriterionLabel,
+  type RubricCriterionGroup,
+  type RubricLevelScale,
+} from "@/lib/roleplay/rubric";
 import { resolveVideoSource } from "@/lib/roleplay/submission";
 import type { Scenario } from "@/lib/roleplay/types";
 import {
@@ -33,34 +45,29 @@ import { cn } from "@/lib/utils";
 
 const AUTO_SAVE_DELAY = 1500;
 
-const SCALE_OPTIONS = RUBRIC_SCALE.map((item) => ({
-  value: item.key,
-  label: item.label,
-  gold: item.key === "exceeds",
-  score: item.score,
-}));
-
-type ScaleKey = (typeof RUBRIC_SCALE)[number]["key"];
-
-function scoreToScale(score: number): ScaleKey | null {
-  if (score >= 17) return "exceeds";
-  if (score >= 13) return "meets";
-  if (score >= 8) return "below";
-  if (score > 0) return "little";
-  return null;
-}
+type GradingRow = {
+  key: string;
+  group: RubricCriterionGroup;
+  code: string | null;
+  label: string;
+  levels: RubricLevelScale[];
+  score: number;
+  maxPoints: number;
+  onChange: (score: number) => void;
+};
 
 function commentLabel(tag: CommentTag, scenario: Scenario) {
   if (tag.startsWith("PI-")) {
     const index = Number(tag.slice(3)) - 1;
     return (
       scenario.performanceIndicators?.[index]?.pi_code ??
-      COMMENT_TAG_LABELS[tag]
+      COMMENT_TAG_LABELS[tag] ??
+      tag
     );
   }
-  if (tag === "21st-century") return "21ST CENTURY";
+  if (tag === "21st-century") return "CAREER";
   if (tag === "general") return "NOTE";
-  return COMMENT_TAG_LABELS[tag];
+  return COMMENT_TAG_LABELS[tag] ?? tag;
 }
 
 export function OfficerGradingWorkspace({
@@ -100,20 +107,46 @@ export function OfficerGradingWorkspace({
 
   useEffect(() => {
     const grading = submission.grading_data;
+    const empty = createEmptyRubric(scenario.pis.length, scenario.rubric);
+    const piCount = Object.keys(empty.piScores).length || scenario.pis.length;
     if (grading) {
       setComments(grading.comments ?? []);
-      setRubric(grading.rubric);
-      setPiFeedback(grading.piFeedback ?? createEmptyPiFeedback(scenario.pis.length));
+      const extras = extraCriteria(scenario.rubric);
+      setRubric({
+        ...empty,
+        ...grading.rubric,
+        piScores: Object.fromEntries(
+          Object.keys(empty.piScores).map((key) => [
+            key,
+            clampScore(grading.rubric.piScores[key] ?? 0, empty.maxPiScore),
+          ]),
+        ),
+        extraScores: extras.length
+          ? Object.fromEntries(
+              extras.map((criterion) => [
+                criterion.id,
+                clampScore(
+                  grading.rubric.extraScores?.[criterion.id] ?? 0,
+                  criterion.max_points,
+                ),
+              ]),
+            )
+          : grading.rubric.extraScores,
+        maxPiScore: empty.maxPiScore,
+        maxCenturyScore: empty.maxCenturyScore,
+        maxTotalPoints: empty.maxTotalPoints ?? grading.rubric.maxTotalPoints,
+      });
+      setPiFeedback(grading.piFeedback ?? createEmptyPiFeedback(piCount));
       setCenturyFeedback(grading.centuryFeedback ?? "");
       setOverallFeedback(grading.overallFeedback ?? "");
       setVideoDuration(grading.videoDuration);
     } else {
-      setRubric(createEmptyRubric(scenario.pis.length));
-      setPiFeedback(createEmptyPiFeedback(scenario.pis.length));
+      setRubric(empty);
+      setPiFeedback(createEmptyPiFeedback(piCount));
     }
     setSubmitted(submission.status === "reviewed");
     finalizedRef.current = submission.status === "reviewed";
-  }, [submission, scenario.pis.length]);
+  }, [submission, scenario.pis.length, scenario.rubric]);
 
   const buildGrading = useCallback(
     (): Grading => ({
@@ -242,7 +275,10 @@ export function OfficerGradingWorkspace({
   if (!rubric) return null;
 
   const tagOptions: CommentTag[] = [
-    ...scenario.pis.map((_, index) => `PI-${index + 1}` as CommentTag),
+    ...Array.from(
+      { length: Object.keys(rubric.piScores).length || scenario.pis.length },
+      (_, index) => `PI-${index + 1}` as CommentTag,
+    ),
     "21st-century",
     "general",
   ];
@@ -266,19 +302,90 @@ export function OfficerGradingWorkspace({
     ? `${submission.event_code}${submission.event_name ? ` ${submission.event_name}` : ""}`
     : scenario.event;
 
-  const setPiScale = (index: number, key: ScaleKey) => {
-    const score = RUBRIC_SCALE.find((item) => item.key === key)?.score ?? 0;
-    const piKey = `PI-${index + 1}`;
+  const setPiScore = (index: number, score: number) => {
     setRubric({
       ...rubric,
-      piScores: { ...rubric.piScores, [piKey]: score },
+      piScores: { ...rubric.piScores, [`PI-${index + 1}`]: score },
     });
   };
 
-  const setCenturyScale = (key: ScaleKey) => {
-    const score = RUBRIC_SCALE.find((item) => item.key === key)?.score ?? 0;
+  const setExtraScore = (criterionId: string, score: number) => {
+    const extraScores = { ...(rubric.extraScores ?? {}), [criterionId]: score };
+    setRubric({
+      ...rubric,
+      extraScores,
+      centurySkills: Object.values(extraScores).reduce((sum, value) => sum + value, 0),
+    });
+  };
+
+  const setLegacyCentury = (score: number) => {
     setRubric({ ...rubric, centurySkills: score });
   };
+
+  const template = scenario.rubric;
+  const piList = piCriteria(template);
+  const extraList = extraCriteria(template);
+  const rows: GradingRow[] = [];
+
+  if (piList.length) {
+    piList.forEach((criterion, index) => {
+      rows.push({
+        key: criterion.id,
+        group: "performance_indicator",
+        code:
+          criterion.pi_code ??
+          scenario.performanceIndicators?.[index]?.pi_code ??
+          `PI-${index + 1}`,
+        label: criterionDisplayText(criterion),
+        levels: levelsForCriterion(criterion, rubric.maxPiScore),
+        score: rubric.piScores[`PI-${index + 1}`] ?? 0,
+        maxPoints: criterion.max_points || rubric.maxPiScore,
+        onChange: (score) => setPiScore(index, score),
+      });
+    });
+  } else {
+    scenario.pis.forEach((label, index) => {
+      rows.push({
+        key: `PI-${index + 1}`,
+        group: "performance_indicator",
+        code: scenario.performanceIndicators?.[index]?.pi_code ?? `PI-${index + 1}`,
+        label,
+        levels: defaultNumericLevels(rubric.maxPiScore),
+        score: rubric.piScores[`PI-${index + 1}`] ?? 0,
+        maxPoints: rubric.maxPiScore,
+        onChange: (score) => setPiScore(index, score),
+      });
+    });
+  }
+
+  if (extraList.length) {
+    extraList.forEach((criterion) => {
+      rows.push({
+        key: criterion.id,
+        group: criterion.criterion_group,
+        code: null,
+        label: criterionDisplayText(criterion),
+        levels: levelsForCriterion(criterion, criterion.max_points),
+        score: rubric.extraScores?.[criterion.id] ?? 0,
+        maxPoints: criterion.max_points,
+        onChange: (score) => setExtraScore(criterion.id, score),
+      });
+    });
+  } else {
+    const century = extraList[0];
+    rows.push({
+      key: "century",
+      group: "twenty_first_century_skills",
+      code: null,
+      label: "21st Century Skills — overall presentation and judgment",
+      levels: century
+        ? levelsForCriterion(century)
+        : defaultNumericLevels(rubric.maxCenturyScore),
+      score: rubric.centurySkills,
+      maxPoints: century?.max_points ?? rubric.maxCenturyScore,
+      onChange: setLegacyCentury,
+    });
+  }
 
   const draftLabel =
     saveStatus === "saving"
@@ -321,7 +428,7 @@ export function OfficerGradingWorkspace({
       </div>
       <p className="mt-3 text-xs font-bold text-mute">{draftLabel}</p>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_400px]">
+      <div className="mt-6 flex flex-col gap-5">
         <div className="flex flex-col gap-4">
           <div className="relative overflow-hidden rounded-[20px] bg-[#33322b]">
             {submission.video_url ? (
@@ -383,8 +490,9 @@ export function OfficerGradingWorkspace({
                 />
               </div>
             ) : null}
+        </div>
 
-          <div className="deca-card px-[30px] py-[26px]">
+        <div className="deca-card px-[30px] py-[26px]">
             <div className="mb-4 flex items-baseline justify-between">
               <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
                 Pinned comments
@@ -495,85 +603,94 @@ export function OfficerGradingWorkspace({
                 );
               })}
             </div>
-          </div>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="deca-card px-7 py-[26px]">
-            <div className="mb-[18px] flex items-baseline justify-between">
-              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+        <div className="deca-card px-6 py-6 sm:px-8 sm:py-7">
+            <div className="mb-5 flex items-end justify-between gap-4">
+              <h2 className="text-balance font-display text-[26px] font-extrabold tracking-[-0.03em]">
                 Evaluation form
               </h2>
-              <span className="text-[11px] font-bold text-mute">0–20 each</span>
+              <span className="text-sm font-bold tabular-nums text-mute">
+                {max} pts
+              </span>
             </div>
-            <div className="flex flex-col gap-[18px]">
-              {scenario.pis.map((label, index) => {
-                const key = `PI-${index + 1}` as const;
-                const score = rubric.piScores[key] ?? 0;
-                const selected = scoreToScale(score);
+            <div className="flex flex-col">
+              {rows.map((row, index) => {
+                const prev = rows[index - 1];
+                const showGroup = index === 0 || prev?.group !== row.group;
+                const { title, body } = splitCriterionLabel(row.label);
                 return (
-                  <div key={key}>
-                    <div className="flex items-baseline justify-between">
-                      <span className="max-w-[24ch] text-[13px] font-semibold">{label}</span>
-                      <span className="text-sm font-extrabold">{score || "—"}</span>
-                    </div>
-                    <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-ground">
+                  <div key={row.key}>
+                    {showGroup ? (
                       <div
                         className={cn(
-                          "h-[9px] rounded-full",
-                          score >= 16 ? "bg-ever" : "bg-acc-mid",
+                          "rounded-[14px] bg-ever-dk px-4 py-2.5 text-[12px] font-bold tracking-[0.12em] uppercase text-white",
+                          index > 0 && "mt-6",
                         )}
-                        style={{ width: `${(score / 20) * 100}%` }}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <Segmented
-                        name={key}
-                        value={selected}
-                        options={SCALE_OPTIONS}
-                        onChange={submitted ? undefined : (value) => setPiScale(index, value)}
-                      />
+                      >
+                        {GROUP_LABELS[row.group]}
+                      </div>
+                    ) : null}
+                    <div
+                      className={cn(
+                        "flex flex-col gap-3 py-5 lg:flex-row lg:items-center lg:gap-6",
+                        index < rows.length - 1 && "border-b border-edge/70",
+                      )}
+                    >
+                      <div className="flex min-w-0 flex-1 items-start justify-between gap-4 lg:max-w-[28rem] xl:max-w-[34rem]">
+                        <p className="text-pretty text-[16px] font-semibold leading-[1.45] text-ink">
+                          {row.code ? (
+                            <span className="mr-1.5 font-mono text-[13px] font-extrabold text-ever">
+                              {row.code}
+                            </span>
+                          ) : null}
+                          {title ? (
+                            <>
+                              <span className="font-extrabold">{title}. </span>
+                              {body}
+                            </>
+                          ) : (
+                            body
+                          )}
+                        </p>
+                        <span className="pt-0.5 text-[22px] font-black tabular-nums leading-none lg:hidden">
+                          {row.score}
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-[1.35]">
+                        <PointScale
+                          name={row.key}
+                          value={scoreToPointValue(row.score)}
+                          levels={row.levels}
+                          size="lg"
+                          labeled={showGroup}
+                          onChange={
+                            submitted
+                              ? undefined
+                              : (value) => row.onChange(Number(value))
+                          }
+                        />
+                      </div>
+                      <span className="hidden w-14 shrink-0 text-right text-[22px] font-black tabular-nums leading-none lg:block">
+                        {row.score}
+                      </span>
                     </div>
                   </div>
                 );
               })}
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="max-w-[24ch] text-[13px] font-semibold">
-                    Overall impression
-                  </span>
-                  <span className="text-sm font-extrabold">
-                    {rubric.centurySkills || "—"}
-                  </span>
-                </div>
-                <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-ground">
-                  <div
-                    className="h-[9px] rounded-full bg-ever"
-                    style={{ width: `${(rubric.centurySkills / 20) * 100}%` }}
-                  />
-                </div>
-                <div className="mt-2">
-                  <Segmented
-                    name="century"
-                    value={scoreToScale(rubric.centurySkills)}
-                    options={SCALE_OPTIONS}
-                    onChange={submitted ? undefined : setCenturyScale}
-                  />
-                </div>
-              </div>
             </div>
-            <div className="mt-[22px] flex items-center justify-between rounded-2xl bg-ever-lt px-5 py-4">
-              <span className="text-xs font-bold tracking-[0.1em] uppercase text-ever-dk">
+            <div className="mt-6 flex items-center justify-between rounded-2xl bg-ever-lt px-6 py-5">
+              <span className="text-sm font-bold tracking-[0.1em] uppercase text-ever-dk">
                 Total
               </span>
-              <span className="font-display text-[30px] font-black tracking-[-0.035em]">
+              <span className="font-display text-[40px] font-black tracking-[-0.04em] tabular-nums">
                 {total}
-                <span className="text-base text-mute">/{max}</span>
+                <span className="text-xl text-mute">/{max}</span>
               </span>
             </div>
-          </div>
+        </div>
 
-          <div className="deca-card flex-1 px-7 py-[26px]">
+        <div className="deca-card px-7 py-[26px]">
             <h2 className="mb-3.5 font-display text-[19px] font-extrabold tracking-[-0.02em]">
               Feedback to {firstName}
             </h2>
@@ -614,7 +731,6 @@ export function OfficerGradingWorkspace({
               </button>
             ) : null}
           </div>
-        </div>
       </div>
     </div>
   );

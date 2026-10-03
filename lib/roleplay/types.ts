@@ -1,15 +1,10 @@
+import type { ScenarioRubric } from "@/lib/roleplay/rubric";
+
 export type VideoSource = "youtube" | "google-drive";
 
 export type SubmissionStatus = "submitted" | "under_review" | "reviewed";
 
-export type CommentTag =
-  | "PI-1"
-  | "PI-2"
-  | "PI-3"
-  | "PI-4"
-  | "PI-5"
-  | "21st-century"
-  | "general";
+export type CommentTag = `PI-${number}` | "21st-century" | "general";
 
 export interface Scenario {
   id: string;
@@ -23,6 +18,7 @@ export interface Scenario {
     indicator_text: string;
     display_order: number;
   }[];
+  rubric?: ScenarioRubric;
 }
 
 export interface TimestampedComment {
@@ -37,6 +33,8 @@ export interface RubricScores {
   centurySkills: number;
   maxPiScore: number;
   maxCenturyScore: number;
+  extraScores?: Record<string, number>;
+  maxTotalPoints?: number;
 }
 
 export interface Grading {
@@ -70,13 +68,13 @@ export interface Submission {
   student_email?: string;
 }
 
-export const COMMENT_TAG_LABELS: Record<CommentTag, string> = {
+export const COMMENT_TAG_LABELS: Record<string, string> = {
   "PI-1": "PI 1",
   "PI-2": "PI 2",
   "PI-3": "PI 3",
   "PI-4": "PI 4",
   "PI-5": "PI 5",
-  "21st-century": "21st Century Skills",
+  "21st-century": "Career competencies",
   general: "General",
 };
 
@@ -88,10 +86,15 @@ export const STATUS_LABELS: Record<SubmissionStatus, string> = {
 
 export function getTotalScore(rubric: RubricScores): number {
   const piTotal = Object.values(rubric.piScores).reduce((a, b) => a + b, 0);
-  return piTotal + rubric.centurySkills;
+  const extra =
+    rubric.extraScores != null
+      ? Object.values(rubric.extraScores).reduce((sum, score) => sum + score, 0)
+      : rubric.centurySkills;
+  return piTotal + extra;
 }
 
 export function getMaxScore(rubric: RubricScores): number {
+  if (rubric.maxTotalPoints) return rubric.maxTotalPoints;
   const piCount = Object.keys(rubric.piScores).length;
   return piCount * rubric.maxPiScore + rubric.maxCenturyScore;
 }

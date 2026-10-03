@@ -30,7 +30,7 @@ export function Segmented<T extends string>({
             disabled={!onChange}
             onClick={() => onChange?.(option.value)}
             className={cn(
-              "flex-1 rounded-full px-3 py-2 text-center transition-[background-color,color] duration-150 disabled:cursor-default",
+              "min-h-10 flex-1 rounded-full px-3 py-2 text-center tabular-nums transition-[background-color,color] duration-150 disabled:cursor-default",
               selected && appearance === "solid" && "bg-ever-dk text-white",
               selected && appearance === "tint" && "bg-white text-ever-dk shadow-card",
               !selected && "text-ink-2 hover:text-ever-dk",

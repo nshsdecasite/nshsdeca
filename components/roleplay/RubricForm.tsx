@@ -3,7 +3,11 @@
 import { useState } from "react";
 import type { RubricScores } from "@/lib/roleplay/types";
 import { getMaxScore, getTotalScore } from "@/lib/roleplay/types";
-import { MAX_CENTURY_SCORE, MAX_PI_SCORE } from "@/lib/roleplay/scenarios";
+import {
+  GROUP_LABELS,
+  splitCriterionLabel,
+  type RubricCriterionGroup,
+} from "@/lib/roleplay/rubric";
 import { Input } from "@/components/ui/input";
 
 interface RubricFormProps {
@@ -14,6 +18,13 @@ interface RubricFormProps {
   onPiFeedbackChange?: (key: string, value: string) => void;
   centuryFeedback?: string;
   onCenturyFeedbackChange?: (value: string) => void;
+  extraItems?: {
+    id: string;
+    label: string;
+    score: number;
+    max: number;
+    group?: RubricCriterionGroup;
+  }[];
   readOnly?: boolean;
 }
 
@@ -25,6 +36,7 @@ export default function RubricForm({
   onPiFeedbackChange,
   centuryFeedback,
   onCenturyFeedbackChange,
+  extraItems,
   readOnly = false,
 }: RubricFormProps) {
   const updatePiScore = (index: number, score: number) => {
@@ -89,6 +101,42 @@ export default function RubricForm({
         })}
       </div>
 
+      {extraItems?.length ? (
+        extraItems.map((item, index) => {
+          const prev = extraItems[index - 1];
+          const showGroup = item.group && item.group !== prev?.group;
+          const { title, body } = splitCriterionLabel(item.label);
+          return (
+            <div key={item.id}>
+              {showGroup ? (
+                <p className="mb-2 text-[11px] font-bold tracking-[0.1em] uppercase text-muted-foreground">
+                  {GROUP_LABELS[item.group!]}
+                </p>
+              ) : null}
+              <div className="space-y-2 rounded-2xl bg-primary/10 p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-pretty text-sm text-foreground">
+                    {title ? (
+                      <>
+                        <span className="font-semibold">{title}. </span>
+                        {body}
+                      </>
+                    ) : (
+                      body
+                    )}
+                  </p>
+                  <ScoreInput
+                    value={item.score}
+                    max={item.max}
+                    onChange={() => {}}
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })
+      ) : (
       <div className="space-y-2 rounded-2xl bg-primary/10 p-3">
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -124,10 +172,17 @@ export default function RubricForm({
           )
         )}
       </div>
+      )}
+
+      {extraItems?.length && centuryFeedback ? (
+        <p className="rounded-xl border border-primary/20 bg-card px-3 py-2 text-sm text-muted-foreground">
+          {centuryFeedback}
+        </p>
+      ) : null}
 
       <div className="flex items-center justify-between border-t border-border pt-3">
         <span className="font-semibold text-foreground">Total Score</span>
-        <span className="text-2xl font-semibold text-primary">
+        <span className="text-2xl font-semibold tabular-nums text-primary">
           {total} <span className="text-base font-normal text-muted-foreground">/ {max}</span>
         </span>
       </div>
@@ -151,7 +206,7 @@ function ScoreInput({
 
   if (readOnly) {
     return (
-      <span className="w-16 text-right text-lg font-semibold text-foreground">
+      <span className="w-16 text-right text-lg font-semibold tabular-nums text-foreground">
         {value}
       </span>
     );
@@ -172,22 +227,11 @@ function ScoreInput({
           }
         }}
         onBlur={() => setDraft(null)}
-        className="h-9 w-14 min-h-0 px-2 py-1 text-center text-sm"
+        className="h-9 w-14 min-h-0 px-2 py-1 text-center text-sm tabular-nums"
       />
       <span className="text-xs text-muted-foreground">/ {max}</span>
     </div>
   );
 }
 
-export function createEmptyRubric(piCount: number): RubricScores {
-  const piScores: Record<string, number> = {};
-  for (let i = 1; i <= piCount; i++) {
-    piScores[`PI-${i}`] = 0;
-  }
-  return {
-    piScores,
-    centurySkills: 0,
-    maxPiScore: MAX_PI_SCORE,
-    maxCenturyScore: MAX_CENTURY_SCORE,
-  };
-}
+export { createEmptyRubric } from "@/lib/roleplay/rubric";

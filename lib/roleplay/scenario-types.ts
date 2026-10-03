@@ -1,3 +1,5 @@
+import type { ScenarioRubric } from "@/lib/roleplay/rubric";
+
 export type ScenarioSummary = {
   id: string;
   event_code: string;
@@ -36,6 +38,7 @@ export type ScenarioDetail = {
   solution_text: string | null;
   source_url: string | null;
   pis?: ScenarioPerformanceIndicator[];
+  rubric?: ScenarioRubric;
 };
 
 export type ScenarioFilterOptions = {

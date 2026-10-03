@@ -14,7 +14,7 @@ export async function listSubmissions(): Promise<Submission[]> {
   await requireAuth();
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_roleplay_submissions");
-  if (error) throw new Error(error.message);
+  if (error) return [];
   return (data ?? []) as Submission[];
 }
 
@@ -24,7 +24,7 @@ export async function getSubmission(id: string): Promise<Submission | null> {
   const { data, error } = await supabase.rpc("get_roleplay_submission", {
     p_id: id,
   });
-  if (error) throw new Error(error.message);
+  if (error) return null;
   return (data as Submission | null) ?? null;
 }
 
@@ -33,7 +33,7 @@ export async function createSubmission(input: {
   videoUrl: string;
   videoSource: string;
 }) {
-  await requireRole(["student"], "/roleplays/submit");
+  await requireAuth("/roleplays/submit");
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_roleplay_submission", {
     p_scenario_key: input.scenarioKey,

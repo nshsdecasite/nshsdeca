@@ -2,6 +2,7 @@ import type {
   ScenarioDetail,
   ScenarioPerformanceIndicator,
 } from "@/lib/roleplay/scenario-types";
+import { normalizeScenarioRubric } from "@/lib/roleplay/rubric";
 import type { Scenario } from "@/lib/roleplay/types";
 
 function normalizePerformanceIndicators(
@@ -40,6 +41,7 @@ export function scenarioDetailToLegacy(detail: ScenarioDetail): Scenario {
     event: detail.event_name,
     pis: performanceIndicators.map((pi) => pi.indicator_text),
     performanceIndicators,
+    rubric: normalizeScenarioRubric(detail.rubric),
   };
 }
 
@@ -55,4 +57,20 @@ export function submissionScenarioTitle(submission: {
   scenario_key: string;
 }) {
   return submission.scenario_title ?? submission.scenario_key;
+}
+
+export function scenarioFromSubmission(submission: {
+  scenario_id?: string | null;
+  scenario_key: string;
+  scenario_title?: string | null;
+  event_code?: string | null;
+  event_name?: string | null;
+}): Scenario {
+  return {
+    id: submissionScenarioId(submission),
+    title: submissionScenarioTitle(submission),
+    description: "",
+    event: submission.event_name ?? submission.event_code ?? "Roleplay",
+    pis: [],
+  };
 }

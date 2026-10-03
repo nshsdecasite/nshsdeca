@@ -9,15 +9,17 @@ from pathlib import Path
 import pdfplumber
 
 LEVEL_NAMES = {
-    "little_no_value": "Little/No Value",
-    "below_expectations": "Below Expectations",
-    "meets_expectations": "Meets Expectations",
-    "exceeds_expectations": "Exceeds Expectations",
+    "novice": "Novice",
+    "developing": "Developing",
+    "proficient": "Proficient",
+    "exemplary": "Exemplary",
 }
 
 CRITERION_GROUPS = {
     "PERFORMANCE INDICATORS": "performance_indicator",
-    "21st CENTURY SKILLS": "twenty_first_century_skills",
+    "SOLUTION": "solution",
+    "CAREER COMPETENCIES": "career_competencies",
+    "21ST CENTURY SKILLS": "career_competencies",
 }
 
 OVERALL_MARKERS = (
@@ -278,7 +280,11 @@ def parse_rubric_from_tables(pages: list) -> tuple[list[RubricCriterion], int]:
             if not table or len(table[0]) < 5:
                 continue
             header = " ".join(str(c or "") for c in table[0])
-            if "Exceeds" not in header and "Expectations" not in header:
+            header_l = header.lower()
+            if not any(
+                marker in header_l
+                for marker in ("exemplary", "novice", "exceeds", "expectations")
+            ):
                 continue
 
             for row in table[1:]:
@@ -293,8 +299,14 @@ def parse_rubric_from_tables(pages: list) -> tuple[list[RubricCriterion], int]:
                 if upper_label.startswith("PERFORMANCE INDICATORS"):
                     current_group = "performance_indicator"
                     continue
+                if upper_label.startswith("SOLUTION"):
+                    current_group = "solution"
+                    continue
+                if "CAREER COMPETENC" in upper_label:
+                    current_group = "career_competencies"
+                    continue
                 if upper_label.startswith("21ST CENTURY SKILLS"):
-                    current_group = "twenty_first_century_skills"
+                    current_group = "career_competencies"
                     continue
                 if upper_label.startswith("TOTAL SCORE"):
                     break
@@ -329,7 +341,10 @@ def parse_rubric_from_tables(pages: list) -> tuple[list[RubricCriterion], int]:
                     )
 
                 display_order += 1
-                criterion_text = text_cell.rstrip("?").strip() + "?"
+                cleaned = text_cell.rstrip("?").strip()
+                criterion_text = (
+                    f"{cleaned}?" if group == "performance_indicator" else cleaned
+                )
                 criteria.append(
                     RubricCriterion(
                         criterion_group=group,

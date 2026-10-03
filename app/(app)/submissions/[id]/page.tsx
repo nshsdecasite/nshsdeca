@@ -7,6 +7,7 @@ import { SocialPage } from "@/components/layout/social-ui";
 import { requireAuth } from "@/lib/auth/roles";
 import {
   scenarioDetailToLegacy,
+  scenarioFromSubmission,
   submissionScenarioId,
 } from "@/lib/roleplay/scenario-display";
 
@@ -22,14 +23,13 @@ export default async function SubmissionDetailPage({
   await requireAuth("/submissions");
   const { id } = await params;
   const submission = await getSubmission(id);
-  const scenarioDetail = submission
-    ? await getScenario(submissionScenarioId(submission))
-    : null;
-  const scenario = scenarioDetail ? scenarioDetailToLegacy(scenarioDetail) : undefined;
-
-  if (!submission || !scenario) {
+  if (!submission) {
     notFound();
   }
+  const scenarioDetail = await getScenario(submissionScenarioId(submission));
+  const scenario = scenarioDetail
+    ? scenarioDetailToLegacy(scenarioDetail)
+    : scenarioFromSubmission(submission);
 
   return (
     <SocialPage size="wide">

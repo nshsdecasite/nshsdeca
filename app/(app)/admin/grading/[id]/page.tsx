@@ -6,6 +6,7 @@ import { OfficerGradingWorkspace } from "@/components/roleplay/OfficerGradingWor
 import { displayName, requireRole } from "@/lib/auth/roles";
 import {
   scenarioDetailToLegacy,
+  scenarioFromSubmission,
   submissionScenarioId,
 } from "@/lib/roleplay/scenario-display";
 
@@ -21,14 +22,13 @@ export default async function OfficerGradingDetailPage({
   const { user } = await requireRole(["officer", "advisor"], "/admin/grading");
   const { id } = await params;
   const submission = await getSubmission(id);
-  const scenarioDetail = submission
-    ? await getScenario(submissionScenarioId(submission))
-    : null;
-  const scenario = scenarioDetail ? scenarioDetailToLegacy(scenarioDetail) : undefined;
-
-  if (!submission || !scenario) {
+  if (!submission) {
     notFound();
   }
+  const scenarioDetail = await getScenario(submissionScenarioId(submission));
+  const scenario = scenarioDetail
+    ? scenarioDetailToLegacy(scenarioDetail)
+    : scenarioFromSubmission(submission);
 
   const officerName = displayName(
     user.user_metadata?.first_name as string | undefined,

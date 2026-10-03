@@ -8,6 +8,7 @@ import type {
   ScenarioFilterOptions,
   ScenarioSummary,
 } from "@/lib/roleplay/scenario-types";
+import { normalizeScenarioRubric } from "@/lib/roleplay/rubric";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -124,6 +125,7 @@ export async function getScenario(id: string): Promise<ScenarioDetail | null> {
   return {
     ...detail,
     pis: normalizePerformanceIndicators(detail.pis),
+    rubric: normalizeScenarioRubric(detail.rubric),
   };
 }
 

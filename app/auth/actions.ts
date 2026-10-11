@@ -5,6 +5,8 @@ import {
   isAllowedSchoolEmail,
   schoolEmailHint,
 } from "@/lib/auth/school-email";
+import { chosenUsername, isUsername, loginUsername, usernameEmail } from "@/lib/auth/username";
+import { getSessionUser } from "@/lib/auth/roles";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -46,19 +48,22 @@ export async function signIn(
   _prevState: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
-  const email = String(formData.get("email") ?? "").trim();
+  const username = loginUsername(String(formData.get("username") ?? ""));
   const password = String(formData.get("password") ?? "");
   const next = String(formData.get("next") ?? "/dashboard");
 
-  if (!email || !password) {
-    return { error: "Email and password are required." };
+  if (!username || !password) {
+    return { error: "Username and password are required." };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({
+    email: usernameEmail(username),
+    password,
+  });
 
   if (error) {
-    return { error: error.message };
+    return { error: "That username or password is wrong." };
   }
 
   redirect(next.startsWith("/") ? next : "/dashboard");
@@ -147,19 +152,53 @@ export async function signUp(
   redirect("/dashboard");
 }
 
+export async function chooseUsername(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const user = await getSessionUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  const username = chosenUsername(String(formData.get("username") ?? ""));
+  if (!isUsername(username)) {
+    return {
+      error: "Use 3 to 30 letters and numbers, and start with a letter.",
+    };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("claim_username", {
+    p_username: username,
+  });
+
+  if (error) {
+    const taken = /taken/i.test(error.message);
+    return {
+      error: taken
+        ? "That username is already taken."
+        : "Could not save that username. Try again.",
+    };
+  }
+
+  redirect("/dashboard");
+}
+
 export async function requestPasswordReset(
   _prevState: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const username = loginUsername(String(formData.get("username") ?? ""));
   const lastName = String(formData.get("lastName") ?? "").trim();
+  const email = usernameEmail(username);
 
-  if (!email || !lastName) {
-    return { error: "Email and last name are required." };
+  if (!username || !lastName) {
+    return { error: "Username and last name are required." };
   }
 
-  if (!isAllowedSchoolEmail(email)) {
-    return { error: schoolEmailHint() };
+  if (!isUsername(username)) {
+    return { error: "That username does not match a chapter account." };
   }
 
   const admin = createAdminClient();
@@ -178,7 +217,7 @@ export async function requestPasswordReset(
     !profile?.last_name ||
     profile.last_name.trim().toLowerCase() !== lastName.toLowerCase()
   ) {
-    return { error: "That email and last name do not match our chapter roster." };
+    return { error: "That username and last name do not match our chapter roster." };
   }
 
   const supabase = await createClient();
@@ -196,7 +235,7 @@ export async function requestPasswordReset(
   }
 
   return {
-    message: `If ${email} is on the chapter roster, a password reset link is on its way. Open it from the same device and choose a new password.`,
+    message: `If ${username} is on the chapter roster, a password reset link is on its way. Open it from the same device and choose a new password.`,
   };
 }
 

@@ -136,7 +136,7 @@ const getCachedScenarioFilterOptions = unstable_cache(
     if (error) throw new Error(error.message);
     return data as ScenarioFilterOptions;
   },
-  ["scenario-filter-options"],
+  ["scenario-filter-options-v2"],
   { revalidate: 300 },
 );
 

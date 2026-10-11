@@ -20,7 +20,7 @@ function SubmitButton({ label }: { label: string }) {
 
 export function ForgotPasswordForm() {
   const [step, setStep] = useState<1 | 2>(1);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [lastName, setLastName] = useState("");
   const [state, formAction] = useActionState(requestPasswordReset, initialState);
 
@@ -82,33 +82,36 @@ export function ForgotPasswordForm() {
         {step === 1 ? (
           <>
             <h2 className="font-display text-[34px] font-black tracking-[-0.03em] text-ink">
-              Step 1 · Confirm email
+              Step 1 · Confirm username
             </h2>
             <p className="mt-2 text-sm text-ink-2">
-              Enter the school email tied to your chapter account.
+              Enter the username on your chapter account.
             </p>
             <form
               className="mt-8 flex flex-col gap-4"
               onSubmit={(event) => {
                 event.preventDefault();
-                const value = new FormData(event.currentTarget).get("email");
+                const value = new FormData(event.currentTarget).get("username");
                 if (typeof value === "string" && value.trim()) {
-                  setEmail(value.trim());
+                  setUsername(value.trim());
                   setStep(2);
                 }
               }}
             >
               <div>
-                <label htmlFor="email" className="mb-[7px] block text-xs font-bold text-ink-2">
-                  School email
+                <label htmlFor="username" className="mb-[7px] block text-xs font-bold text-ink-2">
+                  Username
                 </label>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  defaultValue={email}
-                  placeholder="you@student.cfbisd.edu"
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  defaultValue={username}
+                  placeholder="thinhphan"
                   required
                   className="deca-field"
                 />
@@ -125,10 +128,10 @@ export function ForgotPasswordForm() {
             </h2>
             <p className="mt-2 text-sm text-ink-2">
               Confirm your last name matches our chapter roster for{" "}
-              <span className="font-semibold text-ink">{email}</span>.
+              <span className="font-semibold text-ink">{username}</span>.
             </p>
             <form action={formAction} className="mt-8 flex flex-col gap-4">
-              <input type="hidden" name="email" value={email} />
+              <input type="hidden" name="username" value={username} />
               <div>
                 <label
                   htmlFor="lastName"
@@ -156,7 +159,7 @@ export function ForgotPasswordForm() {
                 onClick={() => setStep(1)}
                 className="text-sm font-bold text-ever-dk hover:text-acc-deep"
               >
-                Use a different email
+                Use a different username
               </button>
             </form>
           </>

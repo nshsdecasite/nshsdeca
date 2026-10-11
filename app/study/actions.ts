@@ -28,12 +28,20 @@ function mapPiSummaries(rows: Record<string, unknown>[] | null): PiSummary[] {
 }
 
 const loadPerformanceIndicators = unstable_cache(
-  async (search: string, iaCode: string, clusterSlug: string, limit: number, offset: number) => {
+  async (
+    search: string,
+    iaCode: string,
+    clusterSlug: string,
+    eventCode: string,
+    limit: number,
+    offset: number,
+  ) => {
     const admin = createAdminClient();
     const { data, error } = await admin.rpc("list_performance_indicators", {
       p_search: search || null,
       p_ia_code: iaCode || null,
       p_cluster_slug: clusterSlug || null,
+      p_event_code: eventCode || null,
       p_limit: limit,
       p_offset: offset,
     });
@@ -48,6 +56,7 @@ export async function listPerformanceIndicators(input?: {
   search?: string;
   iaCode?: string;
   clusterSlug?: string;
+  eventCode?: string;
   limit?: number;
   offset?: number;
 }): Promise<PiSummary[]> {
@@ -55,17 +64,19 @@ export async function listPerformanceIndicators(input?: {
   const search = optionalText(input?.search) ?? "";
   const iaCode = optionalText(input?.iaCode) ?? "";
   const clusterSlug = optionalText(input?.clusterSlug) ?? "";
+  const eventCode = optionalText(input?.eventCode) ?? "";
   const limit = input?.limit ?? 48;
   const offset = input?.offset ?? 0;
 
   try {
-    return await loadPerformanceIndicators(search, iaCode, clusterSlug, limit, offset);
+    return await loadPerformanceIndicators(search, iaCode, clusterSlug, eventCode, limit, offset);
   } catch {
     const supabase = await getSupabase();
     const { data, error } = await supabase.rpc("list_performance_indicators", {
       p_search: search || null,
       p_ia_code: iaCode || null,
       p_cluster_slug: clusterSlug || null,
+      p_event_code: eventCode || null,
       p_limit: limit,
       p_offset: offset,
     });

@@ -1,0 +1,452 @@
+{
+ "levels_of_evaluation": {
+  "levels": [
+   "Novice",
+   "Developing",
+   "Proficient",
+   "Exemplary"
+  ],
+  "focus_areas": {
+   "Content Understanding": [
+    "Limited or inaccurate grasp of key concepts.",
+    "Basic grasp of key concepts.",
+    "Solid grasp; explains and supports ideas with appropriate evidence.",
+    "Comprehensive grasp; applies concepts to solve the scenario, including in complex or extended situations."
+   ],
+   "Application of Performance Indicators and Career Competencies": [
+    "Names them but understanding is incomplete or wrong.",
+    "Defines them but does not connect them to the scenario's objective.",
+    "Explains them and connects them to solve the objective.",
+    "Applies them strategically to solve the objective comprehensively."
+   ],
+   "Reasoning": [
+    "Unclear, inaccurate or unsupported ideas; no application.",
+    "Somewhat logical ideas with gaps in reasoning or evidence.",
+    "Logical, well-developed, supported ideas with only minor gaps.",
+    "Logical, well-supported with business concepts/theory; clearly practical and real-world relevant."
+   ],
+   "Workplace Readiness": [
+    "Like an employee who needs significant guidance.",
+    "Like an employee who handles routine tasks with some guidance.",
+    "Like an employee who works independently and effectively.",
+    "Like an advanced employee who works independently and adapts to new or unpredictable challenges."
+   ]
+  },
+  "note": "Paraphrased. The official wording appears on page 4 of every 2026-27 sample role-play on deca.org; paste it in verbatim if you have rights to display it."
+ },
+ "standard_5pi": {
+  "used_by": [
+   "individual_series",
+   "team_decision_making"
+  ],
+  "verified": true,
+  "verified_from": "Official 2026-27 samples: Food Marketing Series (FMS-26 District Event 1), Business Finance Series (BFS-26 District Event 1), Entrepreneurship TDM (ETDM-26 District Event).",
+  "sections": [
+   {
+    "name": "Performance Indicators",
+    "per_pi": true,
+    "count": 5,
+    "max_each": 10,
+    "bands": {
+     "Novice": [
+      0,
+      3
+     ],
+     "Developing": [
+      4,
+      6
+     ],
+     "Proficient": [
+      7,
+      9
+     ],
+     "Exemplary": [
+      10,
+      10
+     ]
+    }
+   },
+   {
+    "name": "Solution",
+    "items": [
+     {
+      "label": "Unique",
+      "description": "Original, fresh, insightful thinking.",
+      "calculation_event_variant": {
+       "label": "Accurate",
+       "description": "Shows appropriate finance acumen (calculations and finance reasoning are correct)."
+      }
+     },
+     {
+      "label": "Practical",
+      "description": "The solution is actionable and workable in the real world."
+     },
+     {
+      "label": "Effective",
+      "description": "The solution achieves outcomes that matter for the scenario."
+     }
+    ],
+    "max_each": 8,
+    "bands": {
+     "Novice": [
+      0,
+      2
+     ],
+     "Developing": [
+      3,
+      5
+     ],
+     "Proficient": [
+      6,
+      7
+     ],
+     "Exemplary": [
+      8,
+      8
+     ]
+    }
+   },
+   {
+    "name": "Career Competencies",
+    "items": [
+     {
+      "label": "Critical Thinking",
+      "description": "Thinks critically to understand and solve problems."
+     },
+     {
+      "label": "Communication",
+      "description": "Communicates clearly, effectively and with reason."
+     },
+     {
+      "label": "Decision Making",
+      "description": "Considers the impacts of decisions."
+     }
+    ],
+    "max_each": 6,
+    "bands": {
+     "Novice": [
+      0,
+      1
+     ],
+     "Developing": [
+      2,
+      3
+     ],
+     "Proficient": [
+      4,
+      5
+     ],
+     "Exemplary": [
+      6,
+      6
+     ]
+    }
+   },
+   {
+    "name": "Overall Impression",
+    "items": [
+     {
+      "label": "Overall Impression",
+      "description": "Shows overall career readiness through professionalism, poise and confidence."
+     }
+    ],
+    "max_each": 8,
+    "bands": {
+     "Novice": [
+      0,
+      2
+     ],
+     "Developing": [
+      3,
+      5
+     ],
+     "Proficient": [
+      6,
+      7
+     ],
+     "Exemplary": [
+      8,
+      8
+     ]
+    }
+   }
+  ],
+  "total": 100
+ },
+ "principles_4pi": {
+  "used_by": [
+   "principles"
+  ],
+  "verified": true,
+  "verified_from": "Official 2026-27 Principles of Marketing sample (PMK-26 District Event).",
+  "sections": [
+   {
+    "name": "Performance Indicators",
+    "per_pi": true,
+    "count": 4,
+    "max_each": 12,
+    "bands": {
+     "Novice": [
+      0,
+      3
+     ],
+     "Developing": [
+      4,
+      7
+     ],
+     "Proficient": [
+      8,
+      11
+     ],
+     "Exemplary": [
+      12,
+      12
+     ]
+    }
+   },
+   {
+    "name": "Solution",
+    "items": [
+     {
+      "label": "Unique",
+      "description": "Original, fresh, insightful thinking.",
+      "calculation_event_variant": {
+       "label": "Accurate",
+       "description": "Shows appropriate finance acumen (calculations and finance reasoning are correct)."
+      }
+     },
+     {
+      "label": "Practical",
+      "description": "The solution is actionable and workable in the real world."
+     },
+     {
+      "label": "Effective",
+      "description": "The solution achieves outcomes that matter for the scenario."
+     }
+    ],
+    "max_each": 8,
+    "bands": {
+     "Novice": [
+      0,
+      2
+     ],
+     "Developing": [
+      3,
+      5
+     ],
+     "Proficient": [
+      6,
+      7
+     ],
+     "Exemplary": [
+      8,
+      8
+     ]
+    }
+   },
+   {
+    "name": "Career Competencies",
+    "items": [
+     {
+      "label": "Critical Thinking",
+      "description": "Thinks critically to understand and solve problems."
+     },
+     {
+      "label": "Communication",
+      "description": "Communicates clearly, effectively and with reason."
+     },
+     {
+      "label": "Decision Making",
+      "description": "Considers the impacts of decisions."
+     }
+    ],
+    "max_each": 6,
+    "bands": {
+     "Novice": [
+      0,
+      1
+     ],
+     "Developing": [
+      2,
+      3
+     ],
+     "Proficient": [
+      4,
+      5
+     ],
+     "Exemplary": [
+      6,
+      6
+     ]
+    }
+   },
+   {
+    "name": "Overall Impression",
+    "items": [
+     {
+      "label": "Overall Impression",
+      "description": "Shows overall career readiness through professionalism, poise and confidence."
+     }
+    ],
+    "max_each": 10,
+    "bands": {
+     "Novice": [
+      0,
+      3
+     ],
+     "Developing": [
+      4,
+      6
+     ],
+     "Proficient": [
+      7,
+      9
+     ],
+     "Exemplary": [
+      10,
+      10
+     ]
+    }
+   }
+  ],
+  "total": 100
+ },
+ "pfl_3pi": {
+  "used_by": [
+   "personal_financial_literacy"
+  ],
+  "verified": true,
+  "verified_from": "Official 2026-27 Personal Financial Literacy sample (PFL-26 District Event, Managing Credit).",
+  "sections": [
+   {
+    "name": "Performance Indicators",
+    "per_pi": true,
+    "count": 3,
+    "max_each": 17,
+    "bands": {
+     "Novice": [
+      0,
+      5
+     ],
+     "Developing": [
+      6,
+      11
+     ],
+     "Proficient": [
+      12,
+      16
+     ],
+     "Exemplary": [
+      17,
+      17
+     ]
+    }
+   },
+   {
+    "name": "Solution",
+    "items": [
+     {
+      "label": "Unique",
+      "description": "Original, fresh, insightful thinking.",
+      "calculation_event_variant": {
+       "label": "Accurate",
+       "description": "Shows appropriate finance acumen (calculations and finance reasoning are correct)."
+      }
+     },
+     {
+      "label": "Practical",
+      "description": "The solution is actionable and workable in the real world."
+     },
+     {
+      "label": "Effective",
+      "description": "The solution achieves outcomes that matter for the scenario."
+     }
+    ],
+    "max_each": 8,
+    "bands": {
+     "Novice": [
+      0,
+      2
+     ],
+     "Developing": [
+      3,
+      5
+     ],
+     "Proficient": [
+      6,
+      7
+     ],
+     "Exemplary": [
+      8,
+      8
+     ]
+    }
+   },
+   {
+    "name": "Career Competencies",
+    "items": [
+     {
+      "label": "Critical Thinking",
+      "description": "Thinks critically to understand and solve problems."
+     },
+     {
+      "label": "Communication",
+      "description": "Communicates clearly, effectively and with reason."
+     },
+     {
+      "label": "Decision Making",
+      "description": "Considers the impacts of decisions."
+     }
+    ],
+    "max_each": 6,
+    "bands": {
+     "Novice": [
+      0,
+      1
+     ],
+     "Developing": [
+      2,
+      3
+     ],
+     "Proficient": [
+      4,
+      5
+     ],
+     "Exemplary": [
+      6,
+      6
+     ]
+    }
+   },
+   {
+    "name": "Overall Impression",
+    "items": [
+     {
+      "label": "Overall Impression",
+      "description": "Shows overall career readiness through professionalism, poise and confidence."
+     }
+    ],
+    "max_each": 7,
+    "bands": {
+     "Novice": [
+      0,
+      2
+     ],
+     "Developing": [
+      3,
+      4
+     ],
+     "Proficient": [
+      5,
+      6
+     ],
+     "Exemplary": [
+      7,
+      7
+     ]
+    }
+   }
+  ],
+  "total": 100
+ }
+}

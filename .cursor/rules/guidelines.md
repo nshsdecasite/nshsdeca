@@ -53,3 +53,5 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+Lastly, Never open the localhost in the cursor browser. The user will open it themslves in their browser with localhost.

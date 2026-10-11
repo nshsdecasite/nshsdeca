@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 type PageSize = "default" | "wide" | "narrow";
 
 const WIDTH: Record<PageSize, string> = {
-  default: "max-w-5xl",
-  wide: "max-w-none",
-  narrow: "max-w-xl",
+  default: "w-full",
+  wide: "w-full",
+  narrow: "mx-auto max-w-xl",
 };
 
 export function SocialPage({
@@ -20,10 +20,8 @@ export function SocialPage({
   className?: string;
 }) {
   return (
-    <div className={cn("relative min-h-full pb-16", className)}>
-      <div className={cn("relative mx-auto px-6 py-9 sm:px-9", WIDTH[size])}>
-        {children}
-      </div>
+    <div className={cn("relative min-h-full pb-8", WIDTH[size], className)}>
+      {children}
     </div>
   );
 }

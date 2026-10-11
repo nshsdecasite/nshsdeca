@@ -1,0 +1,4043 @@
+{
+ "meta": {
+  "source": "National Standards for Personal Financial Education (CEE + Jump$tart, 2021) — PFL.pdf",
+  "used_by": "Personal Financial Literacy (PFL) exam and role-play",
+  "notes": [
+   "Standards = what students know; Learning Outcomes = what they can do. DECA PFL role-play PIs are learning outcomes printed VERBATIM (including clauses like 'such as automobile loans').",
+   "Learning-outcome ids are prefixed with the topic numeral to make them unique (e.g., V.8-4a).",
+   "Verified: the official PFL-26 sample used three GRADE 8 Managing Credit outcomes from two related standards (V.8-4a, V.8-4b, V.8-2c), including an 'Investigate…' outcome. Use grades 8 and 12; never grade 4.",
+   "`roleplay_suitable` is false only for outcomes that need the student's own personal data, a live lookup, or a physical form (Interview…, Complete IRS Form…, Gather data…, Find the current…, Select a stock…, etc.)."
+  ]
+ },
+ "topics": [
+  {
+   "numeral": "I",
+   "name": "Earning Income"
+  },
+  {
+   "numeral": "II",
+   "name": "Spending"
+  },
+  {
+   "numeral": "III",
+   "name": "Saving"
+  },
+  {
+   "numeral": "IV",
+   "name": "Investing"
+  },
+  {
+   "numeral": "V",
+   "name": "Managing Credit"
+  },
+  {
+   "numeral": "VI",
+   "name": "Managing Risk"
+  }
+ ],
+ "standards": [
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "I.4-1",
+   "standard": "People have different job choices depending on their knowledge, skills, interests, and experience.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-1a",
+     "outcome_id": "4-1a",
+     "text": "List different types of jobs.",
+     "display_text": "List different types of jobs.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Discuss the types of knowledge, skills, interests, and experience required for different types of jobs.",
+     "display_text": "Discuss the types of knowledge, skills, interests, and experience required for different types of jobs.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "I.4-2",
+   "standard": "People may be able to improve their ability to earn income by gaining new knowledge, skills, and experience.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Give examples of how an individual’s knowledge, skills, and experience could affect their ability to earn income.",
+     "display_text": "Give examples of how an individual’s knowledge, skills, and experience could affect their ability to earn income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Brainstorm ways to improve one’s ability to earn income.",
+     "display_text": "Brainstorm ways to improve one’s ability to earn income.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-3",
+   "uid": "I.4-3",
+   "standard": "There are different ways to be paid for labor, including wages, salaries, commissions, and tips.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-3a",
+     "outcome_id": "4-3a",
+     "text": "Explain why employers pay people for their labor.",
+     "display_text": "Explain why employers pay people for their labor.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-3b",
+     "outcome_id": "4-3b",
+     "text": "Describe the difference between wages, salaries, commissions, and tips.",
+     "display_text": "Describe the difference between wages, salaries, commissions, and tips.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-3c",
+     "outcome_id": "4-3c",
+     "text": "Compare how the following individuals are typically paid: food server, teacher, and realtor.",
+     "display_text": "Compare how the following individuals are typically paid: food server, teacher, and realtor.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-4",
+   "uid": "I.4-4",
+   "standard": "People can earn income by starting a new business as an entrepreneur or by owning a business.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-4a",
+     "outcome_id": "4-4a",
+     "text": "List several businesses they would be interested in owning as an entrepreneur.",
+     "display_text": "List several businesses they would be interested in owning as an entrepreneur.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-4b",
+     "outcome_id": "4-4b",
+     "text": "Name several famous entrepreneurs and their businesses, and hypothesize why they succeeded or failed.",
+     "display_text": "Name several famous entrepreneurs and their businesses, and hypothesize why they succeeded or failed.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-4c",
+     "outcome_id": "4-4c",
+     "text": "Estimate how much income could be earned from a business operated by children (such as a lawn service or lemonade stand).",
+     "display_text": "Estimate how much income could be earned from a business operated by children (such as a lawn service or lemonade stand).",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-5",
+   "uid": "I.4-5",
+   "standard": "People can earn income by lending money or by renting their property to others.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-5a",
+     "outcome_id": "4-5a",
+     "text": "List several examples of ways in which people can earn income by lending their money or by renting their property to others.",
+     "display_text": "List several examples of ways in which people can earn income by lending their money or by renting their property to others.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-5b",
+     "outcome_id": "4-5b",
+     "text": "Identify different types of property that can be used by owners to earn rental income (such as apartments, automobiles, or tools).",
+     "display_text": "Identify different types of property that can be used by owners to earn rental income (such as apartments, automobiles, or tools).",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-6",
+   "uid": "I.4-6",
+   "standard": "Income can be received as gifts or as an allowance for which no specified work may be required.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-6a",
+     "outcome_id": "4-6a",
+     "text": "Explain the possible reasons for gifting money to others.",
+     "display_text": "Explain the possible reasons for gifting money to others.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-6b",
+     "outcome_id": "4-6b",
+     "text": "Discuss the pros and cons of families/caregivers paying their children a weekly allowance.",
+     "display_text": "Discuss the pros and cons of families/caregivers paying their children a weekly allowance.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 4,
+   "standard_id": "4-7",
+   "uid": "I.4-7",
+   "standard": "Most income is taxed by the government to pay for government-provided goods and services.",
+   "learning_outcomes": [
+    {
+     "id": "I.4-7a",
+     "outcome_id": "4-7a",
+     "text": "Describe examples of government-provided goods and services that are paid for with taxes.",
+     "display_text": "Describe examples of government-provided goods and services that are paid for with taxes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.4-7b",
+     "outcome_id": "4-7b",
+     "text": "Explain why citizens are required to contribute to the cost of fire protection, police, public libraries, and schools.",
+     "display_text": "Explain why citizens are required to contribute to the cost of fire protection, police, public libraries, and schools.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "I.8-1",
+   "standard": "Careers are based on working at jobs in the same occupation or profession for many years. Careers vary in their education and training requirements.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-1a",
+     "outcome_id": "8-1a",
+     "text": "Discuss the advantages and disadvantages of working in the same occupation or profession for many years.",
+     "display_text": "Discuss the advantages and disadvantages of working in the same occupation or profession for many years.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Compare the education and training requirements for at least two careers.",
+     "display_text": "Compare the education and training requirements for at least two careers.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-1c",
+     "outcome_id": "8-1c",
+     "text": "Interview a person who is in a career of interest and create a timeline that shows the progression of their education, training, and job experiences.",
+     "display_text": "Interview a person who is in a career of interest and create a timeline that shows the progression of their education, training, and job experiences.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "I.8-2",
+   "standard": "People make many decisions over a lifetime about their education, jobs, and careers that affect their incomes and opportunities.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Compare the education and training requirements, income potential, and primary duties of at least two jobs available to high school students.",
+     "display_text": "Compare the education and training requirements, income potential, and primary duties of at least two jobs available to high school students.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Conduct research on a specific career field. Describe the education, job, or career decisions individuals in this field might make over their lifetime and explain how this could affect their income potential and opportunities.",
+     "display_text": "Conduct research on a specific career field. Describe the education, job, or career decisions individuals in this field might make over their lifetime and explain how this could affect their income potential and opportunities.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-2c",
+     "outcome_id": "8-2c",
+     "text": "Assess personal skills and interests and match them to various career options.",
+     "display_text": "Assess personal skills and interests and match them to various career options.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "I.8-3",
+   "standard": "Getting more education, training, and experience can increase a person’s human capital, productivity, and income-earning potential.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Investigate training opportunities that can increase a person’s ability to obtain higher paid employment during high school.",
+     "display_text": "Investigate training opportunities that can increase a person’s ability to obtain higher paid employment during high school.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-3b",
+     "outcome_id": "8-3b",
+     "text": "Explain why adults with a college education may earn more than adults with no education beyond high school.",
+     "display_text": "Explain why adults with a college education may earn more than adults with no education beyond high school.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-3c",
+     "outcome_id": "8-3c",
+     "text": "Discuss how specific skills training can improve a young person’s human capital, productivity, and income-earning potential.",
+     "display_text": "Discuss how specific skills training can improve a young person’s human capital, productivity, and income-earning potential.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-3d",
+     "outcome_id": "8-3d",
+     "text": "Gather data on the average wage or salary for different jobs and explain how they differ by the level of education, job skill, or years of experience.",
+     "display_text": "Gather data on the average wage or salary for different jobs and explain how they differ by the level of education, job skill, or years of experience.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "I.8-4",
+   "standard": "Education, training, and development of job skills have opportunity costs in the form of time, effort, and money.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Describe the opportunity costs of attending a training course on babysitting, lifeguarding, or first aid.",
+     "display_text": "Describe the opportunity costs of attending a training course on babysitting, lifeguarding, or first aid.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Compare the costs of post-secondary education with the potential increase in income for a career of choice.",
+     "display_text": "Compare the costs of post-secondary education with the potential increase in income for a career of choice.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-4c",
+     "outcome_id": "8-4c",
+     "text": "Explain why families/caregivers might choose to help pay for education and training of younger family members.",
+     "display_text": "Explain why families/caregivers might choose to help pay for education and training of younger family members.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-5",
+   "uid": "I.8-5",
+   "standard": "Net income (take-home pay) is the amount left from wages and salaries after taxes and payroll deductions.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-5a",
+     "outcome_id": "8-5a",
+     "text": "Differentiate between gross and net income.",
+     "display_text": "Differentiate between gross and net income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-5b",
+     "outcome_id": "8-5b",
+     "text": "Identify common types of payroll deductions.",
+     "display_text": "Identify common types of payroll deductions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-5c",
+     "outcome_id": "8-5c",
+     "text": "Explain how taxes impact take-home pay.",
+     "display_text": "Explain how taxes impact take-home pay.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-6",
+   "uid": "I.8-6",
+   "standard": "Social Security is a federal government program that taxes workers and employers to provide retirement, disability, and survivor income benefits for workers or their dependents.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-6a",
+     "outcome_id": "8-6a",
+     "text": "Identify the different groups of people who qualify for Social Security benefits.",
+     "display_text": "Identify the different groups of people who qualify for Social Security benefits.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-6b",
+     "outcome_id": "8-6b",
+     "text": "Research the Social Security tax rate for someone who is self-employed vs. someone who is working for an employer.",
+     "display_text": "Research the Social Security tax rate for someone who is self-employed vs. someone who is working for an employer.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-6c",
+     "outcome_id": "8-6c",
+     "text": "Given information on a worker’s income and today’s Social Security tax rates, calculate what the worker and the worker’s employer will pay in Social Security taxes.",
+     "display_text": "Given information on a worker’s income and today’s Social Security tax rates, calculate what the worker and the worker’s employer will pay in Social Security taxes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-6d",
+     "outcome_id": "8-6d",
+     "text": "Investigate Social Security benefits for people of different income levels at their full retirement age.",
+     "display_text": "Investigate Social Security benefits for people of different income levels at their full retirement age.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-7",
+   "uid": "I.8-7",
+   "standard": "People are required to pay taxes on most types of income, including wages, salaries, commissions, tips, earnings on investments, and self-employment income.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-7a",
+     "outcome_id": "8-7a",
+     "text": "Illustrate the relationship between income level and income tax paid.",
+     "display_text": "Illustrate the relationship between income level and income tax paid.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-7b",
+     "outcome_id": "8-7b",
+     "text": "Describe how taxes are paid on tip income.",
+     "display_text": "Describe how taxes are paid on tip income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-7c",
+     "outcome_id": "8-7c",
+     "text": "Research the consequences of failing to pay income taxes.",
+     "display_text": "Research the consequences of failing to pay income taxes.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-8",
+   "uid": "I.8-8",
+   "standard": "The government provides income support and assistance for people who qualify based on low income or other criteria.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-8a",
+     "outcome_id": "8-8a",
+     "text": "Explain the financial situation addressed by Medicaid and SNAP (Supplemental Nutrition Assistance Program).",
+     "display_text": "Explain the financial situation addressed by Medicaid and SNAP (Supplemental Nutrition Assistance Program).",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-8b",
+     "outcome_id": "8-8b",
+     "text": "Give several examples of personal circumstances that qualify for government income support or assistance.",
+     "display_text": "Give several examples of personal circumstances that qualify for government income support or assistance.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 8,
+   "standard_id": "8-9",
+   "uid": "I.8-9",
+   "standard": "Entrepreneurs gain satisfaction from working for themselves and expect to earn profits that will compensate for the risks associated with new business ventures.",
+   "learning_outcomes": [
+    {
+     "id": "I.8-9a",
+     "outcome_id": "8-9a",
+     "text": "Investigate the motivating factors to being self-employed or working as an independent contractor in the “gig” economy.",
+     "display_text": "Investigate the motivating factors to being self-employed or working as an independent contractor in the “gig” economy.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-9b",
+     "outcome_id": "8-9b",
+     "text": "Discuss why starting a new business could be riskier than other career choices.",
+     "display_text": "Discuss why starting a new business could be riskier than other career choices.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.8-9c",
+     "outcome_id": "8-9c",
+     "text": "Research common reasons for new business failures.",
+     "display_text": "Research common reasons for new business failures.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "I.12-1",
+   "standard": "Compensation for a job or career can be in the form of wages, salaries, commissions, tips, or bonuses, and may also include contributions to employee benefits, such as health insurance, retirement savings plans, and education reimbursement programs.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Research potential income and employee benefit packages that are likely to be offered to new employees by various companies, government agencies, or not-for-profit organizations.",
+     "display_text": "Research potential income and employee benefit packages that are likely to be offered to new employees by various companies, government agencies, or not-for-profit organizations.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Explain why people should evaluate employee benefits in addition to wages and salaries when choosing between job and career opportunities.",
+     "display_text": "Explain why people should evaluate employee benefits in addition to wages and salaries when choosing between job and career opportunities.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-1c",
+     "outcome_id": "12-1c",
+     "text": "Differentiate between contributory and non-contributory employee benefits.",
+     "display_text": "Differentiate between contributory and non-contributory employee benefits.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-1d",
+     "outcome_id": "12-1d",
+     "text": "Examine the benefits of participating in employer-sponsored retirement savings plans and healthcare savings plans.",
+     "display_text": "Examine the benefits of participating in employer-sponsored retirement savings plans and healthcare savings plans.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "I.12-2",
+   "standard": "In addition to wages and paid benefits, employees may also value intangible (non-cash) benefits, such as good working conditions, flexible work hours, telecommuting privileges, and career advancement potential.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Give examples of intangible job benefits.",
+     "display_text": "Give examples of intangible job benefits.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Describe how intangible benefits can affect a worker’s career choices and income.",
+     "display_text": "Describe how intangible benefits can affect a worker’s career choices and income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-2c",
+     "outcome_id": "12-2c",
+     "text": "Evaluate the tradeoffs between income and non-income factors when making career or job choices.",
+     "display_text": "Evaluate the tradeoffs between income and non-income factors when making career or job choices.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "I.12-3",
+   "standard": "People vary in their opportunity and willingness to incur the present costs of additional training and education in exchange for future benefits, such as earning potential.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Evaluate the costs and benefits of investing in additional education or training.",
+     "display_text": "Evaluate the costs and benefits of investing in additional education or training.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Explain how differences in people’s life circumstances can affect their opportunity and willingness to further their education or training.",
+     "display_text": "Explain how differences in people’s life circumstances can affect their opportunity and willingness to further their education or training.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Compare earnings and unemployment rates by level of education and training.",
+     "display_text": "Compare earnings and unemployment rates by level of education and training.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "I.12-4",
+   "standard": "Employers generally pay higher wages or salaries to more educated, skilled, and productive workers than to less educated, skilled, and productive workers.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-4a",
+     "outcome_id": "12-4a",
+     "text": "Identify different types of jobs and careers where wages and salaries depend on a worker’s productivity and skills.",
+     "display_text": "Identify different types of jobs and careers where wages and salaries depend on a worker’s productivity and skills.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Explain why wages or salaries vary among employees in different types of jobs and among workers in the same jobs.",
+     "display_text": "Explain why wages or salaries vary among employees in different types of jobs and among workers in the same jobs.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Discuss possible explanations for the persistence of race and gender pay gaps.",
+     "display_text": "Discuss possible explanations for the persistence of race and gender pay gaps.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "I.12-5",
+   "standard": "Changes in economic conditions, technology, or the labor market can cause changes in income, career opportunities, or employment status.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Discuss how economic and labor market conditions can affect income, career opportunities, and employment status.",
+     "display_text": "Discuss how economic and labor market conditions can affect income, career opportunities, and employment status.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Evaluate the impact of technological advances on employment and income.",
+     "display_text": "Evaluate the impact of technological advances on employment and income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Discuss the effects of an economic downturn on employment opportunities for people with different characteristics, such as education, experience, employment type, ethnicity, and gender.",
+     "display_text": "Discuss the effects of an economic downturn on employment opportunities for people with different characteristics, such as education, experience, employment type, ethnicity, and gender.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "I.12-6",
+   "standard": "Federal, state, and local taxes fund government-provided goods, services, and transfer payments to individuals. The major types of taxes are income taxes, payroll taxes, property taxes, and sales taxes.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Calculate the amount of taxes a person is likely to pay when given information or data about the person’s sources of income and amount of spending.",
+     "display_text": "Calculate the amount of taxes a person is likely to pay when given information or data about the person’s sources of income and amount of spending.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Identify which level(s) of government typically receive(s) the tax revenue for income taxes, payroll taxes, property taxes, and sales taxes.",
+     "display_text": "Identify which level(s) of government typically receive(s) the tax revenue for income taxes, payroll taxes, property taxes, and sales taxes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-6c",
+     "outcome_id": "12-6c",
+     "text": "Describe the benefits they receive, or may receive in the future, from government-collected tax revenue.",
+     "display_text": "Describe the benefits they receive, or may receive in the future, from government-collected tax revenue.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "I.12-7",
+   "standard": "The type and amount of taxes people pay depend on their sources of income, amount of income, and amount and type of spending.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Investigate the federal and state tax rates applicable to different sources of income.",
+     "display_text": "Investigate the federal and state tax rates applicable to different sources of income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Compare sales tax rates paid on different types of goods in their state and for online purchases.",
+     "display_text": "Compare sales tax rates paid on different types of goods in their state and for online purchases.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Differentiate between gross, net, and taxable income.",
+     "display_text": "Differentiate between gross, net, and taxable income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-7d",
+     "outcome_id": "12-7d",
+     "text": "Explain why some income is reported on an IRS Form W-2 and some is reported on an IRS Form 1099, and how that could affect their taxes.",
+     "display_text": "Explain why some income is reported on an IRS Form W-2 and some is reported on an IRS Form 1099, and how that could affect their taxes.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "I.12-8",
+   "standard": "Interest, dividends, and capital appreciation (gains) are examples of unearned income derived from financial investments. Capital gains are subject to different tax rates than earned income.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Explain the difference between earned and unearned income.",
+     "display_text": "Explain the difference between earned and unearned income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Compare the tax rates assessed on earned income, interest income, and capital gains income.",
+     "display_text": "Compare the tax rates assessed on earned income, interest income, and capital gains income.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "I.12-9",
+   "standard": "Tax deductions and credits reduce income tax liability.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Complete IRS Form W-4.",
+     "display_text": "Complete IRS Form W-4.",
+     "roleplay_suitable": false
+    },
+    {
+     "id": "I.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Explain the difference between a tax credit and a tax deduction.",
+     "display_text": "Explain the difference between a tax credit and a tax deduction.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-9c",
+     "outcome_id": "12-9c",
+     "text": "Identify several examples of tax credits, determining whether they are refundable or non-refundable, and the groups of people who benefit most from each type.",
+     "display_text": "Identify several examples of tax credits, determining whether they are refundable or non-refundable, and the groups of people who benefit most from each type.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-10",
+   "uid": "I.12-10",
+   "standard": "Retirement income typically comes from some combination of continued employment earnings, Social Security, employer-sponsored retirement plans, and personal investments.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-10a",
+     "outcome_id": "12-10a",
+     "text": "Identify different potential sources of retirement income.",
+     "display_text": "Identify different potential sources of retirement income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-10b",
+     "outcome_id": "12-10b",
+     "text": "Describe the importance of having multiple sources of income in retirement, such as Social Security, employer-sponsored retirement plans, and personal investments.",
+     "display_text": "Describe the importance of having multiple sources of income in retirement, such as Social Security, employer-sponsored retirement plans, and personal investments.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-10c",
+     "outcome_id": "12-10c",
+     "text": "Explain the importance of participating in employer-sponsored retirement plans, when available, and contributing enough to qualify for the maximum employer match.",
+     "display_text": "Explain the importance of participating in employer-sponsored retirement plans, when available, and contributing enough to qualify for the maximum employer match.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-10d",
+     "outcome_id": "12-10d",
+     "text": "Report the average benefit paid to a retiree living on Social Security today.",
+     "display_text": "Report the average benefit paid to a retiree living on Social Security today.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Earning Income",
+   "topic_numeral": "I",
+   "grade": 12,
+   "standard_id": "12-11",
+   "uid": "I.12-11",
+   "standard": "Owning a small business can be a person’s primary career or can supplement income from other sources.",
+   "learning_outcomes": [
+    {
+     "id": "I.12-11a",
+     "outcome_id": "12-11a",
+     "text": "Evaluate the benefits and costs of gig employment, such as driving for a cab or delivery service.",
+     "display_text": "Evaluate the benefits and costs of gig employment, such as driving for a cab or delivery service.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "I.12-11b",
+     "outcome_id": "12-11b",
+     "text": "Discuss the pros and cons of small business ownership as their primary source of income.",
+     "display_text": "Discuss the pros and cons of small business ownership as their primary source of income.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "II.4-1",
+   "standard": "People differ in their preferences, priorities, and resources available for consuming goods and services.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-1a",
+     "outcome_id": "4-1a",
+     "text": "Give examples of differences in people’s preferences that can influence their spending on goods and services.",
+     "display_text": "Give examples of differences in people’s preferences that can influence their spending on goods and services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Brainstorm a personal list of goals for consumption of goods and services.",
+     "display_text": "Brainstorm a personal list of goals for consumption of goods and services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-1c",
+     "outcome_id": "4-1c",
+     "text": "Prioritize future spending, taking resource limitations into account.",
+     "display_text": "Prioritize future spending, taking resource limitations into account.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "II.4-2",
+   "standard": "Money can be spent to increase one’s own or another individual’s personal satisfaction or to share the cost of goods and services.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Describe ways that people in a community share the cost of services available to everyone.",
+     "display_text": "Describe ways that people in a community share the cost of services available to everyone.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Analyze how people differ in their values and attitudes about spending money.",
+     "display_text": "Analyze how people differ in their values and attitudes about spending money.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-2c",
+     "outcome_id": "4-2c",
+     "text": "Identify ways you spend your money to increase personal satisfaction.",
+     "display_text": "Identify ways you spend your money to increase personal satisfaction.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-3",
+   "uid": "II.4-3",
+   "standard": "When people make a decision to use money for a particular purpose, they incur an opportunity cost in that they cannot use the money for another purpose.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-3a",
+     "outcome_id": "4-3a",
+     "text": "Define the concept of opportunity cost.",
+     "display_text": "Define the concept of opportunity cost.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-3b",
+     "outcome_id": "4-3b",
+     "text": "Provide examples of financial choices that have opportunity costs.",
+     "display_text": "Provide examples of financial choices that have opportunity costs.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-4",
+   "uid": "II.4-4",
+   "standard": "Purchasing decisions have costs and benefits that can be different for different people.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-4a",
+     "outcome_id": "4-4a",
+     "text": "Compare the costs and benefits of purchasing an item for people with different characteristics (e.g. age, income).",
+     "display_text": "Compare the costs and benefits of purchasing an item for people with different characteristics (e.g. age, income).",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-4b",
+     "outcome_id": "4-4b",
+     "text": "Explain the costs and benefits of trading goods and services between family members and friends.",
+     "display_text": "Explain the costs and benefits of trading goods and services between family members and friends.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-5",
+   "uid": "II.4-5",
+   "standard": "Price, spending choices of others, peer pressure, and advertising about a product or service can influence purchase decisions.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-5a",
+     "outcome_id": "4-5a",
+     "text": "Explain how peer pressure can affect purchasing decisions.",
+     "display_text": "Explain how peer pressure can affect purchasing decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-5b",
+     "outcome_id": "4-5b",
+     "text": "Share examples of how price, spending choices of others, peer pressure, or advertising influence a purchase decision.",
+     "display_text": "Share examples of how price, spending choices of others, peer pressure, or advertising influence a purchase decision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-5c",
+     "outcome_id": "4-5c",
+     "text": "Identify reliable sources of information when comparing products.",
+     "display_text": "Identify reliable sources of information when comparing products.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 4,
+   "standard_id": "4-6",
+   "uid": "II.4-6",
+   "standard": "Payment methods for making purchases include cash, checks, debit cards, and credit cards.",
+   "learning_outcomes": [
+    {
+     "id": "II.4-6a",
+     "outcome_id": "4-6a",
+     "text": "Explain the similarities between paying for purchases with cash, checks, and debit cards.",
+     "display_text": "Explain the similarities between paying for purchases with cash, checks, and debit cards.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.4-6b",
+     "outcome_id": "4-6b",
+     "text": "Compare the effects of using debit versus credit cards to make purchases.",
+     "display_text": "Compare the effects of using debit versus credit cards to make purchases.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "II.8-1",
+   "standard": "Creating a budget can help people make informed choices about spending, saving, and managing money in order to achieve financial goals.",
+   "learning_outcomes": [
+    {
+     "id": "II.8-1a",
+     "outcome_id": "8-1a",
+     "text": "Identify personal goals for spending and saving.",
+     "display_text": "Identify personal goals for spending and saving.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Create a budget that includes expenses and savings out of a given amount of income.",
+     "display_text": "Create a budget that includes expenses and savings out of a given amount of income.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-1c",
+     "outcome_id": "8-1c",
+     "text": "Explain why people with identical incomes make different choices for spending, saving, and managing money.",
+     "display_text": "Explain why people with identical incomes make different choices for spending, saving, and managing money.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-1d",
+     "outcome_id": "8-1d",
+     "text": "Discuss the budgeting challenges faced by people living on minimum wage.",
+     "display_text": "Discuss the budgeting challenges faced by people living on minimum wage.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "II.8-2",
+   "standard": "Making an informed purchase decision requires a consumer to critically evaluate price, product claims, and quality information from a variety of sources.",
+   "learning_outcomes": [
+    {
+     "id": "II.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Select an item and gather information from the manufacturer’s website, retail websites, and consumer review websites.",
+     "display_text": "Select an item and gather information from the manufacturer’s website, retail websites, and consumer review websites.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Explain the types of information most helpful in making a purchase decision.",
+     "display_text": "Explain the types of information most helpful in making a purchase decision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-2c",
+     "outcome_id": "8-2c",
+     "text": "Identify misleading or deceptive information about consumer goods or services found in online and print sources.",
+     "display_text": "Identify misleading or deceptive information about consumer goods or services found in online and print sources.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-2d",
+     "outcome_id": "8-2d",
+     "text": "Discuss ways to verify a claim expressed in advertising for an age-appropriate product.",
+     "display_text": "Discuss ways to verify a claim expressed in advertising for an age-appropriate product.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "II.8-3",
+   "standard": "When evaluating information about goods and services, a consumer can better assess the quality and usefulness of the information by understanding the incentives of the information provider.",
+   "learning_outcomes": [
+    {
+     "id": "II.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Evaluate information about goods and services based on reliability and accuracy of the source.",
+     "display_text": "Evaluate information about goods and services based on reliability and accuracy of the source.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-3b",
+     "outcome_id": "8-3b",
+     "text": "Assess strengths and weaknesses of various online and printed sources of product information.",
+     "display_text": "Assess strengths and weaknesses of various online and printed sources of product information.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-3c",
+     "outcome_id": "8-3c",
+     "text": "Identify sources of product information that are less useful for buying decisions due to incentive conflicts of the information provider.",
+     "display_text": "Identify sources of product information that are less useful for buying decisions due to incentive conflicts of the information provider.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "II.8-4",
+   "standard": "Consumers weigh the costs and benefits of different payment methods to determine the best option for purchasing goods and services.",
+   "learning_outcomes": [
+    {
+     "id": "II.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Explain the difference between a debit card and a credit card.",
+     "display_text": "Explain the difference between a debit card and a credit card.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Explain how various payment methods are used to purchase goods and services.",
+     "display_text": "Explain how various payment methods are used to purchase goods and services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-4c",
+     "outcome_id": "8-4c",
+     "text": "Summarize the advantages, disadvantages, risks, and protections of various payment methods.",
+     "display_text": "Summarize the advantages, disadvantages, risks, and protections of various payment methods.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.8-4d",
+     "outcome_id": "8-4d",
+     "text": "Choose and justify a preferred payment method for purchases of at least three different types of goods and services.",
+     "display_text": "Choose and justify a preferred payment method for purchases of at least three different types of goods and services.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "II.12-1",
+   "standard": "A budget helps people achieve their financial goals by allocating income to necessary and desired spending, saving, and philanthropy.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Identify their short-term and long-term financial goals.",
+     "display_text": "Identify their short-term and long-term financial goals.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Develop a budget to allocate current income to necessary and desired spending, including estimates for both fixed and variable expenses.",
+     "display_text": "Develop a budget to allocate current income to necessary and desired spending, including estimates for both fixed and variable expenses.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-1c",
+     "outcome_id": "12-1c",
+     "text": "Explain methods for adjusting a budget for unexpected expenses or emergencies.",
+     "display_text": "Explain methods for adjusting a budget for unexpected expenses or emergencies.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-1d",
+     "outcome_id": "12-1d",
+     "text": "Evaluate the advantages of using budgeting tools, such as spreadsheets or apps.",
+     "display_text": "Evaluate the advantages of using budgeting tools, such as spreadsheets or apps.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "II.12-2",
+   "standard": "Consumer decisions are influenced by the price of products or services, the price of alternatives, the consumer’s budget and preferences, and potential impact on the environment, society, and economy.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Select a product or service and describe the various factors that may influence a consumer’s purchase decision.",
+     "display_text": "Select a product or service and describe the various factors that may influence a consumer’s purchase decision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Describe a process for making an informed consumer decision.",
+     "display_text": "Describe a process for making an informed consumer decision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-2c",
+     "outcome_id": "12-2c",
+     "text": "List the positive and negative effects of a recent consumer decision on the environment, society, and the economy.",
+     "display_text": "List the positive and negative effects of a recent consumer decision on the environment, society, and the economy.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "II.12-3",
+   "standard": "When purchasing a good that is expected to be used for a long time, consumers consider the product’s durability, maintenance costs, and various product features.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Explain the factors to evaluate when buying a durable good.",
+     "display_text": "Explain the factors to evaluate when buying a durable good.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Analyze the cost and features of three competing products or services.",
+     "display_text": "Analyze the cost and features of three competing products or services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Compare product choices based on their impacts on the environment or society.",
+     "display_text": "Compare product choices based on their impacts on the environment or society.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "II.12-4",
+   "standard": "Consumers may be influenced by how prices of goods and services are advertised, and whether prices are fixed or negotiable.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-4a",
+     "outcome_id": "12-4a",
+     "text": "List different ways retailers advertise the prices of their products.",
+     "display_text": "List different ways retailers advertise the prices of their products.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Describe how inflation affects purchase decisions and the price of goods and services.",
+     "display_text": "Describe how inflation affects purchase decisions and the price of goods and services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Summarize how negotiation affects consumer decisions and the price of goods and services.",
+     "display_text": "Summarize how negotiation affects consumer decisions and the price of goods and services.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "II.12-5",
+   "standard": "Consumers incur costs and realize benefits when searching for information related to the purchase of goods and services.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Explain how pre-purchase research encourages consumers to avoid impulse buying.",
+     "display_text": "Explain how pre-purchase research encourages consumers to avoid impulse buying.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Brainstorm consumer research strategies and resources to use when making purchase decisions.",
+     "display_text": "Brainstorm consumer research strategies and resources to use when making purchase decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Analyze social media marketing and advertising techniques designed to encourage spending.",
+     "display_text": "Analyze social media marketing and advertising techniques designed to encourage spending.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "II.12-6",
+   "standard": "Housing decisions depend on individual preferences, circumstances, and costs, and can impact personal satisfaction and financial well-being.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Identify financial and personal reasons that younger adults often choose to rent a home instead of buying.",
+     "display_text": "Identify financial and personal reasons that younger adults often choose to rent a home instead of buying.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Compare the short-term and long-term costs and benefits of renting versus buying a home in their city of residence.",
+     "display_text": "Compare the short-term and long-term costs and benefits of renting versus buying a home in their city of residence.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-6c",
+     "outcome_id": "12-6c",
+     "text": "Define key rental contract terminology, including lease term, security deposit, grace period, and eviction.",
+     "display_text": "Define key rental contract terminology, including lease term, security deposit, grace period, and eviction.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "II.12-7",
+   "standard": "People donate money, items, or time to charitable and non-profit organizations because they value the services provided by the organization and/or gain satisfaction from giving.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Discuss the motivations for and benefits of donating money, items, or time.",
+     "display_text": "Discuss the motivations for and benefits of donating money, items, or time.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Develop a list of charitable organizations and provide a possible reason that a donor might want to give money to each organization.",
+     "display_text": "Develop a list of charitable organizations and provide a possible reason that a donor might want to give money to each organization.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Identify specific steps one should take when researching charitable and other not-for-profit organizations.",
+     "display_text": "Identify specific steps one should take when researching charitable and other not-for-profit organizations.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "II.12-8",
+   "standard": "Federal and state laws, regulations, and consumer protection agencies (e.g., Federal Trade Commission, Consumer Affairs office, and Consumer Financial Protection Bureau) can help individuals avoid unsafe products, unfair practices, and marketplace fraud.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Describe the roles and responsibilities of government agencies that help protect consumers from fraud.",
+     "display_text": "Describe the roles and responsibilities of government agencies that help protect consumers from fraud.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Identify state and federal consumer protection laws based on the issues they address and the safeguards they provide.",
+     "display_text": "Identify state and federal consumer protection laws based on the issues they address and the safeguards they provide.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-8c",
+     "outcome_id": "12-8c",
+     "text": "Investigate common types of consumer fraud and unfair or deceptive business practices, including online scams, phone solicitations, and redlining.",
+     "display_text": "Investigate common types of consumer fraud and unfair or deceptive business practices, including online scams, phone solicitations, and redlining.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-8d",
+     "outcome_id": "12-8d",
+     "text": "Make recommendations for sources of help for consumers who have experienced fraud.",
+     "display_text": "Make recommendations for sources of help for consumers who have experienced fraud.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Spending",
+   "topic_numeral": "II",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "II.12-9",
+   "standard": "Having an organized system for keeping track of spending, saving, and investing makes it easier to make financial decisions.",
+   "learning_outcomes": [
+    {
+     "id": "II.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Explain how having a system for financial record-keeping can make it easier to make financial decisions.",
+     "display_text": "Explain how having a system for financial record-keeping can make it easier to make financial decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Develop a system for keeping track of spending, saving, and investing.",
+     "display_text": "Develop a system for keeping track of spending, saving, and investing.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "II.12-9c",
+     "outcome_id": "12-9c",
+     "text": "Research financial technology options for financial record-keeping.",
+     "display_text": "Research financial technology options for financial record-keeping.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "III.4-1",
+   "standard": "When people save money, they are choosing not to spend money today to be able to buy something in the future.",
+   "learning_outcomes": [
+    {
+     "id": "III.4-1a",
+     "outcome_id": "4-1a",
+     "text": "Explain why it is often harder to save than to spend money.",
+     "display_text": "Explain why it is often harder to save than to spend money.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Give an example of buying something now versus saving money for the future and explain how they would make that decision.",
+     "display_text": "Give an example of buying something now versus saving money for the future and explain how they would make that decision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-1c",
+     "outcome_id": "4-1c",
+     "text": "Find an example of an advertisement (in a newspaper, magazine, on TV, social media, or online) that is designed to influence people to spend money right away instead of saving their money.",
+     "display_text": "Find an example of an advertisement (in a newspaper, magazine, on TV, social media, or online) that is designed to influence people to spend money right away instead of saving their money.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "III.4-2",
+   "standard": "A savings plan is a plan for setting aside money to pay for a future need, goal, or emergency.",
+   "learning_outcomes": [
+    {
+     "id": "III.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Map out a savings plan designed to achieve a future purchase objective.",
+     "display_text": "Map out a savings plan designed to achieve a future purchase objective.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Give an example to illustrate the importance of having some money set aside for emergencies.",
+     "display_text": "Give an example to illustrate the importance of having some money set aside for emergencies.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-2c",
+     "outcome_id": "4-2c",
+     "text": "Describe ways that people can decrease expenses to save more of their money.",
+     "display_text": "Describe ways that people can decrease expenses to save more of their money.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 4,
+   "standard_id": "4-3",
+   "uid": "III.4-3",
+   "standard": "People differ in their values and attitudes about saving.",
+   "learning_outcomes": [
+    {
+     "id": "III.4-3a",
+     "outcome_id": "4-3a",
+     "text": "Discuss how life circumstances and experiences can cause people to differ in their values and attitudes about saving and their ability to save.",
+     "display_text": "Discuss how life circumstances and experiences can cause people to differ in their values and attitudes about saving and their ability to save.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-3b",
+     "outcome_id": "4-3b",
+     "text": "Explain how a person’s friends and family can influence their values and attitudes about saving.",
+     "display_text": "Explain how a person’s friends and family can influence their values and attitudes about saving.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 4,
+   "standard_id": "4-4",
+   "uid": "III.4-4",
+   "standard": "Safety and ease of access are factors to consider when deciding where to keep savings.",
+   "learning_outcomes": [
+    {
+     "id": "III.4-4a",
+     "outcome_id": "4-4a",
+     "text": "Describe the advantages of saving money in an account at a financial institution rather than keeping the money at home.",
+     "display_text": "Describe the advantages of saving money in an account at a financial institution rather than keeping the money at home.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-4b",
+     "outcome_id": "4-4b",
+     "text": "Identify safe places for people to keep their money.",
+     "display_text": "Identify safe places for people to keep their money.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 4,
+   "standard_id": "4-5",
+   "uid": "III.4-5",
+   "standard": "Financial institutions often pay interest on deposit accounts to attract customers to deposit money in their institution.",
+   "learning_outcomes": [
+    {
+     "id": "III.4-5a",
+     "outcome_id": "4-5a",
+     "text": "Explain why financial institutions, such as banks and credit unions, pay interest to depositors.",
+     "display_text": "Explain why financial institutions, such as banks and credit unions, pay interest to depositors.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.4-5b",
+     "outcome_id": "4-5b",
+     "text": "Compare the interest rates on savings accounts at two financial institutions.",
+     "display_text": "Compare the interest rates on savings accounts at two financial institutions.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "III.8-1",
+   "standard": "People save money for many different purposes, including large purchases such as cars and homes, education costs, retirement, and emergencies.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-1a",
+     "outcome_id": "8-1a",
+     "text": "Identify the most common reasons that people save money for the future.",
+     "display_text": "Identify the most common reasons that people save money for the future.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Create a savings plan that will allow someone to make a large purchase in one year, 5 years, and 10 years.",
+     "display_text": "Create a savings plan that will allow someone to make a large purchase in one year, 5 years, and 10 years.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "III.8-2",
+   "standard": "Savings decisions depend on individual preferences and circumstances, and can impact personal satisfaction and financial well-being.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Compare personal attitudes toward saving to those of a friend or relative.",
+     "display_text": "Compare personal attitudes toward saving to those of a friend or relative.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Explain how a person’s personality type might affect their willingness to save or to stick to a savings plan.",
+     "display_text": "Explain how a person’s personality type might affect their willingness to save or to stick to a savings plan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-2c",
+     "outcome_id": "8-2c",
+     "text": "Identify life situations that can make it difficult for a person to save or to stick to a savings plan.",
+     "display_text": "Identify life situations that can make it difficult for a person to save or to stick to a savings plan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-2d",
+     "outcome_id": "8-2d",
+     "text": "Discuss how savings decisions can affect financial well-being.",
+     "display_text": "Discuss how savings decisions can affect financial well-being.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "III.8-3",
+   "standard": "Financial institutions pay interest to depositors and loan out the money to borrowers who pay interest on their loans.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Compare and contrast different types of financial institutions and their products and services.",
+     "display_text": "Compare and contrast different types of financial institutions and their products and services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-3b",
+     "outcome_id": "8-3b",
+     "text": "Compare the interest rate paid by a financial institution on savings accounts to the interest charged by the same institution on loans.",
+     "display_text": "Compare the interest rate paid by a financial institution on savings accounts to the interest charged by the same institution on loans.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-3c",
+     "outcome_id": "8-3c",
+     "text": "Explain how financial institutions get the money to pay interest to their customers who deposit money in savings accounts.",
+     "display_text": "Explain how financial institutions get the money to pay interest to their customers who deposit money in savings accounts.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "III.8-4",
+   "standard": "Interest earned on savings is the interest rate multiplied by the balance in the account, which includes the original amount saved (principal) and previously earned interest.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Differentiate between principal and interest.",
+     "display_text": "Differentiate between principal and interest.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Demonstrate how earning a higher interest rate on money in a savings account will help a person to reach their savings goal sooner.",
+     "display_text": "Demonstrate how earning a higher interest rate on money in a savings account will help a person to reach their savings goal sooner.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-4c",
+     "outcome_id": "8-4c",
+     "text": "Use the Rule of 72 to approximate how many years it will take for savings to double in value at different rates of interest.",
+     "display_text": "Use the Rule of 72 to approximate how many years it will take for savings to double in value at different rates of interest.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-5",
+   "uid": "III.8-5",
+   "standard": "Compound interest is interest on both the original principal and previously earned interest, as compared to simple interest which is only interest on the original principal.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-5a",
+     "outcome_id": "8-5a",
+     "text": "Explain the benefit of compound interest as compared with simple interest.",
+     "display_text": "Explain the benefit of compound interest as compared with simple interest.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-5b",
+     "outcome_id": "8-5b",
+     "text": "Demonstrate how annual interest earned increases over time when both the original principal and earned interest are left in a savings account.",
+     "display_text": "Demonstrate how annual interest earned increases over time when both the original principal and earned interest are left in a savings account.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 8,
+   "standard_id": "8-6",
+   "uid": "III.8-6",
+   "standard": "Checking and saving deposit accounts in many financial institutions are insured up to certain limits by the federal government.",
+   "learning_outcomes": [
+    {
+     "id": "III.8-6a",
+     "outcome_id": "8-6a",
+     "text": "Explain the importance of federal deposit insurance.",
+     "display_text": "Explain the importance of federal deposit insurance.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-6b",
+     "outcome_id": "8-6b",
+     "text": "Compare Federal Deposit Insurance Corporation (FDIC) and National Credit Union Administration (NCUA) insurance coverage limits for checking and savings accounts offered at financial institutions.",
+     "display_text": "Compare Federal Deposit Insurance Corporation (FDIC) and National Credit Union Administration (NCUA) insurance coverage limits for checking and savings accounts offered at financial institutions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.8-6c",
+     "outcome_id": "8-6c",
+     "text": "Identify types of accounts that do not offer deposit insurance.",
+     "display_text": "Identify types of accounts that do not offer deposit insurance.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "III.12-1",
+   "standard": "Financial institutions offer several types of savings accounts, including regular savings, money market accounts, and certificates of deposit (CDs), that differ in minimum deposits, rates, and deposit insurance coverage.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Compare the features of regular savings accounts, money market accounts, and CDs.",
+     "display_text": "Compare the features of regular savings accounts, money market accounts, and CDs.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Explain why CDs typically pay higher interest rates than regular savings accounts or interest-bearing checking accounts.",
+     "display_text": "Explain why CDs typically pay higher interest rates than regular savings accounts or interest-bearing checking accounts.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "III.12-2",
+   "standard": "Deposit account interest rates and fees vary between financial institutions and depend on market conditions and competition.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Select a preferred location for a savings account based on comparison of interest rates and fees at different types of financial institutions.",
+     "display_text": "Select a preferred location for a savings account based on comparison of interest rates and fees at different types of financial institutions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Explain why an increase in the number of people who want to borrow money might result in banks paying higher rates on deposits.",
+     "display_text": "Explain why an increase in the number of people who want to borrow money might result in banks paying higher rates on deposits.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-2c",
+     "outcome_id": "12-2c",
+     "text": "Discuss types of market conditions that could result in financial institutions paying lower rates on savings accounts.",
+     "display_text": "Discuss types of market conditions that could result in financial institutions paying lower rates on savings accounts.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "III.12-3",
+   "standard": "Unless offered by insured financial institutions, mobile payment accounts and cryptocurrency accounts are not federally insured and usually do not pay interest to depositors.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Research mobile payment account alternatives.",
+     "display_text": "Research mobile payment account alternatives.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Compare and contrast the features of mobile payment accounts, cryptocurrency accounts, and checking/ savings accounts.",
+     "display_text": "Compare and contrast the features of mobile payment accounts, cryptocurrency accounts, and checking/ savings accounts.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Explain why storing money in a mobile payment account can reduce the ability to grow savings.",
+     "display_text": "Explain why storing money in a mobile payment account can reduce the ability to grow savings.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "III.12-4",
+   "standard": "Inflation can erode the value of savings if the interest rate earned on a savings account is less than the inflation rate.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-4a",
+     "outcome_id": "12-4a",
+     "text": "Explain why savers typically earn a higher nominal rate of interest when inflation is high.",
+     "display_text": "Explain why savers typically earn a higher nominal rate of interest when inflation is high.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Illustrate how inflation can reduce the purchasing power of savings over time if the nominal interest rate is lower than the inflation rate.",
+     "display_text": "Illustrate how inflation can reduce the purchasing power of savings over time if the nominal interest rate is lower than the inflation rate.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Investigate how federal I bonds provide inflation protection for savers.",
+     "display_text": "Investigate how federal I bonds provide inflation protection for savers.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "III.12-5",
+   "standard": "Government agencies such as the Federal Reserve, the FDIC, and the NCUA, along with their counterparts in state government, supervise and regulate financial institutions to improve financial solvency, legal compliance, and consumer protection.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Investigate the areas of financial institution operations that are subject to state and/or federal regulation and supervision.",
+     "display_text": "Investigate the areas of financial institution operations that are subject to state and/or federal regulation and supervision.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Identify the state agency responsible for regulating financial institutions where they live.",
+     "display_text": "Identify the state agency responsible for regulating financial institutions where they live.",
+     "roleplay_suitable": false
+    },
+    {
+     "id": "III.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Explain the importance of solvency regulation for financial institutions.",
+     "display_text": "Explain the importance of solvency regulation for financial institutions.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "III.12-6",
+   "standard": "Tax policies that allow people to save pretax earnings or to reduce or defer taxes on interest earned provide incentives for people to save.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Explain how traditional IRAs (individual retirement accounts), Roth IRAs, and education savings accounts provide incentives for people to save.",
+     "display_text": "Explain how traditional IRAs (individual retirement accounts), Roth IRAs, and education savings accounts provide incentives for people to save.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Compare the tax advantages of traditional and Roth IRAs.",
+     "display_text": "Compare the tax advantages of traditional and Roth IRAs.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-6c",
+     "outcome_id": "12-6c",
+     "text": "Compare the tax advantages of different types of education savings accounts.",
+     "display_text": "Compare the tax advantages of different types of education savings accounts.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "III.12-7",
+   "standard": "Employer defined contribution retirement plans and health savings accounts can provide incentives for employees to save.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Explain how an employer match of employee contributions to its retirement plan provides an incentive for employees to save.",
+     "display_text": "Explain how an employer match of employee contributions to its retirement plan provides an incentive for employees to save.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Compare the impact of employee “opt in” versus “opt out” of employer retirement plans and explain why it makes a difference.",
+     "display_text": "Compare the impact of employee “opt in” versus “opt out” of employer retirement plans and explain why it makes a difference.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Describe the pros and cons of saving through an employer retirement plan as compared to saving outside of an employer plan.",
+     "display_text": "Describe the pros and cons of saving through an employer retirement plan as compared to saving outside of an employer plan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-7d",
+     "outcome_id": "12-7d",
+     "text": "Explain the benefits of saving money in a health savings account for individuals with high-deductible health plans.",
+     "display_text": "Explain the benefits of saving money in a health savings account for individuals with high-deductible health plans.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "III.12-8",
+   "standard": "People can reduce the potential for future financial strife with a partner or spouse by sharing personal financial information, goals, and values prior to combining finances.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Assess the value of sharing financial goals and personal financial information with a partner before combining finances.",
+     "display_text": "Assess the value of sharing financial goals and personal financial information with a partner before combining finances.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Discuss how personal financial decisions can affect other people.",
+     "display_text": "Discuss how personal financial decisions can affect other people.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Saving",
+   "topic_numeral": "III",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "III.12-9",
+   "standard": "There are many strategies that can help people manage psychological, emotional, and external obstacles to saving, including automated savings plans, employer matches, and avoiding personal triggers.",
+   "learning_outcomes": [
+    {
+     "id": "III.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Explain how external influences (e.g. peers, family, or social media) can impact personal savings decisions.",
+     "display_text": "Explain how external influences (e.g. peers, family, or social media) can impact personal savings decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Identify strategies to manage psychological and emotional obstacles to saving.",
+     "display_text": "Identify strategies to manage psychological and emotional obstacles to saving.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-9c",
+     "outcome_id": "12-9c",
+     "text": "Discuss strategies for avoiding personal triggers that result in deviating from a savings plan.",
+     "display_text": "Discuss strategies for avoiding personal triggers that result in deviating from a savings plan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "III.12-9d",
+     "outcome_id": "12-9d",
+     "text": "Explain how the saving strategy “pay yourself first” can help people achieve their saving goals.",
+     "display_text": "Explain how the saving strategy “pay yourself first” can help people achieve their saving goals.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "IV.4-1",
+   "standard": "People invest their money so that it can grow over time and help them achieve their long-term financial goals.",
+   "learning_outcomes": [
+    {
+     "id": "IV.4-1a",
+     "outcome_id": "4-1a",
+     "text": "Explain why people invest their money.",
+     "display_text": "Explain why people invest their money.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Identify long-term financial goals that are most likely to be achieved by people who regularly invest their money over many years.",
+     "display_text": "Identify long-term financial goals that are most likely to be achieved by people who regularly invest their money over many years.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "IV.4-2",
+   "standard": "Low-interest savings accounts are commonly used for short-term financial goals and emergency funds because they are low risk. When saving for longer-term financial goals, people often invest in riskier assets to earn higher returns.",
+   "learning_outcomes": [
+    {
+     "id": "IV.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Identify the similarities and differences between saving and investing.",
+     "display_text": "Identify the similarities and differences between saving and investing.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Provide examples of financial goals that are suited for saving versus investing.",
+     "display_text": "Provide examples of financial goals that are suited for saving versus investing.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "IV.8-1",
+   "standard": "Investors in financial assets expect an increase in value over time (capital gain) and/ or receipt of regular income, such as interest or dividends.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-1a",
+     "outcome_id": "8-1a",
+     "text": "List the potential benefits of investing money in a financial asset.",
+     "display_text": "List the potential benefits of investing money in a financial asset.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Explain why some people might prefer to buy investments that grow in value over time instead of investments that pay regular income.",
+     "display_text": "Explain why some people might prefer to buy investments that grow in value over time instead of investments that pay regular income.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "IV.8-2",
+   "standard": "Common types of financial assets include certificates of deposit (CDs), stocks, bonds, mutual funds, and real estate.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Define common types of financial assets.",
+     "display_text": "Define common types of financial assets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Demonstrate how to find the current prices of stocks, bonds, and mutual funds.",
+     "display_text": "Demonstrate how to find the current prices of stocks, bonds, and mutual funds.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-2c",
+     "outcome_id": "8-2c",
+     "text": "Discuss how some financial assets can be harder to sell quickly (e.g. stocks traded on an exchange versus real estate).",
+     "display_text": "Discuss how some financial assets can be harder to sell quickly (e.g. stocks traded on an exchange versus real estate).",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "IV.8-3",
+   "standard": "Investors who buy corporate or government bonds are lending money to the issuer in exchange for regular interest payments.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Compare corporate and government bonds.",
+     "display_text": "Compare corporate and government bonds.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-3b",
+     "outcome_id": "8-3b",
+     "text": "Calculate the amount of annual interest income an investor would receive from a corporate bond offering at a given coupon interest rate.",
+     "display_text": "Calculate the amount of annual interest income an investor would receive from a corporate bond offering at a given coupon interest rate.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "IV.8-4",
+   "standard": "Investors who buy corporate stock become part-owners of a business, benefit from potential increases in the value of their shares, and may receive dividend income.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Select a stock and find the dividends it paid last year and how much the price of the stock has changed over the year.",
+     "display_text": "Select a stock and find the dividends it paid last year and how much the price of the stock has changed over the year.",
+     "roleplay_suitable": false
+    },
+    {
+     "id": "IV.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Explain the potential risks and rewards of investing in corporate stock.",
+     "display_text": "Explain the potential risks and rewards of investing in corporate stock.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-5",
+   "uid": "IV.8-5",
+   "standard": "Instead of buying individual stocks and bonds, investors can buy shares of pooled investments such as mutual funds and exchange-traded funds (ETFs).",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-5a",
+     "outcome_id": "8-5a",
+     "text": "Explain the concept of investment diversification both within and among different asset classes.",
+     "display_text": "Explain the concept of investment diversification both within and among different asset classes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-5b",
+     "outcome_id": "8-5b",
+     "text": "Discuss the advantages and disadvantages of investing in a diversified stock or bond mutual fund versus individual stocks and bonds.",
+     "display_text": "Discuss the advantages and disadvantages of investing in a diversified stock or bond mutual fund versus individual stocks and bonds.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-6",
+   "uid": "IV.8-6",
+   "standard": "Different types of investments expose investors to different degrees of risk.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-6a",
+     "outcome_id": "8-6a",
+     "text": "Compare rates of return on different types of investments and order them by risk.",
+     "display_text": "Compare rates of return on different types of investments and order them by risk.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-6b",
+     "outcome_id": "8-6b",
+     "text": "Identify investments that would be most appropriate for people who are uncomfortable with taking financial risk.",
+     "display_text": "Identify investments that would be most appropriate for people who are uncomfortable with taking financial risk.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 8,
+   "standard_id": "8-7",
+   "uid": "IV.8-7",
+   "standard": "The benefits of compounding for building wealth are greatest for people who invest regularly over longer periods of time.",
+   "learning_outcomes": [
+    {
+     "id": "IV.8-7a",
+     "outcome_id": "8-7a",
+     "text": "Explain the concept of compounding.",
+     "display_text": "Explain the concept of compounding.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-7b",
+     "outcome_id": "8-7b",
+     "text": "Estimate the future value of a lump sum invested today for a specified period of time and rate of return.",
+     "display_text": "Estimate the future value of a lump sum invested today for a specified period of time and rate of return.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-7c",
+     "outcome_id": "8-7c",
+     "text": "Estimate the future value of a regular series of equal annual investments for a specified period of time and rate of return.",
+     "display_text": "Estimate the future value of a regular series of equal annual investments for a specified period of time and rate of return.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.8-7d",
+     "outcome_id": "8-7d",
+     "text": "Demonstrate the difference in wealth accumulation for a person who begins to invest regularly at age 30 versus someone who starts at age 40.",
+     "display_text": "Demonstrate the difference in wealth accumulation for a person who begins to invest regularly at age 30 versus someone who starts at age 40.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "IV.12-1",
+   "standard": "A person’s investment risk tolerance depends on factors such as personality, financial resources, investment experiences, and life circumstances.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Give examples of factors that can influence a person’s risk tolerance.",
+     "display_text": "Give examples of factors that can influence a person’s risk tolerance.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Discuss how a person’s risk tolerance influences their investment decisions.",
+     "display_text": "Discuss how a person’s risk tolerance influences their investment decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-1c",
+     "outcome_id": "12-1c",
+     "text": "Assess their personal risk tolerance using an online tool or worksheet.",
+     "display_text": "Assess their personal risk tolerance using an online tool or worksheet.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "IV.12-2",
+   "standard": "Investors earn investment returns from price changes and annual cash flows (such as interest, dividends or rent). The nominal annual rate of return is the annual total dollar benefit as a percentage of the beginning price.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Describe the different types of annual cash flows that can be received by investors.",
+     "display_text": "Describe the different types of annual cash flows that can be received by investors.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Compare nominal annual rates of return over time on different types of investments, including cash flows and price changes.",
+     "display_text": "Compare nominal annual rates of return over time on different types of investments, including cash flows and price changes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-2c",
+     "outcome_id": "12-2c",
+     "text": "Explain why assets that do not produce income or are exposed to large price fluctuation (such as collectibles, precious metals, and cryptocurrencies) are described as speculative investments.",
+     "display_text": "Explain why assets that do not produce income or are exposed to large price fluctuation (such as collectibles, precious metals, and cryptocurrencies) are described as speculative investments.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "IV.12-3",
+   "standard": "Investors expect to earn higher rates of return when they invest in riskier assets.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Discuss the advantages and disadvantages of investing in riskier assets.",
+     "display_text": "Discuss the advantages and disadvantages of investing in riskier assets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Investigate the long-run average rates of returns on small-company stocks, large-company stocks, corporate bonds, and Treasury bonds.",
+     "display_text": "Investigate the long-run average rates of returns on small-company stocks, large-company stocks, corporate bonds, and Treasury bonds.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Explain why the expected rate of return on a value stock or mutual fund is likely to be lower than that of a growth stock or mutual fund.",
+     "display_text": "Explain why the expected rate of return on a value stock or mutual fund is likely to be lower than that of a growth stock or mutual fund.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-3d",
+     "outcome_id": "12-3d",
+     "text": "Explain why bonds with longer maturities generally earn a higher return than shorter-term bonds.",
+     "display_text": "Explain why bonds with longer maturities generally earn a higher return than shorter-term bonds.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "IV.12-4",
+   "standard": "Because inflation reduces purchasing power over time, the real return on a financial asset is lower than its nominal return.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-4a",
+     "outcome_id": "12-4a",
+     "text": "Describe the impact of inflation on prices over time.",
+     "display_text": "Describe the impact of inflation on prices over time.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Explain the relationship between nominal and real returns.",
+     "display_text": "Explain the relationship between nominal and real returns.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Find the current rate paid on CDs at a bank and calculate the expected real rate after inflation.",
+     "display_text": "Find the current rate paid on CDs at a bank and calculate the expected real rate after inflation.",
+     "roleplay_suitable": false
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "IV.12-5",
+   "standard": "The prices of financial assets change in response to market conditions, interest rates, company performance, new information, and investor demand.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Describe factors that influence the prices of financial assets.",
+     "display_text": "Describe factors that influence the prices of financial assets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Predict what could happen to the price of a stock if new information is reported about the company or its products.",
+     "display_text": "Predict what could happen to the price of a stock if new information is reported about the company or its products.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Discuss how economic downturns that result in high unemployment can affect the prices of financial assets.",
+     "display_text": "Discuss how economic downturns that result in high unemployment can affect the prices of financial assets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-5d",
+     "outcome_id": "12-5d",
+     "text": "Explain why the market price of some assets, such as bonds and real estate, increase when interest rates decrease.",
+     "display_text": "Explain why the market price of some assets, such as bonds and real estate, increase when interest rates decrease.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "IV.12-6",
+   "standard": "When making diversification and asset allocation decisions, investors consider their risk tolerance, goals, and investing time horizon.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Recommend portfolio allocation between major asset classes for a short-term goal versus a long-term goal.",
+     "display_text": "Recommend portfolio allocation between major asset classes for a short-term goal versus a long-term goal.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Discuss the pros and cons of investing in a diversified mutual fund versus investing in a small number of individual stocks.",
+     "display_text": "Discuss the pros and cons of investing in a diversified mutual fund versus investing in a small number of individual stocks.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-6c",
+     "outcome_id": "12-6c",
+     "text": "Suggest an appropriate asset allocation for a very risk averse person versus a very risk tolerant person.",
+     "display_text": "Suggest an appropriate asset allocation for a very risk averse person versus a very risk tolerant person.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-6d",
+     "outcome_id": "12-6d",
+     "text": "Explain how target date retirement funds reallocate investments over time to meet their investment objective.",
+     "display_text": "Explain how target date retirement funds reallocate investments over time to meet their investment objective.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "IV.12-7",
+   "standard": "Expenses of buying, selling, and holding financial assets decrease the rate of return from an investment.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Discuss how the expenses associated with buying and selling investments can impact rates of return and investment outcomes.",
+     "display_text": "Discuss how the expenses associated with buying and selling investments can impact rates of return and investment outcomes.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Compare the expense ratios for several mutual funds.",
+     "display_text": "Compare the expense ratios for several mutual funds.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Explain why an actively managed mutual fund usually has a higher expense ratio than an index fund.",
+     "display_text": "Explain why an actively managed mutual fund usually has a higher expense ratio than an index fund.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "IV.12-8",
+   "standard": "Tax rules affect the rate of return on different investments, and can vary by holding period, type of income, and type of account.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Compare tax rates paid on interest income versus short-term and long-term capital gains.",
+     "display_text": "Compare tax rates paid on interest income versus short-term and long-term capital gains.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Describe the advantages of investing through a tax-deferred account such as an IRA or 401(k) versus a taxable account.",
+     "display_text": "Describe the advantages of investing through a tax-deferred account such as an IRA or 401(k) versus a taxable account.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-8c",
+     "outcome_id": "12-8c",
+     "text": "Investigate the contribution limits and tax advantages of a traditional IRA versus a Roth IRA.",
+     "display_text": "Investigate the contribution limits and tax advantages of a traditional IRA versus a Roth IRA.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "IV.12-9",
+   "standard": "Common behavioral biases can result in investors making decisions that adversely affect their investment outcomes.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Identify several behavioral biases that can result in poor investment decisions (e.g. loss aversion, investing in employer stock, home bias, mental accounting).",
+     "display_text": "Identify several behavioral biases that can result in poor investment decisions (e.g. loss aversion, investing in employer stock, home bias, mental accounting).",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Brainstorm methods for avoiding negative consequences from behavioral biases.",
+     "display_text": "Brainstorm methods for avoiding negative consequences from behavioral biases.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-10",
+   "uid": "IV.12-10",
+   "standard": "Financial technology can counterbalance negative behavioral factors when making investment decisions.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-10a",
+     "outcome_id": "12-10a",
+     "text": "Explore common financial technologies used for investing, including automated trading platforms.",
+     "display_text": "Explore common financial technologies used for investing, including automated trading platforms.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-10b",
+     "outcome_id": "12-10b",
+     "text": "Explain how automating investment activities can help people avoid making emotional investment decisions.",
+     "display_text": "Explain how automating investment activities can help people avoid making emotional investment decisions.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-11",
+   "uid": "IV.12-11",
+   "standard": "Many investors buy and sell financial assets through discount brokerage firms that provide inexpensive investment services and advice using financial technology.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-11a",
+     "outcome_id": "12-11a",
+     "text": "Discuss how the development of financial technology has made it easier for people of all income and education levels to participate in financial markets.",
+     "display_text": "Discuss how the development of financial technology has made it easier for people of all income and education levels to participate in financial markets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-11b",
+     "outcome_id": "12-11b",
+     "text": "Choose a discount broker and research the minimum starting account balance, minimum monthly investment, and trading costs.",
+     "display_text": "Choose a discount broker and research the minimum starting account balance, minimum monthly investment, and trading costs.",
+     "roleplay_suitable": false
+    },
+    {
+     "id": "IV.12-11c",
+     "outcome_id": "12-11c",
+     "text": "Identify the advantages and disadvantages of robo-advising and other investment-related financial technologies.",
+     "display_text": "Identify the advantages and disadvantages of robo-advising and other investment-related financial technologies.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-12",
+   "uid": "IV.12-12",
+   "standard": "Federal regulation of financial markets is designed to ensure that investors have access to accurate information about potential investments and are protected from fraud.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-12a",
+     "outcome_id": "12-12a",
+     "text": "Explain the role of federal regulators in financial markets.",
+     "display_text": "Explain the role of federal regulators in financial markets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-12b",
+     "outcome_id": "12-12b",
+     "text": "Discuss why insider trading is illegal and harmful to investment markets.",
+     "display_text": "Discuss why insider trading is illegal and harmful to investment markets.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-12c",
+     "outcome_id": "12-12c",
+     "text": "Explain the importance of having access to full and accurate information about potential investments.",
+     "display_text": "Explain the importance of having access to full and accurate information about potential investments.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-13",
+   "uid": "IV.12-13",
+   "standard": "Investors often compare the performance of their investments against a benchmark, such as a diversified stock or bond index.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-13a",
+     "outcome_id": "12-13a",
+     "text": "Explain why investors often compare portfolio performance to a benchmark such as the S&P 500 Index.",
+     "display_text": "Explain why investors often compare portfolio performance to a benchmark such as the S&P 500 Index.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-13b",
+     "outcome_id": "12-13b",
+     "text": "Research the composition of the most popular benchmark indices and compare their recent performance.",
+     "display_text": "Research the composition of the most popular benchmark indices and compare their recent performance.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-13c",
+     "outcome_id": "12-13c",
+     "text": "Discuss the advantages of investing in an exchange-traded fund (ETF) that tracks a market index rather than investing in actively managed mutual funds or individual stocks and bonds.",
+     "display_text": "Discuss the advantages of investing in an exchange-traded fund (ETF) that tracks a market index rather than investing in actively managed mutual funds or individual stocks and bonds.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Investing",
+   "topic_numeral": "IV",
+   "grade": 12,
+   "standard_id": "12-14",
+   "uid": "IV.12-14",
+   "standard": "Criteria for selecting financial professionals for investment advice include licensing, certifications, education, experience, and cost.",
+   "learning_outcomes": [
+    {
+     "id": "IV.12-14a",
+     "outcome_id": "12-14a",
+     "text": "Discuss reasons that a person might want to hire a financial professional to manage their investments or provide investment advice.",
+     "display_text": "Discuss reasons that a person might want to hire a financial professional to manage their investments or provide investment advice.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-14b",
+     "outcome_id": "12-14b",
+     "text": "Explain the importance of licensing, certifications, education, and experience as criteria for selecting a financial professional for investment management or advice.",
+     "display_text": "Explain the importance of licensing, certifications, education, and experience as criteria for selecting a financial professional for investment management or advice.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "IV.12-14c",
+     "outcome_id": "12-14c",
+     "text": "Investigate where and how to find qualified financial professionals.",
+     "display_text": "Investigate where and how to find qualified financial professionals.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "V.4-1",
+   "standard": "Interest is the price a borrower pays for using someone else’s money, and the income earned by the lender.",
+   "learning_outcomes": [
+    {
+     "id": "V.4-1a",
+     "outcome_id": "4-1a",
+     "text": "Explain why a person who borrows $100 to buy something, often must pay back more than $100 at a future date.",
+     "display_text": "Explain why a person who borrows $100 to buy something, often must pay back more than $100 at a future date.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Describe the reasons why businesses and individuals sometimes lend money to others.",
+     "display_text": "Describe the reasons why businesses and individuals sometimes lend money to others.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "V.4-2",
+   "standard": "When a person pays with credit, they have immediate use of purchased goods or services while agreeing to repay the lender in the future with interest.",
+   "learning_outcomes": [
+    {
+     "id": "V.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Identify goods and services that people often purchase with credit.",
+     "display_text": "Identify goods and services that people often purchase with credit.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Discuss reasons people may prefer to buy something with credit rather than paying cash.",
+     "display_text": "Discuss reasons people may prefer to buy something with credit rather than paying cash.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 4,
+   "standard_id": "4-3",
+   "uid": "V.4-3",
+   "standard": "Lenders are more likely to approve borrowers who do not have a lot of other debt and who have a history of paying back loans as promised.",
+   "learning_outcomes": [
+    {
+     "id": "V.4-3a",
+     "outcome_id": "4-3a",
+     "text": "Explain why a person might prefer to lend an item or money to one person over another.",
+     "display_text": "Explain why a person might prefer to lend an item or money to one person over another.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.4-3b",
+     "outcome_id": "4-3b",
+     "text": "Discuss why a person might be reluctant to lend money or personal possessions to someone who has a history of not repaying previous loans.",
+     "display_text": "Discuss why a person might be reluctant to lend money or personal possessions to someone who has a history of not repaying previous loans.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "V.8-1",
+   "standard": "Interest rates and fees vary by type of lender, type of credit, and market conditions.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-1a",
+     "outcome_id": "8-1a",
+     "text": "Identify financial institutions and businesses that offer consumer credit.",
+     "display_text": "Identify financial institutions and businesses that offer consumer credit.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Compare lenders based on type of credit offered, interest rates, and fees.",
+     "display_text": "Compare lenders based on type of credit offered, interest rates, and fees.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-1c",
+     "outcome_id": "8-1c",
+     "text": "Explain how market conditions impact interest rates.",
+     "display_text": "Explain how market conditions impact interest rates.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "V.8-2",
+   "standard": "Financial institutions advertise loan costs to potential borrowers using the Annual Percentage Rate (APR), expressed as an annual percentage of the loan principal. Low introductory rates offered to attract customers may increase later.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Describe how lenders advertise loan costs to potential borrowers.",
+     "display_text": "Describe how lenders advertise loan costs to potential borrowers.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Calculate APR, given annual interest and loan amount.",
+     "display_text": "Calculate APR, given annual interest and loan amount.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-2c",
+     "outcome_id": "8-2c",
+     "text": "Investigate what happens to a low introductory interest rate when the borrower misses a payment or makes a late payment.",
+     "display_text": "Investigate what happens to a low introductory interest rate when the borrower misses a payment or makes a late payment.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "V.8-3",
+   "standard": "The longer a loan repayment period and the higher the interest rate, the larger the total amount of interest paid by a borrower.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Describe the effect of higher interest rates and longer loan terms on the total cost of a loan.",
+     "display_text": "Describe the effect of higher interest rates and longer loan terms on the total cost of a loan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-3b",
+     "outcome_id": "8-3b",
+     "text": "For a given monthly payment, loan amount, and loan repayment period, calculate the total amount of interest paid by the borrower.",
+     "display_text": "For a given monthly payment, loan amount, and loan repayment period, calculate the total amount of interest paid by the borrower.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "V.8-4",
+   "standard": "Credit cards typically charge higher interest rates on balances due compared with rates on other types of loans.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Explain why credit card interest rates tend to be higher than rates for secured loans, such as automobile loans.",
+     "display_text": "Explain why credit card interest rates tend to be higher than rates for secured loans, such as automobile loans.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Describe how a credit card user can minimize interest charges on their credit card purchases.",
+     "display_text": "Describe how a credit card user can minimize interest charges on their credit card purchases.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-5",
+   "uid": "V.8-5",
+   "standard": "Lenders charge different interest rates based on borrower risk of nonpayment, which is commonly evaluated using information in the borrower’s credit report.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-5a",
+     "outcome_id": "8-5a",
+     "text": "Identify the types of information contained in a credit report.",
+     "display_text": "Identify the types of information contained in a credit report.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-5b",
+     "outcome_id": "8-5b",
+     "text": "Discuss how a borrower’s credit history can impact their borrowing costs.",
+     "display_text": "Discuss how a borrower’s credit history can impact their borrowing costs.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-6",
+   "uid": "V.8-6",
+   "standard": "When people borrow money to invest in higher education or housing, the risks and costs may be outweighed by the future benefits.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-6a",
+     "outcome_id": "8-6a",
+     "text": "Explain why using credit to finance education and housing could be beneficial.",
+     "display_text": "Explain why using credit to finance education and housing could be beneficial.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-6b",
+     "outcome_id": "8-6b",
+     "text": "Assess the benefits and costs of using credit to finance education and housing versus using credit to purchase food and clothing.",
+     "display_text": "Assess the benefits and costs of using credit to finance education and housing versus using credit to purchase food and clothing.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-6c",
+     "outcome_id": "8-6c",
+     "text": "Justify the use of credit for a specific purchase.",
+     "display_text": "Justify the use of credit for a specific purchase.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 8,
+   "standard_id": "8-7",
+   "uid": "V.8-7",
+   "standard": "Borrowing increases debt and can negatively affect a person’s finances.",
+   "learning_outcomes": [
+    {
+     "id": "V.8-7a",
+     "outcome_id": "8-7a",
+     "text": "Identify indicators that a person has accumulated too much debt.",
+     "display_text": "Identify indicators that a person has accumulated too much debt.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.8-7b",
+     "outcome_id": "8-7b",
+     "text": "Predict the possible consequences of having a lot of debt payments relative to income.",
+     "display_text": "Predict the possible consequences of having a lot of debt payments relative to income.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "V.12-1",
+   "standard": "Borrowers can compare the cost of credit using the Annual Percentage Rate (APR) and other terms in the loan or credit card contract.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Describe how credit card grace periods, methods of interest calculation, and fees affect borrowing costs.",
+     "display_text": "Describe how credit card grace periods, methods of interest calculation, and fees affect borrowing costs.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Compare the cost of borrowing $1,000 using consumer credit options that differ in rates and fees.",
+     "display_text": "Compare the cost of borrowing $1,000 using consumer credit options that differ in rates and fees.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "V.12-2",
+   "standard": "Loans that are secured by collateral have lower interest rates than unsecured loans because they are less risky to lenders.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Give examples of unsecured and secured loans.",
+     "display_text": "Give examples of unsecured and secured loans.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Explain why lenders charge lower interest rates on secured loans than on unsecured loans.",
+     "display_text": "Explain why lenders charge lower interest rates on secured loans than on unsecured loans.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-2c",
+     "outcome_id": "12-2c",
+     "text": "Compare what happens if a borrower fails to make required payments on a secured loan, such as an auto loan or a home mortgage, versus failing to pay a credit card account.",
+     "display_text": "Compare what happens if a borrower fails to make required payments on a secured loan, such as an auto loan or a home mortgage, versus failing to pay a credit card account.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "V.12-3",
+   "standard": "Monthly mortgage payments vary depending on the amount borrowed, the repayment period, and the interest rate, which can be fixed or adjustable.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Identify the type of collateral required for a mortgage loan.",
+     "display_text": "Identify the type of collateral required for a mortgage loan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Differentiate between adjustable-rate and fixed-rate mortgages.",
+     "display_text": "Differentiate between adjustable-rate and fixed-rate mortgages.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Compare monthly mortgage payments for loans that differ in repayment period, amount borrowed, and interest rate.",
+     "display_text": "Compare monthly mortgage payments for loans that differ in repayment period, amount borrowed, and interest rate.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "V.12-4",
+   "standard": "Post-secondary education is often financed by students and families/caregivers through a combination of scholarships, grants, student loans, work-study, and savings.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-4a",
+     "outcome_id": "12-4a",
+     "text": "Describe the different sources of funding for post-secondary education.",
+     "display_text": "Describe the different sources of funding for post-secondary education.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Explain the role the FAFSA plays in applying for college financial aid.",
+     "display_text": "Explain the role the FAFSA plays in applying for college financial aid.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Identify scholarships and grants for which they are eligible.",
+     "display_text": "Identify scholarships and grants for which they are eligible.",
+     "roleplay_suitable": false
+    },
+    {
+     "id": "V.12-4d",
+     "outcome_id": "12-4d",
+     "text": "Estimate the reduction in total cost of education and potential student loan debt if they complete their first two years of college at a community college before transferring to a four-year institution.",
+     "display_text": "Estimate the reduction in total cost of education and potential student loan debt if they complete their first two years of college at a community college before transferring to a four-year institution.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "V.12-5",
+   "standard": "Federal student loans have lower rates and more favorable repayment terms than private student loans, and may be subsidized.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Compare federal and private student loans based on interest rates, repayment rules, and other characteristics.",
+     "display_text": "Compare federal and private student loans based on interest rates, repayment rules, and other characteristics.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Describe the process of applying for a student loan.",
+     "display_text": "Describe the process of applying for a student loan.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Estimate total interest on various student loans based on interest rates and repayment plans.",
+     "display_text": "Estimate total interest on various student loans based on interest rates and repayment plans.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-5d",
+     "outcome_id": "12-5d",
+     "text": "Predict the potential consequences of deferred payment of student loans.",
+     "display_text": "Predict the potential consequences of deferred payment of student loans.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "V.12-6",
+   "standard": "Down payments reduce the amount needed to borrow.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Identify examples of loans that may require down payments.",
+     "display_text": "Identify examples of loans that may require down payments.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Given the price of a home, estimate the amount of down payment required.",
+     "display_text": "Given the price of a home, estimate the amount of down payment required.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-6c",
+     "outcome_id": "12-6c",
+     "text": "For a specified loan amount, compare the monthly loan payment with a 10% down payment versus a 20% down payment.",
+     "display_text": "For a specified loan amount, compare the monthly loan payment with a 10% down payment versus a 20% down payment.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-6d",
+     "outcome_id": "12-6d",
+     "text": "Explain how a down payment makes a borrower more attractive to a lender and motivates loan repayment by the borrower.",
+     "display_text": "Explain how a down payment makes a borrower more attractive to a lender and motivates loan repayment by the borrower.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "V.12-7",
+   "standard": "Lenders assess credit-worthiness of potential borrowers by consulting credit reports compiled by credit bureaus.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Identify the primary organizations that maintain and provide consumer credit reports.",
+     "display_text": "Identify the primary organizations that maintain and provide consumer credit reports.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Assess the value to a potential lender of the information contained in a credit report.",
+     "display_text": "Assess the value to a potential lender of the information contained in a credit report.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Explain how a person can get a free copy of their credit report and why this is advisable.",
+     "display_text": "Explain how a person can get a free copy of their credit report and why this is advisable.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-7d",
+     "outcome_id": "12-7d",
+     "text": "Outline the process of disputing inaccurate credit report information.",
+     "display_text": "Outline the process of disputing inaccurate credit report information.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "V.12-8",
+   "standard": "A credit score is a numeric rating that assesses a person’s credit risk based on information in their credit report.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Identify the main factors that are included in credit score calculations.",
+     "display_text": "Identify the main factors that are included in credit score calculations.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Explain how a borrower’s credit score can impact their cost of credit and their ability to get credit.",
+     "display_text": "Explain how a borrower’s credit score can impact their cost of credit and their ability to get credit.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-8c",
+     "outcome_id": "12-8c",
+     "text": "Recommend ways that a person can increase their credit score.",
+     "display_text": "Recommend ways that a person can increase their credit score.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "V.12-9",
+   "standard": "Credit reports and credit scores may be requested and used by entities other than lenders.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Explain how landlords, potential employers, and insurance companies use credit reports and credit scores in decision-making.",
+     "display_text": "Explain how landlords, potential employers, and insurance companies use credit reports and credit scores in decision-making.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Provide examples of benefits associated with having a good credit score.",
+     "display_text": "Provide examples of benefits associated with having a good credit score.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-9c",
+     "outcome_id": "12-9c",
+     "text": "Compare the effect of soft versus hard credit inquiries on a person’s credit score.",
+     "display_text": "Compare the effect of soft versus hard credit inquiries on a person’s credit score.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-10",
+   "uid": "V.12-10",
+   "standard": "Borrowers who face negative consequences because they are unable to repay their debts may be able to seek debt management assistance.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-10a",
+     "outcome_id": "12-10a",
+     "text": "Describe how failing to repay a loan can negatively impact a person’s finances and life.",
+     "display_text": "Describe how failing to repay a loan can negatively impact a person’s finances and life.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-10b",
+     "outcome_id": "12-10b",
+     "text": "Identify sources of assistance with debt management.",
+     "display_text": "Identify sources of assistance with debt management.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-10c",
+     "outcome_id": "12-10c",
+     "text": "Create a plan for a person who is having difficulty repaying debt.",
+     "display_text": "Create a plan for a person who is having difficulty repaying debt.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-10d",
+     "outcome_id": "12-10d",
+     "text": "Compare the costs and benefits associated with for-profit versus non-profit credit counseling services.",
+     "display_text": "Compare the costs and benefits associated with for-profit versus non-profit credit counseling services.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-11",
+   "uid": "V.12-11",
+   "standard": "In extreme cases, bankruptcy may be an option for people who are unable to repay their debts.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-11a",
+     "outcome_id": "12-11a",
+     "text": "Describe the purpose of bankruptcy laws.",
+     "display_text": "Describe the purpose of bankruptcy laws.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-11b",
+     "outcome_id": "12-11b",
+     "text": "Investigate the effects of bankruptcy on assets, employment, and future access to credit.",
+     "display_text": "Investigate the effects of bankruptcy on assets, employment, and future access to credit.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-11c",
+     "outcome_id": "12-11c",
+     "text": "Compare the results of liquidation versus reorganization bankruptcy.",
+     "display_text": "Compare the results of liquidation versus reorganization bankruptcy.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-12",
+   "uid": "V.12-12",
+   "standard": "Consumer credit protection laws govern disclosure of credit terms, discrimination in borrowing, and debt collection practices.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-12a",
+     "outcome_id": "12-12a",
+     "text": "Explain the rationale behind laws that require people to have access to full information about credit cards and loans before they borrow money.",
+     "display_text": "Explain the rationale behind laws that require people to have access to full information about credit cards and loans before they borrow money.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-12b",
+     "outcome_id": "12-12b",
+     "text": "Discuss the importance of protecting borrowers from discrimination and abusive marketing or collection practices.",
+     "display_text": "Discuss the importance of protecting borrowers from discrimination and abusive marketing or collection practices.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-12c",
+     "outcome_id": "12-12c",
+     "text": "Research where to find credible sources of up-to-date information on credit rights and responsibilities.",
+     "display_text": "Research where to find credible sources of up-to-date information on credit rights and responsibilities.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Credit",
+   "topic_numeral": "V",
+   "grade": 12,
+   "standard_id": "12-13",
+   "uid": "V.12-13",
+   "standard": "Alternative financial services, such as payday loans, check-cashing services, pawnshops, and instant tax refunds, provide easy access to credit, often at relatively high cost.",
+   "learning_outcomes": [
+    {
+     "id": "V.12-13a",
+     "outcome_id": "12-13a",
+     "text": "Identify products and practices that are classified as alternative financial services.",
+     "display_text": "Identify products and practices that are classified as alternative financial services.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-13b",
+     "outcome_id": "12-13b",
+     "text": "Discuss the costs and benefits of using alternative financial services relative to traditional banking.",
+     "display_text": "Discuss the costs and benefits of using alternative financial services relative to traditional banking.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "V.12-13c",
+     "outcome_id": "12-13c",
+     "text": "Explain how using payday loans can cause a cycle of debt.",
+     "display_text": "Explain how using payday loans can cause a cycle of debt.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 4,
+   "standard_id": "4-1",
+   "uid": "VI.4-1",
+   "standard": "People are exposed to risk when there is a chance of loss or harm. Risk is an unavoidable part of daily life.",
+   "learning_outcomes": [
+    {
+     "id": "VI.4-1a",
+     "outcome_id": "4-1a",
+     "text": "Give examples of risks that people and households face.",
+     "display_text": "Give examples of risks that people and households face.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-1b",
+     "outcome_id": "4-1b",
+     "text": "Identify why people take risks.",
+     "display_text": "Identify why people take risks.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-1c",
+     "outcome_id": "4-1c",
+     "text": "Estimate the losses and costs associated with certain physical and financial risks.",
+     "display_text": "Estimate the losses and costs associated with certain physical and financial risks.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-1d",
+     "outcome_id": "4-1d",
+     "text": "Describe how valuable personal items might be lost or damaged.",
+     "display_text": "Describe how valuable personal items might be lost or damaged.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 4,
+   "standard_id": "4-2",
+   "uid": "VI.4-2",
+   "standard": "People who are exposed to risks often try to reduce or avoid the negative consequences of those risks.",
+   "learning_outcomes": [
+    {
+     "id": "VI.4-2a",
+     "outcome_id": "4-2a",
+     "text": "Recommend ways to reduce or avoid a given risk.",
+     "display_text": "Recommend ways to reduce or avoid a given risk.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-2b",
+     "outcome_id": "4-2b",
+     "text": "Identify types of risks that are difficult or impossible for people to reduce or avoid.",
+     "display_text": "Identify types of risks that are difficult or impossible for people to reduce or avoid.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 4,
+   "standard_id": "4-3",
+   "uid": "VI.4-3",
+   "standard": "One way to cope with unexpected losses is to save for emergencies.",
+   "learning_outcomes": [
+    {
+     "id": "VI.4-3a",
+     "outcome_id": "4-3a",
+     "text": "Give examples of life events for which emergency savings could offset financial losses.",
+     "display_text": "Give examples of life events for which emergency savings could offset financial losses.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-3b",
+     "outcome_id": "4-3b",
+     "text": "Develop a system to keep track of personal items and handle small amounts of money.",
+     "display_text": "Develop a system to keep track of personal items and handle small amounts of money.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 4,
+   "standard_id": "4-4",
+   "uid": "VI.4-4",
+   "standard": "Insurance is often purchased to limit financial losses due to risk.",
+   "learning_outcomes": [
+    {
+     "id": "VI.4-4a",
+     "outcome_id": "4-4a",
+     "text": "Provide examples of large financial risks that people buy insurance for (e.g., health, auto, fire).",
+     "display_text": "Provide examples of large financial risks that people buy insurance for (e.g., health, auto, fire).",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.4-4b",
+     "outcome_id": "4-4b",
+     "text": "Investigate the types of insurance commonly available for people to purchase.",
+     "display_text": "Investigate the types of insurance commonly available for people to purchase.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-1",
+   "uid": "VI.8-1",
+   "standard": "Financial loss can occur from unexpected events that damage health, wealth, income, property, and/or future opportunities.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-1a",
+     "outcome_id": "8-1a",
+     "text": "Describe how an unexpected event that damages health or property can impact a family’s financial situation.",
+     "display_text": "Describe how an unexpected event that damages health or property can impact a family’s financial situation.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-1b",
+     "outcome_id": "8-1b",
+     "text": "Explain how advance planning can reduce the financial impact of an event that causes damage to personal property.",
+     "display_text": "Explain how advance planning can reduce the financial impact of an event that causes damage to personal property.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-2",
+   "uid": "VI.8-2",
+   "standard": "Insurance is a financial product that allows people to pay a fee (premium) to transfer the cost of a potential financial loss to an insurance company.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-2a",
+     "outcome_id": "8-2a",
+     "text": "Describe ways in which having insurance can protect a person from financial loss.",
+     "display_text": "Describe ways in which having insurance can protect a person from financial loss.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-2b",
+     "outcome_id": "8-2b",
+     "text": "Explain what might happen to people who cannot afford to buy insurance for a particular risk or who choose not to buy it.",
+     "display_text": "Explain what might happen to people who cannot afford to buy insurance for a particular risk or who choose not to buy it.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-3",
+   "uid": "VI.8-3",
+   "standard": "An insurance company creates a pool of funds from many policyholders’ premium payments and then uses these funds to compensate customers who experience a loss. People at higher risk for making a claim usually have to pay a higher premium.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-3a",
+     "outcome_id": "8-3a",
+     "text": "Discuss how people use insurance to share the risk of financial loss.",
+     "display_text": "Discuss how people use insurance to share the risk of financial loss.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-3b",
+     "outcome_id": "8-3b",
+     "text": "Explain why insurers commonly charge higher premiums to people who are higher risk (e.g. auto insurance for drivers with a bad accident record, flood insurance for houses on the coastline).",
+     "display_text": "Explain why insurers commonly charge higher premiums to people who are higher risk (e.g. auto insurance for drivers with a bad accident record, flood insurance for houses on the coastline).",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-4",
+   "uid": "VI.8-4",
+   "standard": "Four key insurance terms that contribute to out-of-pocket costs with an insurance policy are: premium, deductible, copayments, and co-insurance.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-4a",
+     "outcome_id": "8-4a",
+     "text": "Describe how each of the following out-of-pocket insurance costs affects policyholders: premium, deductible, copayment, and coinsurance.",
+     "display_text": "Describe how each of the following out-of-pocket insurance costs affects policyholders: premium, deductible, copayment, and coinsurance.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-4b",
+     "outcome_id": "8-4b",
+     "text": "Given information about premiums, deductibles, copayments, and coinsurance, calculate out-of-pocket costs for a hypothetical insured loss.",
+     "display_text": "Given information about premiums, deductibles, copayments, and coinsurance, calculate out-of-pocket costs for a hypothetical insured loss.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-5",
+   "uid": "VI.8-5",
+   "standard": "People can choose to avoid, reduce, retain, or transfer risk through the purchase of insurance. Each option has different costs and benefits.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-5a",
+     "outcome_id": "8-5a",
+     "text": "Give examples of how people manage the risk of financial loss through risk avoidance, reduction, retention, and transfer.",
+     "display_text": "Give examples of how people manage the risk of financial loss through risk avoidance, reduction, retention, and transfer.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-5b",
+     "outcome_id": "8-5b",
+     "text": "Identify ways in which an automobile driver can avoid, reduce, or transfer the risk of being in a crash.",
+     "display_text": "Identify ways in which an automobile driver can avoid, reduce, or transfer the risk of being in a crash.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-5c",
+     "outcome_id": "8-5c",
+     "text": "Weigh the costs and benefits of buying cell phone insurance versus accepting the risk.",
+     "display_text": "Weigh the costs and benefits of buying cell phone insurance versus accepting the risk.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-6",
+   "uid": "VI.8-6",
+   "standard": "Extended warranties and service contracts provide protection against certain product mechanical failures during the contract period.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-6a",
+     "outcome_id": "8-6a",
+     "text": "Describe types of purchases where extended warranties are typically offered as an add-on purchase.",
+     "display_text": "Describe types of purchases where extended warranties are typically offered as an add-on purchase.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-6b",
+     "outcome_id": "8-6b",
+     "text": "Analyze the costs and benefits of purchasing an extended warranty on a specific item (e.g. cellphone, laptop, or vehicle).",
+     "display_text": "Analyze the costs and benefits of purchasing an extended warranty on a specific item (e.g. cellphone, laptop, or vehicle).",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 8,
+   "standard_id": "8-7",
+   "uid": "VI.8-7",
+   "standard": "Identity theft is the use of someone else’s personal identification information to commit a crime.",
+   "learning_outcomes": [
+    {
+     "id": "VI.8-7a",
+     "outcome_id": "8-7a",
+     "text": "Explain methods used by identity thieves to obtain personal information to commit a crime.",
+     "display_text": "Explain methods used by identity thieves to obtain personal information to commit a crime.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-7b",
+     "outcome_id": "8-7b",
+     "text": "List actions that an individual can take to protect personal identification information.",
+     "display_text": "List actions that an individual can take to protect personal identification information.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.8-7c",
+     "outcome_id": "8-7c",
+     "text": "Describe steps people can take to safely manage their finances using mobile technology.",
+     "display_text": "Describe steps people can take to safely manage their finances using mobile technology.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-1",
+   "uid": "VI.12-1",
+   "standard": "People vary with respect to their willingness to accept risk and in how much they are willing to pay for insurance that will allow them to minimize future financial loss.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-1a",
+     "outcome_id": "12-1a",
+     "text": "Discuss whether a premium paid to insure against a crash that never happens is wasted.",
+     "display_text": "Discuss whether a premium paid to insure against a crash that never happens is wasted.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-1b",
+     "outcome_id": "12-1b",
+     "text": "Analyze the conditions under which it is appropriate for young adults to have life, health, and disability insurance.",
+     "display_text": "Analyze the conditions under which it is appropriate for young adults to have life, health, and disability insurance.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-2",
+   "uid": "VI.12-2",
+   "standard": "The decision to buy insurance depends on perceived risk exposure, the price of insurance coverage, and individual characteristics such as risk attitudes, age, occupation, lifestyle, and financial profile.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-2a",
+     "outcome_id": "12-2a",
+     "text": "Identify individual characteristics that influence insurance purchase decisions.",
+     "display_text": "Identify individual characteristics that influence insurance purchase decisions.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-2b",
+     "outcome_id": "12-2b",
+     "text": "Recommend types of insurance needed by people with different characteristics.",
+     "display_text": "Recommend types of insurance needed by people with different characteristics.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-3",
+   "uid": "VI.12-3",
+   "standard": "Some types of insurance coverage are mandatory.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-3a",
+     "outcome_id": "12-3a",
+     "text": "Explain why homeowners’ insurance is required by a lender when a homeowner takes out a mortgage.",
+     "display_text": "Explain why homeowners’ insurance is required by a lender when a homeowner takes out a mortgage.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-3b",
+     "outcome_id": "12-3b",
+     "text": "Discuss why most states mandate auto liability coverage.",
+     "display_text": "Discuss why most states mandate auto liability coverage.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-3c",
+     "outcome_id": "12-3c",
+     "text": "Research the minimum auto liability insurance required in the state they live in and whether it is sufficient to cover typical auto accident financial losses.",
+     "display_text": "Research the minimum auto liability insurance required in the state they live in and whether it is sufficient to cover typical auto accident financial losses.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-4",
+   "uid": "VI.12-4",
+   "standard": "Insurance premiums are lower for people who take actions to reduce the likelihood and/or financial cost of losses and for those who buy policies with larger deductibles or copayments.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-4a",
+     "outcome_id": "12-4a",
+     "text": "Research factors that result in lower auto insurance premiums.",
+     "display_text": "Research factors that result in lower auto insurance premiums.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-4b",
+     "outcome_id": "12-4b",
+     "text": "Explain why taking a safe driving course can lower a driver’s auto insurance premium.",
+     "display_text": "Explain why taking a safe driving course can lower a driver’s auto insurance premium.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-4c",
+     "outcome_id": "12-4c",
+     "text": "Discuss the pros and cons of buying an auto insurance policy with a higher deductible.",
+     "display_text": "Discuss the pros and cons of buying an auto insurance policy with a higher deductible.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-5",
+   "uid": "VI.12-5",
+   "standard": "Health insurance provides coverage for medically necessary health care and may also cover some preventive care. It is sometimes offered as an employee benefit with the employer paying some or all of the premium cost.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-5a",
+     "outcome_id": "12-5a",
+     "text": "Discuss the advantages of obtaining health insurance coverage through an employer plan versus buying private insurance or being uninsured.",
+     "display_text": "Discuss the advantages of obtaining health insurance coverage through an employer plan versus buying private insurance or being uninsured.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-5b",
+     "outcome_id": "12-5b",
+     "text": "Compare the cost of health insurance to the potential financial consequences of not having health insurance.",
+     "display_text": "Compare the cost of health insurance to the potential financial consequences of not having health insurance.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-5c",
+     "outcome_id": "12-5c",
+     "text": "Estimate the effect on different health insurance deductibles and coinsurance rates on out-of-pocket medical costs.",
+     "display_text": "Estimate the effect on different health insurance deductibles and coinsurance rates on out-of-pocket medical costs.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-6",
+   "uid": "VI.12-6",
+   "standard": "Disability insurance replaces income lost when a person is unable to earn their regular income due to injury or illness. In addition to privately purchased policies, some government programs provide disability protection.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-6a",
+     "outcome_id": "12-6a",
+     "text": "Compare disability coverage offered by individual policies, employee benefit plans, Social Security, workers’ compensation, and temporary disability programs (in some states).",
+     "display_text": "Compare disability coverage offered by individual policies, employee benefit plans, Social Security, workers’ compensation, and temporary disability programs (in some states).",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-6b",
+     "outcome_id": "12-6b",
+     "text": "Assess the extent of financial risk and need for disability insurance using hypothetical disability scenarios.",
+     "display_text": "Assess the extent of financial risk and need for disability insurance using hypothetical disability scenarios.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-7",
+   "uid": "VI.12-7",
+   "standard": "Auto, homeowner’s and renter’s insurance reimburse policyholders for financial losses to their covered property and the costs of legal liability for their damages to other people or property.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-7a",
+     "outcome_id": "12-7a",
+     "text": "Explain the primary types of losses covered by auto, homeowner’s, and renter’s insurance policies.",
+     "display_text": "Explain the primary types of losses covered by auto, homeowner’s, and renter’s insurance policies.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-7b",
+     "outcome_id": "12-7b",
+     "text": "Describe situations where someone may be liable for injuries or damages to another person or their property.",
+     "display_text": "Describe situations where someone may be liable for injuries or damages to another person or their property.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-7c",
+     "outcome_id": "12-7c",
+     "text": "Identify factors that influence the cost of renter’s insurance and homeowners’ insurance.",
+     "display_text": "Identify factors that influence the cost of renter’s insurance and homeowners’ insurance.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-8",
+   "uid": "VI.12-8",
+   "standard": "Life insurance provides funds for beneficiaries in the event of an insured person’s death. Policy proceeds are intended to replace the insured’s lost wages and/or to fund their dependents’ future financial needs.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-8a",
+     "outcome_id": "12-8a",
+     "text": "Explain how a person’s death can result in financial losses to others.",
+     "display_text": "Explain how a person’s death can result in financial losses to others.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-8b",
+     "outcome_id": "12-8b",
+     "text": "Discuss the benefits and costs of purchasing life insurance on the primary earners in a household.",
+     "display_text": "Discuss the benefits and costs of purchasing life insurance on the primary earners in a household.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-9",
+   "uid": "VI.12-9",
+   "standard": "Unemployment insurance, Medicaid, and Medicare are public insurance programs that protect individuals from economic hardship caused by certain risks.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-9a",
+     "outcome_id": "12-9a",
+     "text": "Discuss how state unemployment programs can help reduce economic hardship caused by job losses during a recession or pandemic.",
+     "display_text": "Discuss how state unemployment programs can help reduce economic hardship caused by job losses during a recession or pandemic.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-9b",
+     "outcome_id": "12-9b",
+     "text": "Compare the Medicare and Medicaid programs based on who they cover and how they are funded.",
+     "display_text": "Compare the Medicare and Medicaid programs based on who they cover and how they are funded.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-10",
+   "uid": "VI.12-10",
+   "standard": "Insurance fraud is a crime that encompasses illegal actions by the buyer (e.g., falsified claims) or seller (e.g., representing non-existent companies) of an insurance contract.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-10a",
+     "outcome_id": "12-10a",
+     "text": "Provide examples of insurance fraud.",
+     "display_text": "Provide examples of insurance fraud.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-10b",
+     "outcome_id": "12-10b",
+     "text": "Investigate the legal consequence for individuals who are convicted of insurance fraud.",
+     "display_text": "Investigate the legal consequence for individuals who are convicted of insurance fraud.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-11",
+   "uid": "VI.12-11",
+   "standard": "Online transactions and failure to safeguard personal documents can make consumers vulnerable to privacy infringement, identity theft, and fraud.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-11a",
+     "outcome_id": "12-11a",
+     "text": "Provide examples of how online behavior, e-mail and text-message scams, telemarketers, and other methods make consumers vulnerable to privacy infringement, identity theft, and fraud.",
+     "display_text": "Provide examples of how online behavior, e-mail and text-message scams, telemarketers, and other methods make consumers vulnerable to privacy infringement, identity theft, and fraud.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-11b",
+     "outcome_id": "12-11b",
+     "text": "Describe conditions under which individuals should and should not disclose their Social Security numbers, account numbers, or other sensitive information.",
+     "display_text": "Describe conditions under which individuals should and should not disclose their Social Security numbers, account numbers, or other sensitive information.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-11c",
+     "outcome_id": "12-11c",
+     "text": "Recommend strategies to reduce the risk of identity theft and financial fraud.",
+     "display_text": "Recommend strategies to reduce the risk of identity theft and financial fraud.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-11d",
+     "outcome_id": "12-11d",
+     "text": "Explain the steps an identity theft victim should take to limit losses and restore personal security.",
+     "display_text": "Explain the steps an identity theft victim should take to limit losses and restore personal security.",
+     "roleplay_suitable": true
+    }
+   ]
+  },
+  {
+   "topic": "Managing Risk",
+   "topic_numeral": "VI",
+   "grade": 12,
+   "standard_id": "12-12",
+   "uid": "VI.12-12",
+   "standard": "Extended warranties and service contracts are like an insurance policy.",
+   "learning_outcomes": [
+    {
+     "id": "VI.12-12a",
+     "outcome_id": "12-12a",
+     "text": "Evaluate the costs and benefits of buying an extended warranty on a specific item (e.g. cellphone, laptop, or vehicle) considering the likelihood of product failure, cost of replacing the item, and price of the warranty.",
+     "display_text": "Evaluate the costs and benefits of buying an extended warranty on a specific item (e.g. cellphone, laptop, or vehicle) considering the likelihood of product failure, cost of replacing the item, and price of the warranty.",
+     "roleplay_suitable": true
+    },
+    {
+     "id": "VI.12-12b",
+     "outcome_id": "12-12b",
+     "text": "Explain how extended warranties or service contracts are similar to and different from insurance.",
+     "display_text": "Explain how extended warranties or service contracts are similar to and different from insurance.",
+     "roleplay_suitable": true
+    }
+   ]
+  }
+ ]
+}

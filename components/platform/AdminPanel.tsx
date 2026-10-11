@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { SelectMenu } from "@/components/ui/select-menu";
 import Link from "next/link";
 import { setMemberRole } from "@/app/admin/actions";
 import { DecaButton } from "@/components/deca/button";
@@ -36,6 +37,51 @@ function downloadCsv(filename: string, rows: string[][]) {
 }
 
 type Filter = "all" | "officers" | "students";
+
+function MemberRoleSelect({
+  role,
+  disabled,
+  canAssignAdvisor,
+  label,
+  onRoleChange,
+}: {
+  role: ChapterMember["role"];
+  disabled: boolean;
+  canAssignAdvisor: boolean;
+  label: string;
+  onRoleChange: (role: ChapterMember["role"], revert: () => void) => void;
+}) {
+  const [value, setValue] = useState(role);
+  useEffect(() => {
+    setValue(role);
+  }, [role]);
+
+  return (
+    <SelectMenu
+      variant="pill"
+      aria-label={`Role for ${label}`}
+      disabled={disabled}
+      value={value}
+      onValueChange={(next) => {
+        const roleNext = next as ChapterMember["role"];
+        const previous = value;
+        setValue(roleNext);
+        onRoleChange(roleNext, () => setValue(previous));
+      }}
+      options={[
+        { value: "student", label: "Student" },
+        { value: "officer", label: "Officer" },
+        ...(canAssignAdvisor || role === "advisor"
+          ? [{ value: "advisor", label: "Advisor" }]
+          : []),
+      ]}
+      className={cn(
+        "w-auto px-3 py-1 text-[10px] font-extrabold uppercase shadow-none",
+        value === "student" ? "bg-ever-lt text-ever-dk" : "bg-ever-dk text-white",
+      )}
+    />
+  );
+}
 
 export function AdminPanel({
   overview,
@@ -261,38 +307,27 @@ export function AdminPanel({
                   <td className="py-3.5 font-bold">{gradeWord}</td>
                   <td className="py-3.5 font-extrabold">{member.total_points}</td>
                   <td className="py-3.5">
-                    <select
-                      defaultValue={member.role}
+                    <MemberRoleSelect
+                      role={member.role}
+                      label={name}
                       disabled={isPending || member.id === currentUserId}
-                      onChange={(event) => {
-                        const role = event.target.value as ChapterMember["role"];
+                      canAssignAdvisor={canAssignAdvisor}
+                      onRoleChange={(role, revert) => {
                         startTransition(async () => {
                           try {
                             await setMemberRole(member.id, role);
                             router.refresh();
                           } catch (roleError) {
+                            revert();
                             setError(
                               roleError instanceof Error
                                 ? roleError.message
                                 : "Could not update role",
                             );
-                            event.target.value = member.role;
                           }
                         });
                       }}
-                      className={cn(
-                        "rounded-full px-3 py-1 text-[10px] font-extrabold uppercase",
-                        member.role === "student"
-                          ? "bg-ever-lt text-ever-dk"
-                          : "bg-ever-dk text-white",
-                      )}
-                    >
-                      <option value="student">Student</option>
-                      <option value="officer">Officer</option>
-                      {canAssignAdvisor || member.role === "advisor" ? (
-                        <option value="advisor">Advisor</option>
-                      ) : null}
-                    </select>
+                    />
                   </td>
                 </tr>
               );

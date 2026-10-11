@@ -1,20 +1,73 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireRole } from "@/lib/auth/roles";
+import { requireAuth, requireRole } from "@/lib/auth/roles";
 import type {
   AdminOverview,
   Announcement,
+  AnnouncementReaction,
+  AnnouncementReactionName,
   ChapterActivity,
   ChapterMember,
 } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
 
+const REACTIONS = new Set<AnnouncementReactionName>([
+  "like",
+  "love",
+  "laugh",
+  "celebrate",
+  "eyes",
+]);
+
+function asReactions(value: unknown): AnnouncementReaction[] {
+  let parsed = value;
+  if (typeof value === "string") {
+    try {
+      parsed = JSON.parse(value) as unknown;
+    } catch {
+      return [];
+    }
+  }
+  if (!Array.isArray(parsed)) return [];
+  return parsed.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const row = item as { reaction?: unknown; count?: unknown; mine?: unknown };
+    if (typeof row.reaction !== "string" || !REACTIONS.has(row.reaction as AnnouncementReactionName)) {
+      return [];
+    }
+    return [{
+      reaction: row.reaction as AnnouncementReactionName,
+      count: Number(row.count) || 0,
+      mine: Boolean(row.mine),
+    }];
+  });
+}
+
 export async function listAnnouncements(): Promise<Announcement[]> {
+  await requireAuth("/messages");
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_announcements");
   if (error) throw new Error(error.message);
-  return (data ?? []) as Announcement[];
+  return ((data ?? []) as Announcement[]).map((announcement) => ({
+    ...announcement,
+    reactions: asReactions(announcement.reactions),
+  }));
+}
+
+export async function toggleAnnouncementReaction(
+  announcementId: string,
+  reaction: AnnouncementReactionName,
+) {
+  await requireAuth("/messages");
+  if (!REACTIONS.has(reaction)) throw new Error("Unknown reaction");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("toggle_announcement_reaction", {
+    p_announcement_id: announcementId,
+    p_reaction: reaction,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePath("/messages");
 }
 
 export async function getAdminOverview(): Promise<AdminOverview> {

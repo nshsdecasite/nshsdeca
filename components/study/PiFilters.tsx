@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SelectMenu } from "@/components/ui/select-menu";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ type PiFiltersProps = {
     search?: string;
     ia?: string;
     cluster?: string;
+    event?: string;
   };
 };
 
@@ -24,8 +26,9 @@ function buildHref(
   if (merged.search) params.set("search", merged.search);
   if (merged.ia) params.set("ia", merged.ia);
   if (merged.cluster) params.set("cluster", merged.cluster);
+  if (merged.event) params.set("event", merged.event);
   const query = params.toString();
-  return query ? `/study/pis?${query}` : "/study/pis";
+  return query ? `/study/pis?${query}` : "/study/pis?all=1";
 }
 
 export function PiFilters({
@@ -51,43 +54,45 @@ export function PiFilters({
 
           <div>
             <Label htmlFor="pi-ia">Instructional area</Label>
-            <select
+            <SelectMenu
               id="pi-ia"
               name="ia"
               defaultValue={current.ia ?? ""}
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="">All areas</option>
-              {instructionalAreas.map((area) => (
-                <option key={area.code} value={area.code}>
-                  {area.code} — {area.name}
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[
+                { value: "", label: "All areas" },
+                ...instructionalAreas.map((area) => ({
+                  value: area.code,
+                  label: `${area.code} — ${area.name}`,
+                })),
+              ]}
+            />
           </div>
 
           <div>
             <Label htmlFor="pi-cluster">Cluster</Label>
-            <select
+            <SelectMenu
               id="pi-cluster"
               name="cluster"
               defaultValue={current.cluster ?? ""}
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="">All clusters</option>
-              {clusters.map((cluster) => (
-                <option key={cluster.slug} value={cluster.slug}>
-                  {cluster.name}
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[
+                { value: "", label: "All clusters" },
+                ...clusters.map((cluster) => ({
+                  value: cluster.slug,
+                  label: cluster.name,
+                })),
+              ]}
+            />
           </div>
         </div>
+
+        {current.event ? <input type="hidden" name="event" value={current.event} /> : null}
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Button type="submit">Apply filters</Button>
           <Button variant="ghost" asChild>
-            <Link href="/study/pis">Clear</Link>
+            <Link href="/study/pis?all=1">Clear</Link>
           </Button>
         </div>
       </form>
@@ -101,6 +106,7 @@ export function PiFilterPills({
   current: PiFiltersProps["current"];
 }) {
   const pills = [
+    current.event ? { label: `Event: ${current.event}`, key: "event" } : null,
     current.search ? { label: `Search: ${current.search}`, key: "search" } : null,
     current.ia ? { label: `IA: ${current.ia}`, key: "ia" } : null,
     current.cluster ? { label: `Cluster: ${current.cluster}`, key: "cluster" } : null,

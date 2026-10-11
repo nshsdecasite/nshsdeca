@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { startPiTargetedTest } from "@/app/platform/actions";
 import { TimedModeField } from "@/components/test/TimedModeField";
 import { Button } from "@/components/ui/button";
+import { SelectMenu } from "@/components/ui/select-menu";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
@@ -48,18 +49,16 @@ export function PiTargetedLauncher({ weakPiCount }: PiTargetedLauncherProps) {
       >
         <div className="max-w-xs">
           <Label htmlFor="pi-targeted-count">Question count</Label>
-          <select
+          <SelectMenu
             id="pi-targeted-count"
             name="questionCount"
             defaultValue="15"
-            className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            {[10, 15, 20, 30].map((count) => (
-              <option key={count} value={count}>
-                {count} questions
-              </option>
-            ))}
-          </select>
+            className="mt-2"
+            options={[10, 15, 20, 30].map((count) => ({
+              value: String(count),
+              label: `${count} questions`,
+            }))}
+          />
         </div>
 
         <TimedModeField

@@ -30,17 +30,22 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
       activeUserId ? listConversationMessages(activeUserId) : Promise.resolve([]),
     ]);
 
+  const messageableMembers =
+    role === "student" && conversations.length > 0
+      ? members.filter((member) =>
+          conversations.some((conversation) => conversation.user_id === member.id),
+        )
+      : members;
+
   return (
-    <div className="px-9 py-9">
-      <ChapterInbox
-        currentUserId={user.id}
-        role={role}
-        announcements={announcements}
-        conversations={conversations}
-        members={members}
-        activeUserId={activeUserId}
-        activeMessages={activeMessages}
-      />
-    </div>
+    <ChapterInbox
+      currentUserId={user.id}
+      role={role}
+      announcements={announcements}
+      conversations={conversations}
+      members={messageableMembers}
+      activeUserId={activeUserId}
+      activeMessages={activeMessages}
+    />
   );
 }

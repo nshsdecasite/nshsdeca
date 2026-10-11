@@ -16,6 +16,7 @@ function isProtected(pathname: string) {
   return (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/roleplays") ||
+    pathname.startsWith("/generate") ||
     pathname.startsWith("/tests") ||
     pathname.startsWith("/submissions") ||
     pathname.startsWith("/admin") ||

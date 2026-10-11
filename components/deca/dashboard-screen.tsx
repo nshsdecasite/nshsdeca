@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { DecaButton } from "@/components/deca/button";
 import { Rail } from "@/components/deca/rail";
 import { accuracyTone, NEXT_CONFERENCE } from "@/lib/deca/placeholder";
@@ -28,13 +29,26 @@ export type DashboardWaiting = {
   live?: boolean;
 };
 
+function timeGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+function todayLabel() {
+  return new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 export function DashboardScreen({
   name,
   examAccuracy,
   roleplayAverage,
-  roleplayAttempts,
   streak,
-  bestStreak,
   masteredCount,
   masteredTotal,
   questionCount,
@@ -44,15 +58,13 @@ export function DashboardScreen({
   waiting,
   standingRank,
   standingOf,
-  standingNote,
   points,
   testsTaken,
-  roleplaysGraded,
 }: {
   name: string;
   examAccuracy: number | null;
   roleplayAverage: number | null;
-  roleplayAttempts: number;
+  roleplayAttempts?: number;
   streak: number;
   bestStreak?: number;
   masteredCount: number;
@@ -69,26 +81,58 @@ export function DashboardScreen({
   testsTaken?: number;
   roleplaysGraded?: number;
 }) {
+  const firstName = name.split(" ")[0] || name;
   const weeks = weeksUntil(NEXT_CONFERENCE.iso);
   const masteredPct = masteredTotal
     ? Math.round((masteredCount / masteredTotal) * 100)
     : 0;
 
+  const jumps = [
+    {
+      href: "/tests",
+      title: "Practice exam",
+      detail: examAccuracy != null ? `${examAccuracy}% accuracy` : "Start a full or custom test",
+    },
+    {
+      href: "/roleplays",
+      title: "Roleplays",
+      detail:
+        roleplayAverage != null
+          ? `${roleplayAverage}/100 average`
+          : "Browse scenarios and submit",
+    },
+    {
+      href: weakPis[0]?.href ?? "/study",
+      title: "Study",
+      detail:
+        weakPis.length > 0
+          ? `${weakPis.length} weak indicator${weakPis.length === 1 ? "" : "s"}`
+          : "PIs, flashcards, and vocab",
+    },
+    {
+      href: "/messages",
+      title: "Messages",
+      detail: "Announcements and DMs",
+    },
+  ];
+
   return (
-    <div className="px-9 py-9">
-      <div className="flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <header className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <p className="text-xs font-bold tracking-[0.1em] uppercase text-ever-dk">
-            {standingRank && standingOf
-              ? `#${standingRank} of ${standingOf} · ${points ?? 0} points`
-              : `${points ?? 0} chapter points`}
+            {todayLabel()}
           </p>
-          <h1 className="mt-2.5 font-display text-[40px] font-black tracking-[-0.04em]">
-            {weeks > 0 ? `${weeks} weeks to district` : `Welcome back, ${name.split(" ")[0]}`}
+          <h1 className="mt-2 font-display text-[40px] font-black tracking-[-0.04em] text-balance">
+            {timeGreeting()}, {firstName}
           </h1>
-          {standingNote ? (
-            <p className="mt-2 text-sm text-ink-2">{standingNote}</p>
-          ) : null}
+          <p className="mt-2 text-sm text-ink-2">
+            {weeks > 0
+              ? `${weeks} weeks to ${NEXT_CONFERENCE.name}.`
+              : standingRank && standingOf
+                ? `#${standingRank} of ${standingOf} · ${points ?? 0} points`
+                : `${points ?? 0} chapter points`}
+          </p>
         </div>
         <div className="flex gap-2.5">
           <DecaButton href="/tests" variant="outline">
@@ -96,158 +140,150 @@ export function DashboardScreen({
           </DecaButton>
           <DecaButton href="/roleplays">New roleplay</DecaButton>
         </div>
-      </div>
+      </header>
 
-      <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard label="Accuracy" value={examAccuracy != null ? `${examAccuracy}%` : "—"} />
         <StatCard
-          label="Exam accuracy"
-          value={examAccuracy != null ? String(examAccuracy) : "—"}
-          suffix={examAccuracy != null ? "%" : undefined}
-          note={questionCount ? `${questionCount} questions answered` : "Take a practice exam"}
-        />
-        <StatCard
-          label="Roleplay average"
-          value={roleplayAverage != null ? String(roleplayAverage) : "—"}
+          label="Roleplay"
+          value={roleplayAverage != null ? `${roleplayAverage}` : "—"}
           suffix={roleplayAverage != null ? "/100" : undefined}
-          note={
-            roleplayAttempts
-              ? `${roleplayAttempts} graded · ${roleplaysGraded ?? 0} total submitted`
-              : "Submit a roleplay"
-          }
         />
-        <StatCard
-          label="Study streak"
-          value={String(streak)}
-          suffix=" days"
-          note={bestStreak ? `best: ${bestStreak} days` : "Practice today to start"}
-        />
-        <StatCard
-          label="Tests completed"
-          value={String(testsTaken ?? 0)}
-          note={`${masteredCount} PIs at 70%+ accuracy`}
-          rail={masteredPct / 100}
-        />
+        <StatCard label="Streak" value={`${streak}d`} />
+        <StatCard label="Tests" value={String(testsTaken ?? 0)} rail={masteredPct / 100} />
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
-        <div className="flex flex-col gap-4">
-          <div className="deca-card px-[30px] py-7">
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
-                Accuracy by instructional area
-              </h2>
-              <span className="text-xs font-bold text-mute">
-                {questionCount ?? 0} questions
-              </span>
-            </div>
-            {accuracy.length === 0 ? (
-              <p className="text-sm text-ink-2">
-                Complete a practice test to see accuracy by instructional area.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-[13px]">
-                {accuracy.map((row, index) => (
-                  <div
-                    key={row.name}
-                    className="grid grid-cols-[minmax(0,210px)_1fr_44px] items-center gap-4"
-                  >
-                    <span className="truncate text-[13px] font-semibold">{row.name}</span>
-                    <Rail
-                      fill={row.accuracy / 100}
-                      tone={accuracyTone(row.accuracy)}
-                      delay={index * 60}
-                      height="h-[14px]"
-                      className="mt-0"
-                    />
-                    <span className="text-right text-[13px] font-bold">{row.accuracy}%</span>
-                  </div>
-                ))}
-              </div>
-            )}
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="deca-card px-7 py-6">
+          <div className="mb-5 flex items-baseline justify-between gap-3">
+            <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
+              Accuracy by area
+            </h2>
+            {questionCount ? (
+              <span className="text-xs font-bold text-mute">{questionCount} Qs</span>
+            ) : null}
           </div>
+          {accuracy.length === 0 ? (
+            <p className="text-sm text-ink-2">Complete a practice test to see this.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {accuracy.map((row, index) => (
+                <div
+                  key={row.name}
+                  className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_40px] items-center gap-3"
+                >
+                  <span className="truncate text-[13px] font-semibold">{row.name}</span>
+                  <Rail
+                    fill={row.accuracy / 100}
+                    tone={accuracyTone(row.accuracy)}
+                    delay={index * 60}
+                    height="h-3"
+                    className="mt-0"
+                  />
+                  <span className="text-right text-[13px] font-bold tabular-nums">
+                    {row.accuracy}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
-          <div className="deca-card px-[30px] py-7">
-            <div className="mb-1.5 flex items-baseline justify-between">
-              <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
-                Last eight practice exams
-              </h2>
-              <span className="text-xs font-bold text-mute">score out of 100</span>
+          {trend.length > 0 ? (
+            <div className="mt-7 border-t border-hair pt-5">
+              <h3 className="mb-2 text-[13px] font-bold text-mute">Recent exams</h3>
+              <ExamTrend points={trend} />
             </div>
-            <ExamTrend points={trend} />
-          </div>
+          ) : null}
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="deca-card px-[26px] py-6">
-            <h2 className="font-display text-[17px] font-extrabold tracking-[-0.02em]">
-              Work on these next
-            </h2>
-            <p className="mt-1 mb-4 text-xs text-mute">
-              Indicators under 70% accuracy
-            </p>
-            {weakPis.length === 0 ? (
-              <p className="text-sm text-ink-2">
-                No weak indicators yet — keep practicing or take a PI-targeted quiz.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {weakPis.map((pi) => (
-                  <Link
-                    key={pi.code}
-                    href={pi.href ?? "/tests/pi-targeted"}
-                    className="flex items-center justify-between gap-2.5 text-ink hover:text-ink"
+        <div className="deca-card px-5 py-5">
+          <h2 className="px-2 font-display text-[19px] font-extrabold tracking-[-0.02em]">
+            Quick jump
+          </h2>
+          <div className="mt-3 flex flex-col">
+            {jumps.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex items-center gap-3 rounded-[14px] px-2 py-3 text-ink hover:bg-ground hover:text-ink"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14px] font-bold">{item.title}</span>
+                  <span className="mt-0.5 block truncate text-[12px] text-mute">
+                    {item.detail}
+                  </span>
+                </span>
+                <ChevronRight
+                  className="h-4 w-4 flex-none text-mute transition-transform duration-150 group-hover:translate-x-0.5"
+                  strokeWidth={2.25}
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="deca-card px-6 py-5 lg:col-span-1">
+          <h2 className="font-display text-[17px] font-extrabold tracking-[-0.02em]">
+            Work on next
+          </h2>
+          {weakPis.length === 0 ? (
+            <p className="mt-3 text-sm text-ink-2">No weak indicators yet.</p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-2.5">
+              {weakPis.map((pi) => (
+                <Link
+                  key={pi.code}
+                  href={pi.href ?? "/tests/pi-targeted"}
+                  className="flex items-start justify-between gap-2 text-ink hover:text-ink"
+                >
+                  <span className="text-[13px] leading-[1.4]">{pi.text}</span>
+                  <span className="flex-none rounded-full bg-gold-lt px-2 py-[2px] text-[11px] font-extrabold text-gold">
+                    {pi.meta.split(" · ")[0]}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="deca-card px-6 py-5">
+          <h2 className="font-display text-[17px] font-extrabold tracking-[-0.02em]">
+            Waiting on grade
+          </h2>
+          {waiting.length === 0 ? (
+            <p className="mt-3 text-sm text-ink-2">Nothing queued.</p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-2.5">
+              {waiting.map((item) => (
+                <div key={item.name} className="flex items-center justify-between gap-2">
+                  <span className="truncate text-[13px]">{item.name}</span>
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-[2px] text-[11px] font-extrabold",
+                      item.live ? "bg-ever-lt text-ever-dk" : "bg-ground text-mute",
+                    )}
                   >
-                    <span className="text-[13px] leading-[1.4]">{pi.text}</span>
-                    <span className="flex-none rounded-full bg-gold-lt px-2.5 py-[3px] text-xs font-extrabold text-gold">
-                      {pi.meta.split(" · ")[0]}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+                    {item.live ? "IN REVIEW" : "QUEUED"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-          <div className="deca-card px-[26px] py-6">
-            <h2 className="mb-3.5 font-display text-[17px] font-extrabold tracking-[-0.02em]">
-              Waiting on an officer
-            </h2>
-            {waiting.length === 0 ? (
-              <p className="text-sm text-ink-2">No roleplays waiting for a grade.</p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {waiting.map((item) => (
-                  <div key={item.name} className="flex items-center justify-between gap-2.5">
-                    <span className="text-[13px]">{item.name}</span>
-                    <span
-                      className={cn(
-                        "rounded-full px-2.5 py-[3px] text-[11px] font-extrabold",
-                        item.live
-                          ? "bg-ever-lt text-ever-dk"
-                          : "bg-ground text-mute",
-                      )}
-                    >
-                      {item.live ? "IN REVIEW" : "QUEUED"}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-1 flex-col rounded-[20px] bg-ever-dk p-[26px] text-white">
-            <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-white/95">
-              Next up
-            </p>
-            <p className="mt-2.5 font-display text-[19px] font-extrabold leading-[1.25] tracking-[-0.02em]">
-              {NEXT_CONFERENCE.name}
-            </p>
-            <p className="mt-2 mb-[18px] text-[13px] text-white/95">
-              {NEXT_CONFERENCE.when}
-            </p>
-            <DecaButton href="/events" variant="white" size="sm" className="mt-auto self-start">
-              See checklist
-            </DecaButton>
-          </div>
+        <div className="flex flex-col rounded-[20px] bg-ever-dk px-6 py-5 text-white">
+          <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-white/80">
+            Next up
+          </p>
+          <p className="mt-2 font-display text-[18px] font-extrabold leading-snug tracking-[-0.02em]">
+            {NEXT_CONFERENCE.name}
+          </p>
+          <p className="mt-1.5 text-[13px] text-white/85">{NEXT_CONFERENCE.when}</p>
+          <DecaButton href="/events" variant="white" size="sm" className="mt-auto self-start pt-5">
+            Checklist
+          </DecaButton>
         </div>
       </div>
     </div>
@@ -258,46 +294,38 @@ function StatCard({
   label,
   value,
   suffix,
-  note,
   rail,
 }: {
   label: string;
   value: string;
   suffix?: string;
-  note?: string;
   rail?: number;
 }) {
   return (
-    <div className="deca-card px-[26px] py-6">
-      <p className="text-xs font-semibold text-mute">{label}</p>
-      <p className="mt-2 font-display text-4xl font-black tracking-[-0.035em]">
-        {value}
-        {suffix ? <span className="text-lg text-mute">{suffix}</span> : null}
-      </p>
-      {note ? <p className="mt-[11px] text-xs text-mute">{note}</p> : null}
-      {rail != null ? <Rail fill={rail} height="h-[7px]" className="mt-3.5" /> : null}
+    <div className="deca-card overflow-hidden">
+      <div className="h-[3px] bg-ever" />
+      <div className="px-5 py-4">
+        <p className="text-[11px] font-bold tracking-[0.08em] uppercase text-mute">{label}</p>
+        <p className="mt-1.5 font-display text-[32px] font-black tracking-[-0.035em] tabular-nums">
+          {value}
+          {suffix ? <span className="text-base text-mute">{suffix}</span> : null}
+        </p>
+        {rail != null ? <Rail fill={rail} height="h-[6px]" className="mt-3" /> : null}
+      </div>
     </div>
   );
 }
 
 function ExamTrend({ points }: { points: DashboardTrendPoint[] }) {
-  if (points.length === 0) {
-    return (
-      <p className="mt-4 text-sm text-ink-2">
-        Complete a full or custom test to see your score trend.
-      </p>
-    );
-  }
-
   const width = 620;
-  const height = 150;
+  const height = 110;
   const pad = 10;
   const xs = points.map((_, i) =>
     points.length === 1 ? width / 2 : pad + (i * (width - pad * 2)) / (points.length - 1),
   );
   const ys = points.map((point) => {
     const t = (100 - Math.max(0, Math.min(100, point.score))) / 100;
-    return 20 + t * 100;
+    return 16 + t * 72;
   });
   const line = xs.map((x, i) => `${x},${ys[i]}`).join(" ");
   const area = `M${xs[0]},${ys[0]} ${xs
@@ -309,16 +337,16 @@ function ExamTrend({ points }: { points: DashboardTrendPoint[] }) {
     <>
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="mt-2 block h-[150px] w-full overflow-visible"
+        className="block h-[110px] w-full overflow-visible"
         aria-label="Practice exam trend"
       >
         <defs>
-          <linearGradient id="v8g" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="dash-trend" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#7d9068" stopOpacity="0.22" />
             <stop offset="1" stopColor="#7d9068" stopOpacity="0" />
           </linearGradient>
         </defs>
-        <path d={area} fill="url(#v8g)" />
+        <path d={area} fill="url(#dash-trend)" />
         <polyline
           points={line}
           fill="none"
@@ -330,34 +358,25 @@ function ExamTrend({ points }: { points: DashboardTrendPoint[] }) {
         <circle
           cx={xs[xs.length - 1]}
           cy={ys[ys.length - 1]}
-          r="6"
+          r="5"
           fill="#47583c"
           stroke="#fff"
-          strokeWidth="2.5"
+          strokeWidth="2"
         />
         <text
           x={xs[xs.length - 1]}
-          y={Math.max(14, ys[ys.length - 1] - 16)}
+          y={Math.max(12, ys[ys.length - 1] - 12)}
           textAnchor="end"
-          fontSize="13"
+          fontSize="12"
           fontWeight="800"
           fill="#2b2a25"
         >
           {last?.score ?? ""}
         </text>
       </svg>
-      <div className="mt-1.5 flex justify-between text-[11px] font-bold text-mute">
-        {points
-          .filter(
-            (_, i) =>
-              i === 0 ||
-              i === points.length - 1 ||
-              i === Math.floor(points.length / 3) ||
-              i === Math.floor((points.length * 2) / 3),
-          )
-          .map((point) => (
-            <span key={`${point.label}-${point.score}`}>{point.label}</span>
-          ))}
+      <div className="mt-1 flex justify-between text-[11px] font-bold text-mute">
+        <span>{points[0]?.label}</span>
+        <span>{points[points.length - 1]?.label}</span>
       </div>
     </>
   );

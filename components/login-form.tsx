@@ -32,20 +32,23 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           Welcome back
         </h1>
         <p className="mt-2 text-center text-sm text-ink-2">
-          Sign in with your school email to continue.
+          Sign in with your username. The first time, that is your first and last name together, like thinhphan.
         </p>
 
         <form action={formAction} className="mt-7 flex flex-col gap-4">
           <input type="hidden" name="next" value={nextPath ?? "/dashboard"} />
           <div>
-            <label htmlFor="email" className="mb-[7px] block text-xs font-bold text-ink-2">
-              School email
+            <label htmlFor="username" className="mb-[7px] block text-xs font-bold text-ink-2">
+              Username
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
+              id="username"
+              name="username"
+              type="text"
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               required
               className="deca-field"
             />

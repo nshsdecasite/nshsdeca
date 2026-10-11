@@ -186,7 +186,7 @@ export function TestTaker({ session }: TestTakerProps) {
         : 0;
 
   return (
-    <div className="px-9 py-9">
+    <div>
       <div className="flex flex-wrap items-center justify-between gap-6">
         <div>
           <h1 className="font-display text-[28px] font-black tracking-[-0.03em]">

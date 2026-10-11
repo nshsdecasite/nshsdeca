@@ -5,6 +5,7 @@ import { startCustomTest } from "@/app/platform/actions";
 import { searchPisForTest } from "@/app/study/actions";
 import { TimedModeField } from "@/components/test/TimedModeField";
 import { Button } from "@/components/ui/button";
+import { SelectMenu } from "@/components/ui/select-menu";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,52 +76,50 @@ export function CustomTestForm({ clusters, instructionalAreas }: CustomTestFormP
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <Label htmlFor="questionCount">Question count</Label>
-            <select
+            <SelectMenu
               id="questionCount"
               name="questionCount"
               defaultValue="20"
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              {[10, 20, 30, 50, 100].map((count) => (
-                <option key={count} value={count}>
-                  {count} questions
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[10, 20, 30, 50, 100].map((count) => ({
+                value: String(count),
+                label: `${count} questions`,
+              }))}
+            />
           </div>
 
           <div>
             <Label htmlFor="cluster">Cluster</Label>
-            <select
+            <SelectMenu
               id="cluster"
               name="cluster"
               defaultValue=""
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="">All clusters</option>
-              {clusters.map((cluster) => (
-                <option key={cluster.slug} value={cluster.slug}>
-                  {cluster.name}
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[
+                { value: "", label: "All clusters" },
+                ...clusters.map((cluster) => ({
+                  value: cluster.slug,
+                  label: cluster.name,
+                })),
+              ]}
+            />
           </div>
 
           <div className="sm:col-span-2">
             <Label htmlFor="ia">Instructional area</Label>
-            <select
+            <SelectMenu
               id="ia"
               name="ia"
               defaultValue=""
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="">All instructional areas</option>
-              {instructionalAreas.map((area) => (
-                <option key={area.code} value={area.code}>
-                  {area.code} — {area.name}
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[
+                { value: "", label: "All instructional areas" },
+                ...instructionalAreas.map((area) => ({
+                  value: area.code,
+                  label: `${area.code} — ${area.name}`,
+                })),
+              ]}
+            />
           </div>
 
           <div className="sm:col-span-2">
@@ -133,28 +132,30 @@ export function CustomTestForm({ clusters, instructionalAreas }: CustomTestFormP
               placeholder="Type at least 2 characters to search PIs…"
               className="mt-2"
             />
-            <select
+            <SelectMenu
               id="piId"
               name="piId"
               defaultValue=""
-              className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <option value="">
-                {piLoading
-                  ? "Searching…"
-                  : piQuery.trim().length < 2
-                    ? "All PIs in selected filters"
-                    : matchingPis.length
-                      ? "Pick a PI (optional)"
-                      : "No matching PIs with questions"}
-              </option>
-              {matchingPis.map((pi) => (
-                <option key={pi.id} value={pi.id}>
-                  {pi.pi_code} — {pi.indicator_text.slice(0, 80)}
-                  {pi.indicator_text.length > 80 ? "…" : ""} ({pi.question_count})
-                </option>
-              ))}
-            </select>
+              className="mt-2"
+              options={[
+                {
+                  value: "",
+                  label: piLoading
+                    ? "Searching…"
+                    : piQuery.trim().length < 2
+                      ? "All PIs in selected filters"
+                      : matchingPis.length
+                        ? "Pick a PI (optional)"
+                        : "No matching PIs with questions",
+                },
+                ...matchingPis.map((pi) => ({
+                  value: pi.id,
+                  label: `${pi.pi_code} — ${pi.indicator_text.slice(0, 80)}${
+                    pi.indicator_text.length > 80 ? "…" : ""
+                  } (${pi.question_count})`,
+                })),
+              ]}
+            />
           </div>
         </div>
 

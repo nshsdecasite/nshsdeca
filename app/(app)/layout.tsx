@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { getUnreadMessageCount } from "@/app/messages/actions";
 import { getMyProfile } from "@/app/platform/actions";
+import { ChooseUsername } from "@/components/auth/choose-username";
 import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
 import { SessionFocusProvider } from "@/components/layout/session-focus-context";
 import { displayName, getSessionUser, getUserRole } from "@/lib/auth/roles";
@@ -40,6 +41,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     .map((part) => part!.slice(0, 1).toUpperCase())
     .join("")
     .slice(0, 2) || name.slice(0, 2).toUpperCase();
+
+  if (profile?.username_confirmed === false) {
+    return (
+      <ChooseUsername username={profile.username ?? ""} name={name} />
+    );
+  }
 
   return (
     <SessionFocusProvider>

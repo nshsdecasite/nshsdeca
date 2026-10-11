@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { updateMyProfile } from "@/app/platform/actions";
 import type { UserProfile } from "@/lib/platform/types";
 import { Button } from "@/components/ui/button";
+import { SelectMenu } from "@/components/ui/select-menu";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,18 +67,16 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
         <div>
           <Label htmlFor="gradeLevel">Grade level</Label>
-          <select
+          <SelectMenu
             id="gradeLevel"
             name="gradeLevel"
-            defaultValue={profile.grade_level ?? 9}
-            className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground shadow-border outline-none transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            {[9, 10, 11, 12].map((grade) => (
-              <option key={grade} value={grade}>
-                Grade {grade}
-              </option>
-            ))}
-          </select>
+            defaultValue={String(profile.grade_level ?? 9)}
+            className="mt-2"
+            options={[9, 10, 11, 12].map((grade) => ({
+              value: String(grade),
+              label: `Grade ${grade}`,
+            }))}
+          />
         </div>
 
         <label className="flex items-center gap-3 rounded-2xl bg-muted px-4 py-3">

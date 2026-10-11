@@ -45,6 +45,8 @@ export async function sendDirectMessage(recipientId: string, body: string) {
   await requireAuth("/messages");
   const text = body.trim();
   if (!text) throw new Error("Message is required");
+  if (!recipientId) throw new Error("Choose someone to message.");
+
   const supabase = await createClient();
   const { error } = await supabase.rpc("send_direct_message", {
     p_recipient_id: recipientId,

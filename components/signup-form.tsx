@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { signUp, type AuthActionState } from "@/app/auth/actions";
 import { DecaButton } from "@/components/deca/button";
+import { SelectMenu } from "@/components/ui/select-menu";
 import { Logo } from "@/components/logo";
 
 const initialState: AuthActionState = {};
@@ -126,21 +127,20 @@ export function SignupForm() {
             <label htmlFor="gradeLevel" className="mb-[7px] block text-xs font-bold text-ink-2">
               Grade
             </label>
-            <select
+            <SelectMenu
               id="gradeLevel"
               name="gradeLevel"
               required
               defaultValue=""
-              className="deca-field"
-            >
-              <option value="" disabled>
-                Select grade
-              </option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-            </select>
+              placeholder="Select grade"
+              invalidMessage="Select a grade"
+              options={[
+                { value: "9", label: "9" },
+                { value: "10", label: "10" },
+                { value: "11", label: "11" },
+                { value: "12", label: "12" },
+              ]}
+            />
           </div>
           {state.error ? (
             <p className="text-sm leading-[1.6] text-[#b42318]">{state.error}</p>

@@ -1,0 +1,1510 @@
+{
+ "meta": {
+  "school_year": "2026-2027",
+  "sources": [
+   "Event lists + tier charts printed in each 2026-27 PI PDF",
+   "DECA Guide 2026-27 (Principles, Series, TDM guideline pages)",
+   "DECA Direct: 13 Things Every Advisor Should Know for 2026-2027 (Aug 2026)",
+   "Official 2026-27 sample role-plays: PMK-26, PFL-26, BFS-26 District Event 1, ETDM-26, FMS-26 District Event 1"
+  ],
+  "category_rules": {
+   "principles": {
+    "pi_count": 4,
+    "pools": "Tier 1 only",
+    "composition": "All 4 PIs from ONE instructional area."
+   },
+   "individual_series": {
+    "pi_count": 5,
+    "pools": "Tier 1 + Tier 2 + the event's Tier 3 pathway",
+    "composition": ">=3 PIs from ONE primary instructional area; >=1 PI from the event's pathway pool. Supporting PIs usually come from ONE other IA, often a soft-skill IA (BFS-26: 3 Financial Analysis + 2 Communication Skills)."
+   },
+   "team_decision_making": {
+    "pi_count": 5,
+    "pools": "Tier 1 + Tier 2 (NEVER Tier 3)",
+    "composition": ">=3 PIs from ONE primary instructional area (DECA's old 7-PI rule was >=4 of 7; 5-PI version is an inference)."
+   },
+   "personal_financial_literacy": {
+    "pi_count": 3,
+    "pools": "PFL national standards",
+    "composition": "All 3 from ONE topic, usually from 1-2 related standards; grades 8 and 12 (PFL-26 used three grade-8 Managing Credit outcomes). Never grade 4."
+   }
+  }
+ },
+ "events": [
+  {
+   "code": "PBM",
+   "name": "Principles of Business Management and Administration",
+   "category": "principles",
+   "cluster": "CORE",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Business Administration Core exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE"
+   ],
+   "roleplay_pools": [
+    "T1:CORE"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 4,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "score_weighting": "Role-play counts 2x the exam score",
+   "eligibility": "First-year DECA members only",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "principles_4pi",
+   "scenario_focus": "Concepts from administrative services, business information management, general management, human resources management and operations.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., PRINCIPLES OF MARKETING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    230
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "PMK-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "PEN",
+   "name": "Principles of Entrepreneurship",
+   "category": "principles",
+   "cluster": "CORE",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Business Administration Core exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE"
+   ],
+   "roleplay_pools": [
+    "T1:CORE"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 4,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "score_weighting": "Role-play counts 2x the exam score",
+   "eligibility": "First-year DECA members only",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "principles_4pi",
+   "scenario_focus": "Concepts that matter to entrepreneurs and small-business owners.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., PRINCIPLES OF MARKETING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    230
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "PMK-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "PFN",
+   "name": "Principles of Finance",
+   "category": "principles",
+   "cluster": "CORE",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Business Administration Core exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE"
+   ],
+   "roleplay_pools": [
+    "T1:CORE"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 4,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "score_weighting": "Role-play counts 2x the exam score",
+   "eligibility": "First-year DECA members only",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "principles_4pi",
+   "scenario_focus": "Concepts from accounting, banking services, business finance, insurance, and securities/investments.",
+   "solution_first_criterion": "Accurate if the scenario requires calculations, otherwise Unique (inferred)",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., PRINCIPLES OF MARKETING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    230
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "PMK-26",
+   "judge_solution_page": "when calculations are required"
+  },
+  {
+   "code": "PHT",
+   "name": "Principles of Hospitality and Tourism",
+   "category": "principles",
+   "cluster": "CORE",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Business Administration Core exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE"
+   ],
+   "roleplay_pools": [
+    "T1:CORE"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 4,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "score_weighting": "Role-play counts 2x the exam score",
+   "eligibility": "First-year DECA members only",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "principles_4pi",
+   "scenario_focus": "Concepts from hotels, restaurants, and travel/tourism.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., PRINCIPLES OF MARKETING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    230
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "PMK-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "PMK",
+   "name": "Principles of Marketing",
+   "category": "principles",
+   "cluster": "CORE",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Business Administration Core exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE"
+   ],
+   "roleplay_pools": [
+    "T1:CORE"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 4,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "score_weighting": "Role-play counts 2x the exam score",
+   "eligibility": "First-year DECA members only",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "principles_4pi",
+   "scenario_focus": "Concepts from marketing communications, marketing management, marketing research, merchandising and professional selling.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., PRINCIPLES OF MARKETING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    230
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "PMK-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "BLTDM",
+   "name": "Business Law and Ethics Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "BMA",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "BMA cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:BMA"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:BMA"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "U.S. business law (contracts, product liability, employment, forms of ownership) plus ethics questions where competing values can reasonably be argued either way.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "BTDM",
+   "name": "Buying and Merchandising Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "MKT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Getting product to the customer: forecasting, planning, buying, display, selling, customer service.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "ETDM",
+   "name": "Entrepreneurship Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "ENT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "ENT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "ENT"
+   ],
+   "roleplay_pools": [
+    "ENT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Recognizing and acting on opportunities: needs, markets, research, capital, management.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "FTDM",
+   "name": "Financial Services Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "FIN",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "FIN cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:FIN"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:FIN"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Services from financial institutions; financial statements, how management decisions affect them, analyzing data for planning.",
+   "solution_first_criterion": "Accurate if the scenario requires calculations, otherwise Unique (inferred)",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": "when calculations are required"
+  },
+  {
+   "code": "HTDM",
+   "name": "Hospitality Services Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "HT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "HT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Marketing and management in hotels, lodging, convention services, food and beverage.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "MTDM",
+   "name": "Marketing Management Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "MKT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Marketing and management in a NON-retail environment.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "STDM",
+   "name": "Sports and Entertainment Marketing Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "MKT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Amateur/pro sports, entertainment events, recreation equipment, hobbies, leisure and cultural events.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "TTDM",
+   "name": "Travel and Tourism Team Decision Making",
+   "category": "team_decision_making",
+   "cluster": "HT",
+   "generate_roleplay": true,
+   "participants": 2,
+   "exam": "HT cluster exam (each member; scores averaged)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 30,
+   "present_minutes": 15,
+   "rounds": "1 case study; finalists get a 2nd",
+   "score_weighting": "Case study counts 2x the averaged exam score",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "career_competencies_note": "The TDM guidelines also list Collaboration as a developed competency, but the official 2026 sample evaluation form scores only the three listed here.",
+   "rubric": "standard_5pi",
+   "scenario_focus": "Passenger transportation, travel services, attractions, tours, ticketing and related services.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., ENTREPRENEURSHIP TEAM DECISION MAKING EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    300,
+    450
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "eval_weighting_note": "The official ETDM sample prints 'one-third'; the TDM guidelines say the case study counts 2x the averaged exam. Mirror the sample.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "ETDM-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "ACT",
+   "name": "Accounting Applications Series",
+   "category": "individual_series",
+   "cluster": "FIN",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "FIN cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:FIN"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:FIN",
+    "T3:FIN:ACCOUNTING"
+   ],
+   "pathway": "Accounting",
+   "pathway_pool": "T3:FIN:ACCOUNTING",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Applying financial data to business planning: collecting/organizing data, reports, analysis, how decisions affect statements. Calculation-heavy.",
+   "solution_first_criterion": "Accurate (inferred from BFS-26)",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": true
+  },
+  {
+   "code": "AAM",
+   "name": "Apparel and Accessories Marketing Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MERCHANDISING"
+   ],
+   "pathway": "Merchandising",
+   "pathway_pool": "T3:MKT:MERCHANDISING",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Retail, wholesale or manufacturing of clothing and personal accessories.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "ASM",
+   "name": "Automotive Services Marketing Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MARKETING_MANAGEMENT"
+   ],
+   "pathway": "Marketing Management",
+   "pathway_pool": "T3:MKT:MARKETING_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Auto dealers, service centers, parts stores and related businesses.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "BFS",
+   "name": "Business Finance Series",
+   "category": "individual_series",
+   "cluster": "FIN",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "FIN cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:FIN"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:FIN",
+    "T3:FIN:CORPORATE_FINANCE"
+   ],
+   "pathway": "Corporate Finance",
+   "pathway_pool": "T3:FIN:CORPORATE_FINANCE",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "High-level corporate financial planning and analysis; statements and decisions. Calculation-heavy.",
+   "solution_first_criterion": "Accurate (verified: BFS-26)",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": true
+  },
+  {
+   "code": "BSM",
+   "name": "Business Services Marketing Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MARKETING_MANAGEMENT"
+   ],
+   "pathway": "Marketing Management",
+   "pathway_pool": "T3:MKT:MARKETING_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Services sold to businesses on a fee/contract basis, or services to consumers.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "ENT",
+   "name": "Entrepreneurship Series",
+   "category": "individual_series",
+   "cluster": "ENT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "ENT cluster exam (100 questions)",
+   "exam_pools": [
+    "ENT"
+   ],
+   "roleplay_pools": [
+    "ENT"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Recognizing and acting on opportunities: needs, markets, research, sources of capital, management.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "FMS",
+   "name": "Food Marketing Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MARKETING_MANAGEMENT"
+   ],
+   "pathway": "Marketing Management",
+   "pathway_pool": "T3:MKT:MARKETING_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Retail, wholesale and manufacturing firms that sell food.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "HLM",
+   "name": "Hotel and Lodging Management Series",
+   "category": "individual_series",
+   "cluster": "HT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "HT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:HT",
+    "T3:HT:LODGING"
+   ],
+   "pathway": "Lodging",
+   "pathway_pool": "T3:HT:LODGING",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Hotels, motels, lodging, convention services, food and beverage.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "HRM",
+   "name": "Human Resources Management Series",
+   "category": "individual_series",
+   "cluster": "BMA",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "BMA cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:BMA"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:BMA",
+    "T3:BMA:HUMAN_RESOURCES_MANAGEMENT"
+   ],
+   "pathway": "Human Resources Management",
+   "pathway_pool": "T3:BMA:HUMAN_RESOURCES_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Staffing, recruiting, selection, training, appraisal, compensation, safety training.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "MCS",
+   "name": "Marketing Communications Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MARKETING_COMMUNICATIONS"
+   ],
+   "pathway": "Marketing Communications",
+   "pathway_pool": "T3:MKT:MARKETING_COMMUNICATIONS",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Communications that inform, persuade or remind a target market.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "QSRM",
+   "name": "Quick Serve Restaurant Management Series",
+   "category": "individual_series",
+   "cluster": "HT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "HT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:HT",
+    "T3:HT:RESTAURANT_MANAGEMENT"
+   ],
+   "pathway": "Restaurant Management",
+   "pathway_pool": "T3:HT:RESTAURANT_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Quick-serve / fast-food restaurant marketing and management.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "RFSM",
+   "name": "Restaurant and Food Service Management Series",
+   "category": "individual_series",
+   "cluster": "HT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "HT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:HT",
+    "T3:HT:RESTAURANT_MANAGEMENT"
+   ],
+   "pathway": "Restaurant Management",
+   "pathway_pool": "T3:HT:RESTAURANT_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Full-service restaurants and food-service businesses.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "RMS",
+   "name": "Retail Merchandising Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MERCHANDISING"
+   ],
+   "pathway": "Merchandising",
+   "pathway_pool": "T3:MKT:MERCHANDISING",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Marketing and management in any retail establishment.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "SEM",
+   "name": "Sports and Entertainment Marketing Series",
+   "category": "individual_series",
+   "cluster": "MKT",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "MKT cluster exam (100 questions)",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [
+    "T1:CORE",
+    "T2:MKT",
+    "T3:MKT:MARKETING_MANAGEMENT"
+   ],
+   "pathway": "Marketing Management",
+   "pathway_pool": "T3:MKT:MARKETING_MANAGEMENT",
+   "pi_count": 5,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "2 preliminary role-plays; finalists get a 3rd",
+   "score_weighting": "Exam and each preliminary role-play are 1/3 of total; in finals the role-play counts 2x the exam",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "standard_5pi",
+   "scenario_focus": "Sports, entertainment, recreation equipment, hobbies, cultural events, leisure businesses.",
+   "solution_first_criterion": "Unique",
+   "header_title": "{EVENT NAME IN CAPS} EVENT  (e.g., BUSINESS FINANCE SERIES EVENT)",
+   "header_lines": [
+    "CAREER CLUSTER",
+    "CAREER PATHWAY",
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event 1",
+    "Event 2"
+   ],
+   "situation_word_range": [
+    200,
+    330
+   ],
+   "eval_weighting_line": "This presentation will be valued at one-third of the total score.",
+   "judge_questions_timing": "during the role-play",
+   "verified_against": "FMS-26, BFS-26",
+   "judge_solution_page": false
+  },
+  {
+   "code": "PFL",
+   "name": "Personal Financial Literacy",
+   "category": "personal_financial_literacy",
+   "cluster": "PFL",
+   "generate_roleplay": true,
+   "participants": 1,
+   "exam": "Personal financial literacy exam (100 questions)",
+   "exam_pools": [
+    "PFL"
+   ],
+   "roleplay_pools": [
+    "PFL"
+   ],
+   "pathway": null,
+   "pathway_pool": null,
+   "pi_count": 3,
+   "prep_minutes": 10,
+   "present_minutes": 10,
+   "rounds": "1 role-play; finalists get a 2nd",
+   "career_competencies_on_form": [
+    "Critical Thinking",
+    "Communication",
+    "Decision Making"
+   ],
+   "rubric": "pfl_3pi",
+   "scenario_focus": "Personal (not business) financial decisions: earning income, spending, saving, investing, managing credit, managing risk. Participant is usually an advisor/educator/bank employee helping an individual (judge).",
+   "solution_first_criterion": "Unique (verified on a non-calculation PFL-26 sample; calculation-based PFL unverified)",
+   "header_title": "PERSONAL FINANCIAL LITERACY  (no 'EVENT')",
+   "header_lines": [
+    "INSTRUCTIONAL AREA"
+   ],
+   "event_labels": [
+    "Event"
+   ],
+   "situation_word_range": [
+    150,
+    240
+   ],
+   "eval_weighting_line": "The presentation will be weighted twice (2 times) the exam score.",
+   "judge_questions_timing": "after the participant has presented",
+   "pfl_grades": [
+    8,
+    12
+   ],
+   "verified_against": "PFL-26",
+   "judge_solution_page": "when calculations are required"
+  },
+  {
+   "code": "FCE",
+   "name": "Financial Consulting",
+   "category": "professional_selling_and_consulting",
+   "cluster": "FIN",
+   "generate_roleplay": false,
+   "exam": "FIN cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:FIN"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  },
+  {
+   "code": "HTPS",
+   "name": "Hospitality and Tourism Professional Selling",
+   "category": "professional_selling_and_consulting",
+   "cluster": "HT",
+   "generate_roleplay": false,
+   "exam": "HT cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:HT"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  },
+  {
+   "code": "PSE",
+   "name": "Professional Selling",
+   "category": "professional_selling_and_consulting",
+   "cluster": "MKT",
+   "generate_roleplay": false,
+   "exam": "MKT cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  },
+  {
+   "code": "IMCE",
+   "name": "Integrated Marketing Campaign–Event",
+   "category": "integrated_marketing_campaign",
+   "cluster": "MKT",
+   "generate_roleplay": false,
+   "exam": "MKT cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  },
+  {
+   "code": "IMCP",
+   "name": "Integrated Marketing Campaign–Product",
+   "category": "integrated_marketing_campaign",
+   "cluster": "MKT",
+   "generate_roleplay": false,
+   "exam": "MKT cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  },
+  {
+   "code": "IMCS",
+   "name": "Integrated Marketing Campaign–Service",
+   "category": "integrated_marketing_campaign",
+   "cluster": "MKT",
+   "generate_roleplay": false,
+   "exam": "MKT cluster exam",
+   "exam_pools": [
+    "T1:CORE",
+    "T2:MKT"
+   ],
+   "roleplay_pools": [],
+   "note": "Prepared/presentation event. Performance indicators are used for the exam only — do not generate PI-based role-plays for this event."
+  }
+ ]
+}

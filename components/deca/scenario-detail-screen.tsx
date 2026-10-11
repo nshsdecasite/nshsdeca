@@ -20,7 +20,7 @@ export function ScenarioDetailScreen({
   const nextAttempt = (attempts[0]?.attempt_number ?? 0) + 1;
 
   return (
-    <div className="px-9 py-9">
+    <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <Link href="/roleplays" className="text-[13px] font-bold text-ever-dk hover:text-ever">

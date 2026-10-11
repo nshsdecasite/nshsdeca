@@ -38,6 +38,8 @@ export type UserProfile = {
   first_name: string | null;
   last_name: string | null;
   email: string | null;
+  username?: string | null;
+  username_confirmed?: boolean;
   grade_level: number | null;
   role: string | null;
   total_points: number;
@@ -45,6 +47,11 @@ export type UserProfile = {
   is_public_on_leaderboard: boolean;
   chapter_name: string | null;
   school_name: string | null;
+  event_code?: string | null;
+  event_name?: string | null;
+  cluster_slug?: string | null;
+  cluster_name?: string | null;
+  event_pi_count?: number;
 };
 
 export type LeaderboardEntry = {
@@ -79,6 +86,14 @@ export type Flashcard = {
   status: "learning" | "know_it";
 };
 
+export type AnnouncementReactionName = "like" | "love" | "laugh" | "celebrate" | "eyes";
+
+export type AnnouncementReaction = {
+  reaction: AnnouncementReactionName;
+  count: number;
+  mine: boolean;
+};
+
 export type Announcement = {
   id: string;
   message: string;
@@ -86,6 +101,7 @@ export type Announcement = {
   created_at: string;
   expires_at: string | null;
   author_name: string | null;
+  reactions?: AnnouncementReaction[];
 };
 
 export type AdminOverview = {

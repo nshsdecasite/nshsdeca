@@ -20,7 +20,7 @@ export default async function AdminPage() {
   ]);
 
   return (
-    <div className="px-9 py-9">
+    <div>
       <AdminPanel
         overview={overview}
         members={members}

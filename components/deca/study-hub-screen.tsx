@@ -23,6 +23,9 @@ export function StudyHubScreen({
   weakestName,
   weakestAccuracy,
   decks,
+  eventCode,
+  eventName,
+  clusterName,
 }: {
   resumeHref?: string;
   resumeTitle?: string;
@@ -33,20 +36,25 @@ export function StudyHubScreen({
   weakestName?: string;
   weakestAccuracy?: number;
   decks: { id: string; title: string; count: number; mastered: number }[];
+  eventCode?: string;
+  eventName?: string;
+  clusterName?: string;
 }) {
   const studySection = platformSections.find((section) => section.title === "Study tools");
   const examSection = platformSections.find((section) => section.title === "Practice tests");
 
   return (
-    <div className="px-9 py-9">
+    <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <h1 className="font-display text-[40px] font-black tracking-[-0.04em]">Study</h1>
           <p className="mt-2.5 text-sm text-ink-2">
-            Flashcards, indicator drills and full cluster exams.
+            {eventCode
+              ? `${eventCode}${eventName ? ` · ${eventName}` : ""}. Your exam and performance indicators open on ${clusterName ?? "your cluster"}.`
+              : "Flashcards, indicator drills and full cluster exams."}
           </p>
         </div>
-        <DecaButton href={resumeHref ?? "/tests"}>
+        <DecaButton href={resumeHref ?? "/tests/full"}>
           Start today&apos;s session
         </DecaButton>
       </div>
@@ -65,8 +73,8 @@ export function StudyHubScreen({
           {resumeProgress != null ? (
             <Rail fill={resumeProgress} height="h-[9px]" className="mt-2" />
           ) : null}
-          <DecaButton href={resumeHref ?? "/tests"} size="sm" className="mt-[18px]">
-            {resumeHref ? "Resume" : "Open tests"}
+          <DecaButton href={resumeHref ?? "/tests/full"} size="sm" className="mt-[18px]">
+            {resumeHref ? "Resume" : "Open your exam"}
           </DecaButton>
         </div>
         <div className="deca-card px-7 py-[26px]">
@@ -151,7 +159,11 @@ export function StudyHubScreen({
               >
                 <div>
                   <p className="m-0 text-sm font-bold">{feature.title}</p>
-                  <p className="mt-1 text-xs text-mute">{feature.description}</p>
+                  <p className="mt-1 text-xs text-mute">
+                    {feature.href === "/tests/full" && eventCode
+                      ? `${eventCode} uses the ${clusterName ?? "cluster"} exam. The newest year is first.`
+                      : feature.description}
+                  </p>
                 </div>
                 <DecaButton href={feature.href} variant="outline" size="sm" className="flex-none">
                   Open
@@ -177,7 +189,11 @@ export function StudyHubScreen({
               <h3 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-sm leading-[1.55] text-ink-2">{feature.description}</p>
+              <p className="mt-2 text-sm leading-[1.55] text-ink-2">
+                {feature.href === "/study/pis" && eventCode
+                  ? `Opens the performance indicators for ${eventCode}.`
+                  : feature.description}
+              </p>
               <span className="mt-4 inline-flex text-[13px] font-bold text-ever-dk">
                 {isLive ? "Open" : "Coming soon"}
               </span>

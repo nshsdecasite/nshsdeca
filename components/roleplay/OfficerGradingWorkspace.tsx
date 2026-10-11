@@ -397,7 +397,7 @@ export function OfficerGradingWorkspace({
           : "DRAFT SAVED 12:04";
 
   return (
-    <div className="px-9 py-9">
+    <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <p className="text-xs font-bold tracking-[0.1em] uppercase text-mute">

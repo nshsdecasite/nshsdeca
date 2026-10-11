@@ -7,6 +7,7 @@ import {
 import { StudyHubScreen } from "@/components/deca/study-hub-screen";
 import { iaName } from "@/lib/deca/placeholder";
 import { requireAuth } from "@/lib/auth/roles";
+import { loadMyProfile } from "@/lib/data/request-cache";
 
 export const metadata: Metadata = {
   title: "Study tools",
@@ -14,10 +15,11 @@ export const metadata: Metadata = {
 
 export default async function StudyPage() {
   await requireAuth("/study");
-  const [stats, heatmap, sets] = await Promise.all([
+  const [stats, heatmap, sets, profile] = await Promise.all([
     getDashboardStats(),
     getMyPiHeatmap(),
     listFlashcardSets().catch(() => []),
+    loadMyProfile(),
   ]);
 
   const openSession = (stats.recent_sessions ?? []).find((session) => !session.completed_at);
@@ -58,6 +60,9 @@ export default async function StudyPage() {
         count: set.card_count,
         mastered: set.known_count,
       }))}
+      eventCode={profile?.event_code ?? undefined}
+      eventName={profile?.event_name ?? undefined}
+      clusterName={profile?.cluster_name ?? undefined}
     />
   );
 }

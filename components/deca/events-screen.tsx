@@ -21,7 +21,13 @@ export function EventsScreen({
   return (
     <>
       {publicNav ? <SiteNav active="events" /> : null}
-      <div className="mx-auto max-w-3xl px-9 pb-11 pt-9">
+      <div
+        className={
+          publicNav
+            ? "mx-auto w-full max-w-3xl px-5 pb-11 pt-9 sm:px-8 lg:w-[70%] lg:max-w-[1100px] lg:px-0"
+            : "pb-2"
+        }
+      >
         <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div>
             <h1 className="font-display text-[40px] font-black tracking-[-0.04em]">

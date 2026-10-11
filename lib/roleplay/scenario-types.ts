@@ -44,6 +44,7 @@ export type ScenarioDetail = {
 export type ScenarioFilterOptions = {
   years: number[];
   events: { event_code: string; event_name: string }[];
+  instructional_areas?: { code: string; name: string }[];
   clusters?: { slug: string; name: string }[];
   levels: string[];
 };

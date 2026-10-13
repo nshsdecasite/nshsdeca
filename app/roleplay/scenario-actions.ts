@@ -8,6 +8,7 @@ import type {
   ScenarioFilterOptions,
   ScenarioSummary,
 } from "@/lib/roleplay/scenario-types";
+import { extractJudgeQuestions } from "@/lib/roleplay/judge-questions";
 import { normalizeScenarioRubric } from "@/lib/roleplay/rubric";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -45,7 +46,7 @@ const loadScenarioCatalog = unstable_cache(
     return (data ?? []) as ScenarioSummary[];
   },
   ["scenario-catalog"],
-  { revalidate: 60 },
+  { revalidate: 60, tags: ["scenario-catalog"] },
 );
 
 export async function listScenarios(input?: {
@@ -121,12 +122,47 @@ export async function getScenario(id: string): Promise<ScenarioDetail | null> {
   if (error) throw new Error(error.message);
   if (!data) return null;
 
-  const detail = data as ScenarioDetail & { pis?: ScenarioDetail["pis"] | string[] };
+  const detail = data as ScenarioDetail & {
+    pis?: ScenarioDetail["pis"] | string[];
+    judge_question_1?: string | null;
+    judge_question_2?: string | null;
+  };
+  const stored = [detail.judge_question_1, detail.judge_question_2]
+    .map((question) => question?.trim() ?? "")
+    .filter(Boolean);
   return {
     ...detail,
     pis: normalizePerformanceIndicators(detail.pis),
     rubric: normalizeScenarioRubric(detail.rubric),
+    judge_questions: stored.length
+      ? stored.slice(0, 2)
+      : extractJudgeQuestions(detail.judge_characterization),
   };
+}
+
+export async function listScenarioAnswers(scenarioId: string) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { data, error } = await supabase.rpc("list_scenario_answers", {
+    p_scenario_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as { question_number: number; answer_text: string }[];
+}
+
+export async function saveScenarioAnswer(
+  scenarioId: string,
+  questionNumber: number,
+  answer: string,
+) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("save_scenario_answer", {
+    p_scenario_id: scenarioId,
+    p_question_number: questionNumber,
+    p_answer: answer,
+  });
+  if (error) throw new Error(error.message);
 }
 
 const getCachedScenarioFilterOptions = unstable_cache(
@@ -137,7 +173,7 @@ const getCachedScenarioFilterOptions = unstable_cache(
     return data as ScenarioFilterOptions;
   },
   ["scenario-filter-options-v2"],
-  { revalidate: 300 },
+  { revalidate: 300, tags: ["scenario-filters"] },
 );
 
 export async function getScenarioFilterOptions(): Promise<ScenarioFilterOptions> {

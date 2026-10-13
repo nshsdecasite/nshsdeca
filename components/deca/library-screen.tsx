@@ -49,7 +49,11 @@ function filterScenarios(scenarios: ScenarioSummary[], filters: ScenarioFilters)
   return scenarios.filter((scenario) => {
     if (filters.event && scenario.event_code !== filters.event) return false;
     if (filters.area && scenario.instructional_area_code !== filters.area) return false;
-    if (filters.level && scenario.level !== filters.level) return false;
+    if (filters.level === "practice") {
+      if (scenario.level !== "practice") return false;
+    } else if (scenario.level === "practice") {
+      return false;
+    }
     if (filters.year === "older") return scenario.year < 2023;
     if (filters.year && String(scenario.year) !== filters.year) return false;
     return true;
@@ -61,14 +65,12 @@ export function LibraryScreen({
   years = [],
   events,
   instructionalAreas = [],
-  levels,
   current,
 }: {
   scenarios: ScenarioSummary[];
   years?: number[];
   events: { event_code: string; event_name: string }[];
   instructionalAreas?: { code: string; name: string }[];
-  levels: string[];
   current: ScenarioFilters;
 }) {
   const serverKey = JSON.stringify(current);
@@ -174,7 +176,14 @@ export function LibraryScreen({
         years={years}
         events={events}
         instructionalAreas={instructionalAreas}
-        levels={levels}
+        generated={scenarios.filter((scenario) => {
+          if (scenario.level !== "practice") return false;
+          if (filters.event && scenario.event_code !== filters.event) return false;
+          if (filters.area && scenario.instructional_area_code !== filters.area) return false;
+          if (filters.year === "older") return scenario.year < 2023;
+          if (filters.year && String(scenario.year) !== filters.year) return false;
+          return true;
+        })}
         value={filters}
         onChange={updateFilters}
       />

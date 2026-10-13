@@ -121,7 +121,7 @@ export const platformSections: PlatformSection[] = [
   {
     title: "Progress & engagement",
     description:
-      "Dashboard stats, PI heatmaps, points, and the chapter leaderboard.",
+      "Dashboard stats, PI heatmaps, and points.",
     features: [
       {
         title: "Your dashboard",
@@ -130,15 +130,8 @@ export const platformSections: PlatformSection[] = [
         href: "/dashboard",
       },
       {
-        title: "Leaderboard",
-        description:
-          "Chapter-wide rankings by total points with weekly and all-time views.",
-        href: "/leaderboard",
-      },
-      {
         title: "Profile & settings",
-        description:
-          "Display name, grade, and leaderboard visibility preferences.",
+        description: "Display name and grade.",
         href: "/profile",
       },
       {

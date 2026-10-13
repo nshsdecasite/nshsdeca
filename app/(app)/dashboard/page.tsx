@@ -4,12 +4,11 @@ import {
   getDashboardStats,
   getMyPiHeatmap,
   getMyProfile,
-  listLeaderboard,
 } from "@/app/platform/actions";
 import { DashboardScreen } from "@/components/deca/dashboard-screen";
 import { displayName, requireAuth } from "@/lib/auth/roles";
 import { iaName } from "@/lib/deca/placeholder";
-import { getTotalScore } from "@/lib/roleplay/types";
+import { getMaxScore, getTotalScore } from "@/lib/roleplay/types";
 import type { PiHeatmapCell } from "@/lib/platform/types";
 
 export const metadata: Metadata = {
@@ -60,29 +59,39 @@ function streakFrom(dates: string[]) {
 
 export default async function DashboardPage() {
   await requireAuth("/dashboard");
-  const [profile, stats, heatmap, leaderboard, submissions] = await Promise.all([
+  const [profile, stats, heatmap, submissions] = await Promise.all([
     getMyProfile(),
     getDashboardStats(),
     getMyPiHeatmap(),
-    listLeaderboard().catch(() => []),
     listSubmissions().catch(() => []),
   ]);
 
   const name = displayName(profile?.first_name, profile?.last_name, profile?.email);
   const accuracy = groupAccuracy(heatmap);
   const questionCount = heatmap.reduce((sum, cell) => sum + cell.total_attempts, 0);
-  const correctCount = heatmap.reduce((sum, cell) => sum + cell.correct_count, 0);
-  const examAccuracy = questionCount
-    ? Math.round((correctCount / questionCount) * 100)
-    : null;
-  const mastered = heatmap.filter((cell) => cell.accuracy >= 70);
+  const examAccuracy =
+    stats.avg_test_pct != null ? Math.round(Number(stats.avg_test_pct)) : null;
 
   const reviewed = submissions.filter((item) => item.status === "reviewed");
-  const roleplayScores = reviewed
-    .map((item) => (item.grading_data ? getTotalScore(item.grading_data.rubric) : null))
+  const roleplayPercents = reviewed
+    .map((item) => {
+      if (!item.grading_data) return null;
+      const total = getTotalScore(item.grading_data.rubric);
+      const max = getMaxScore(item.grading_data.rubric);
+      if (!max) return null;
+      return Math.round((total / max) * 100);
+    })
     .filter((value): value is number => value != null);
-  const roleplayAverage = roleplayScores.length
-    ? Math.round(roleplayScores.reduce((sum, score) => sum + score, 0) / roleplayScores.length)
+  const roleplayAverage = roleplayPercents.length
+    ? Math.round(
+        roleplayPercents.reduce((sum, score) => sum + score, 0) / roleplayPercents.length,
+      )
+    : null;
+
+  const eventPiTotal = stats.event_pi_count ?? profile?.event_pi_count ?? 0;
+  const eventPisStudied = stats.event_pis_studied ?? 0;
+  const piCoveragePct = eventPiTotal
+    ? Math.round((eventPisStudied / eventPiTotal) * 100)
     : null;
 
   const waiting = submissions
@@ -117,14 +126,6 @@ export default async function DashboardPage() {
     href: `/study/pis/${pi.id}`,
   }));
 
-  const standing = leaderboard.find((entry) => entry.user_id === profile?.id);
-  const standingNote =
-    standing && standing.rank > 1
-      ? `Keep working the weak indicators. A graded roleplay is worth 15.`
-      : standing?.rank === 1
-        ? "First in the chapter this season."
-        : undefined;
-
   const activityDates = [
     ...(stats.recent_sessions ?? [])
       .map((session) => session.completed_at)
@@ -141,17 +142,14 @@ export default async function DashboardPage() {
       roleplayAttempts={reviewed.length}
       streak={streak}
       bestStreak={streak}
-      masteredCount={mastered.length}
-      masteredTotal={stats.total_pi_count ?? heatmap.length}
+      piCoveragePct={piCoveragePct}
+      eventPisStudied={eventPisStudied}
+      eventPiTotal={eventPiTotal || undefined}
       questionCount={questionCount || undefined}
       accuracy={accuracy}
       trend={trend}
       weakPis={weakPis}
       waiting={waiting}
-      standingRank={standing?.rank ?? null}
-      standingOf={leaderboard.length || null}
-      standingNote={standingNote}
-      points={stats.total_points}
       testsTaken={stats.tests_completed}
       roleplaysGraded={stats.roleplays_graded}
     />

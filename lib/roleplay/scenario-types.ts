@@ -6,7 +6,7 @@ export type ScenarioSummary = {
   event_name: string;
   cluster_name: string | null;
   year: number;
-  level: "district" | "state" | "icdc";
+  level: "district" | "state" | "icdc" | "practice";
   scenario_number: number;
   scenario_title: string | null;
   instructional_area_code: string | null;
@@ -27,7 +27,7 @@ export type ScenarioDetail = {
   event_name: string;
   cluster_name: string | null;
   year: number;
-  level: "district" | "state" | "icdc";
+  level: "district" | "state" | "icdc" | "practice";
   scenario_number: number;
   scenario_title: string | null;
   instructional_area_code: string | null;
@@ -37,6 +37,7 @@ export type ScenarioDetail = {
   judge_characterization: string | null;
   solution_text: string | null;
   source_url: string | null;
+  judge_questions: string[];
   pis?: ScenarioPerformanceIndicator[];
   rubric?: ScenarioRubric;
 };
@@ -53,4 +54,5 @@ export const LEVEL_LABELS: Record<ScenarioSummary["level"], string> = {
   district: "District",
   state: "State",
   icdc: "ICDC",
+  practice: "Generated",
 };

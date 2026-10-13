@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { AppNav } from "@/components/deca/app-nav";
+import { RouteGhost } from "@/components/layout/route-ghost";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
 import type { UserRole } from "@/lib/auth/roles";
 
@@ -28,7 +29,9 @@ export function AuthenticatedLayout({
   if (isFocusMode) {
     return (
       <div className="min-h-screen bg-ground">
-        <div className={CONTENT}>{children}</div>
+        <div className={CONTENT}>
+          <RouteGhost>{children}</RouteGhost>
+        </div>
       </div>
     );
   }
@@ -42,7 +45,9 @@ export function AuthenticatedLayout({
         role={role}
         unreadCount={unreadCount}
       />
-      <main className={CONTENT}>{children}</main>
+      <main className={CONTENT}>
+        <RouteGhost>{children}</RouteGhost>
+      </main>
     </div>
   );
 }

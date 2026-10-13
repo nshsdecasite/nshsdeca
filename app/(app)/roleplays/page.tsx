@@ -45,7 +45,6 @@ export default async function RoleplaysPage({ searchParams }: RoleplaysPageProps
       years={filterOptions.years}
       events={filterOptions.events}
       instructionalAreas={filterOptions.instructional_areas ?? []}
-      levels={filterOptions.levels ?? ["district", "state", "icdc"]}
       current={{
         search: params.search,
         year: params.year,

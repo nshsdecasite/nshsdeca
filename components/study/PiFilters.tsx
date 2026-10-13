@@ -14,6 +14,7 @@ type PiFiltersProps = {
     ia?: string;
     cluster?: string;
     event?: string;
+    tier?: string;
   };
 };
 
@@ -27,6 +28,7 @@ function buildHref(
   if (merged.ia) params.set("ia", merged.ia);
   if (merged.cluster) params.set("cluster", merged.cluster);
   if (merged.event) params.set("event", merged.event);
+  if (merged.tier) params.set("tier", merged.tier);
   const query = params.toString();
   return query ? `/study/pis?${query}` : "/study/pis?all=1";
 }
@@ -39,8 +41,8 @@ export function PiFilters({
   return (
     <Card className="p-5">
       <form action="/study/pis" method="get">
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="md:col-span-1">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div>
             <Label htmlFor="pi-search">Search</Label>
             <Input
               id="pi-search"
@@ -85,6 +87,23 @@ export function PiFilters({
               ]}
             />
           </div>
+
+          <div>
+            <Label htmlFor="pi-tier">Tier</Label>
+            <SelectMenu
+              id="pi-tier"
+              name="tier"
+              defaultValue={current.tier ?? ""}
+              className="mt-2"
+              searchable={false}
+              options={[
+                { value: "", label: "All tiers" },
+                { value: "1", label: "Tier 1" },
+                { value: "2", label: "Tier 2" },
+                { value: "3", label: "Tier 3" },
+              ]}
+            />
+          </div>
         </div>
 
         {current.event ? <input type="hidden" name="event" value={current.event} /> : null}
@@ -110,6 +129,7 @@ export function PiFilterPills({
     current.search ? { label: `Search: ${current.search}`, key: "search" } : null,
     current.ia ? { label: `IA: ${current.ia}`, key: "ia" } : null,
     current.cluster ? { label: `Cluster: ${current.cluster}`, key: "cluster" } : null,
+    current.tier ? { label: `Tier ${current.tier}`, key: "tier" } : null,
   ].filter(Boolean) as { label: string; key: keyof PiFiltersProps["current"] }[];
 
   if (pills.length === 0) return null;

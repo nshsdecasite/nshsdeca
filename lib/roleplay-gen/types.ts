@@ -197,7 +197,6 @@ export type GeneratorEvent = {
 export type GenerateInput = {
   eventCode: string;
   primaryIA?: string;
-  difficulty: "standard" | "advanced";
   calculations?: boolean;
   avoid?: string[];
 };

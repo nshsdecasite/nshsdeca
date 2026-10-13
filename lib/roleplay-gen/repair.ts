@@ -3,6 +3,7 @@ import { normalizeDraft, prepareCalculationDraft } from "@/lib/roleplay-gen/draf
 import { countWords, participantText, situationPieces } from "@/lib/roleplay-gen/render";
 import type { BodyBlock, Calculation, KitEvent, ScenarioDraft, Selection } from "@/lib/roleplay-gen/types";
 import {
+  ANSWER_SCRIPT,
   evaluateExpression,
   expressionOperands,
   isBareYesNo,
@@ -108,10 +109,10 @@ const FUNCTION_SYNONYM: Record<string, string> = {
 };
 
 const PADS = [
-  "You need a recommendation the business can put to work.",
-  "Your idea should stay practical with the time and money already described.",
-  "Be ready to explain what should happen next.",
-  "More than one good choice can fit what you have been told.",
+  "The business has used the same approach for two years.",
+  "A decision is needed before the end of the month.",
+  "Several people at the company will be affected.",
+  "The meeting is on the calendar for this week.",
 ];
 
 const QUESTION_FALLBACKS: [string, string] = [
@@ -483,6 +484,38 @@ function numberTokens(text: string) {
   return text.match(/\d[\d,]*(?:\.\d+)?%?/g) ?? [];
 }
 
+function dropScripted(text: string) {
+  const kept = text
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => sentence && !ANSWER_SCRIPT.test(sentence));
+  return tidy(kept.join(" "));
+}
+
+function withoutAnswerScript(blocks: BodyBlock[]) {
+  const next: BodyBlock[] = [];
+  for (const block of blocks) {
+    if (block.type === "p") {
+      const text = dropScripted(block.text);
+      if (text) next.push({ type: "p", text });
+      continue;
+    }
+    const items = block.items.map((item) => item.trim()).filter((item) => item && !ANSWER_SCRIPT.test(item));
+    if (items.length) next.push({ type: "bullets", items });
+  }
+  return next;
+}
+
+function stripAnswerScripts(draft: ScenarioDraft): ScenarioDraft {
+  const core = dropScripted(draft.core_task);
+  return {
+    ...draft,
+    core_task: core || "recommend a practical next step",
+    situation_body: withoutAnswerScript(draft.situation_body),
+    judge_body: withoutAnswerScript(draft.judge_body),
+  };
+}
+
 function tidy(value: string) {
   return value
     .replace(/\(\s*\)/g, "")
@@ -838,6 +871,7 @@ export function repairDraft(selection: Selection, draft: ScenarioDraft, calculat
   next = normalizeDraft(next);
   next = repairMath(next, event, calculations);
   next = ensureCalculationInputs(next, event);
+  next = stripAnswerScripts(next);
   next = fitLength(next, event);
   next = normalizeDraft(next);
   next = stripExtraJudgeNumbers(next, event);

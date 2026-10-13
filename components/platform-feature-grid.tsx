@@ -36,7 +36,6 @@ const LIVE_ROUTES = new Set([
   "/study/theories",
   "/notes",
   "/dashboard",
-  "/leaderboard",
   "/profile",
   "/messages",
 ]);

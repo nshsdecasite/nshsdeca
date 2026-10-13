@@ -7,7 +7,12 @@ import Link from "next/link";
 import { setMemberRole } from "@/app/admin/actions";
 import { DecaButton } from "@/components/deca/button";
 import { initialsFromName } from "@/lib/deca/format";
-import type { AdminOverview, ChapterActivity, ChapterMember } from "@/lib/platform/types";
+import type {
+  AdminOverview,
+  ChapterActivity,
+  ChapterMember,
+  SolutionPeek,
+} from "@/lib/platform/types";
 import { displayName } from "@/lib/auth/display-name";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +20,7 @@ type AdminPanelProps = {
   overview: AdminOverview;
   members: ChapterMember[];
   activity: ChapterActivity[];
+  solutionPeeks: SolutionPeek[];
   currentUserId: string;
   currentRole: "officer" | "advisor";
 };
@@ -87,6 +93,7 @@ export function AdminPanel({
   overview,
   members,
   activity,
+  solutionPeeks,
   currentUserId,
   currentRole,
 }: AdminPanelProps) {
@@ -259,6 +266,56 @@ export function AdminPanel({
             })}
           </tbody>
         </table>
+      </div>
+
+      <div className="deca-card mt-4 overflow-x-auto px-[30px] py-[26px]">
+        <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em] text-balance">
+          Checked solution before an attempt
+        </h2>
+        <p className="mt-1 text-pretty text-xs text-mute">
+          Members who opened the written solution before recording an attempt.
+        </p>
+        {solutionPeeks.length === 0 ? (
+          <p className="mt-4 text-[13px] text-mute">No solution checks yet.</p>
+        ) : (
+          <table className="mt-4 w-full border-collapse text-left text-[13px]">
+            <thead>
+              <tr>
+                {["Member", "Roleplay", "Checked", "Attempted after"].map((heading) => (
+                  <th
+                    key={heading}
+                    className="pb-3 text-[11px] font-extrabold tracking-[0.1em] uppercase text-mute"
+                  >
+                    {heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {solutionPeeks.map((peek) => {
+                const name = displayName(peek.first_name, peek.last_name, peek.email);
+                const title =
+                  peek.scenario_title?.trim() || `District Event ${peek.scenario_number}`;
+                const checked = new Date(peek.checked_at).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                });
+                return (
+                  <tr key={peek.id} className="border-t border-edge">
+                    <td className="py-3 pr-3 font-bold">{name}</td>
+                    <td className="py-3 pr-3">
+                      {peek.event_code} · {title} · {peek.year}
+                    </td>
+                    <td className="py-3 tabular-nums">{checked}</td>
+                    <td className="py-3 font-bold">{peek.attempted_after ? "Yes" : "No"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div className="deca-card mt-4 overflow-x-auto px-[30px] py-[26px]">

@@ -14,7 +14,6 @@ import {
   PanelLeftOpen,
   Settings,
   Sparkles,
-  Trophy,
   User,
   Video,
 } from "lucide-react";
@@ -47,7 +46,6 @@ const mainNav: NavItem[] = [
   { label: "Study", href: "/study", icon: BookOpen },
   { label: "Notes", href: "/notes", icon: NotebookPen },
   { label: "Messages", href: "/messages", icon: MessageSquare },
-  { label: "Leaderboard", href: "/leaderboard", icon: Trophy },
   { label: "Profile", href: "/profile", icon: User },
 ];
 

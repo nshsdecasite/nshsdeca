@@ -9,6 +9,7 @@ import type {
   AnnouncementReactionName,
   ChapterActivity,
   ChapterMember,
+  SolutionPeek,
 } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -121,6 +122,19 @@ export async function listChapterActivity(): Promise<ChapterActivity[]> {
     avg_roleplay_score:
       row.avg_roleplay_score != null ? Number(row.avg_roleplay_score) : null,
     tab_blur_count: Number(row.tab_blur_count),
+  }));
+}
+
+export async function listSolutionPeeks(): Promise<SolutionPeek[]> {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_solution_peeks");
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as SolutionPeek[]).map((row) => ({
+    ...row,
+    scenario_number: Number(row.scenario_number),
+    year: Number(row.year),
+    attempted_after: Boolean(row.attempted_after),
   }));
 }
 

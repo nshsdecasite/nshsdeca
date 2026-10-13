@@ -19,12 +19,17 @@ function optionalText(value: string | undefined) {
   return trimmed ? trimmed : undefined;
 }
 
-function mapPiSummaries(rows: Record<string, unknown>[] | null): PiSummary[] {
-  return (rows ?? []).map((row) => ({
-    ...row,
-    question_count: Number(row.question_count ?? 0),
-    roleplay_count: Number(row.roleplay_count ?? 0),
-  })) as PiSummary[];
+function mapPiPage(rows: Record<string, unknown>[] | null): { items: PiSummary[]; total: number } {
+  const list = rows ?? [];
+  const total = Number(list[0]?.total_count ?? 0);
+  const items = list
+    .filter((row) => row.id)
+    .map((row) => ({
+      ...row,
+      question_count: Number(row.question_count ?? 0),
+      roleplay_count: Number(row.roleplay_count ?? 0),
+    })) as PiSummary[];
+  return { items, total };
 }
 
 const loadPerformanceIndicators = unstable_cache(
@@ -33,6 +38,7 @@ const loadPerformanceIndicators = unstable_cache(
     iaCode: string,
     clusterSlug: string,
     eventCode: string,
+    tier: number,
     limit: number,
     offset: number,
   ) => {
@@ -42,13 +48,14 @@ const loadPerformanceIndicators = unstable_cache(
       p_ia_code: iaCode || null,
       p_cluster_slug: clusterSlug || null,
       p_event_code: eventCode || null,
+      p_tier: tier > 0 ? tier : null,
       p_limit: limit,
       p_offset: offset,
     });
     if (error) throw new Error(error.message);
-    return mapPiSummaries(data as Record<string, unknown>[] | null);
+    return mapPiPage(data as Record<string, unknown>[] | null);
   },
-  ["pi-browser"],
+  ["pi-browser-v2"],
   { revalidate: 60 },
 );
 
@@ -57,19 +64,29 @@ export async function listPerformanceIndicators(input?: {
   iaCode?: string;
   clusterSlug?: string;
   eventCode?: string;
+  tier?: number;
   limit?: number;
   offset?: number;
-}): Promise<PiSummary[]> {
+}): Promise<{ items: PiSummary[]; total: number }> {
   await requireAuth();
   const search = optionalText(input?.search) ?? "";
   const iaCode = optionalText(input?.iaCode) ?? "";
   const clusterSlug = optionalText(input?.clusterSlug) ?? "";
   const eventCode = optionalText(input?.eventCode) ?? "";
+  const tier = input?.tier && [1, 2, 3].includes(input.tier) ? input.tier : 0;
   const limit = input?.limit ?? 48;
   const offset = input?.offset ?? 0;
 
   try {
-    return await loadPerformanceIndicators(search, iaCode, clusterSlug, eventCode, limit, offset);
+    return await loadPerformanceIndicators(
+      search,
+      iaCode,
+      clusterSlug,
+      eventCode,
+      tier,
+      limit,
+      offset,
+    );
   } catch {
     const supabase = await getSupabase();
     const { data, error } = await supabase.rpc("list_performance_indicators", {
@@ -77,11 +94,12 @@ export async function listPerformanceIndicators(input?: {
       p_ia_code: iaCode || null,
       p_cluster_slug: clusterSlug || null,
       p_event_code: eventCode || null,
+      p_tier: tier > 0 ? tier : null,
       p_limit: limit,
       p_offset: offset,
     });
     if (error) throw new Error(error.message);
-    return mapPiSummaries(data as Record<string, unknown>[] | null);
+    return mapPiPage(data as Record<string, unknown>[] | null);
   }
 }
 

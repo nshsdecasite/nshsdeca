@@ -12,6 +12,9 @@ import {
 
 export const SITUATION_WORD_SLACK = 15;
 
+export const ANSWER_SCRIPT =
+  /\b(?:in your prepared materials|prepared materials|be prepared to|be sure to (?:include|cover|address|discuss|explain)|your (?:presentation|materials|response|plan) (?:should|must) (?:include|cover|address|discuss)|make sure (?:you|your)|you propose to)\b/i;
+
 const LEGACY = [
   "21st century",
   "problem solving –",
@@ -192,6 +195,10 @@ export function validateDraft(selection: Selection, draft: ScenarioDraft, calcul
 
   if (selection.pis.length !== event.pi_count) {
     errors.push(`Expected ${event.pi_count} performance indicators.`);
+  }
+
+  if (ANSWER_SCRIPT.test(participant) || ANSWER_SCRIPT.test(draft.core_task)) {
+    errors.push("State the decision once. Do not list what the presentation must include.");
   }
 
   const participantLower = participant.toLowerCase();

@@ -94,6 +94,48 @@ export function participantText(draft: ScenarioDraft, event: KitEvent) {
   return situationPieces(draft, event).join("\n");
 }
 
+function documentBlocks(blocks: BodyBlock[]) {
+  const parts: string[] = [];
+  for (const block of blocks) {
+    if (block.type === "p") {
+      if (block.text.trim()) parts.push(block.text.trim());
+    } else if (block.items.length) {
+      parts.push(block.items.map((item) => `• ${item.trim()}`).join("\n"));
+    }
+  }
+  return parts;
+}
+
+export function situationDocument(draft: ScenarioDraft, event: KitEvent) {
+  return [openingText(draft, event), ...documentBlocks(draft.situation_body), closingText(draft)].join("\n\n");
+}
+
+export function judgeDocument(draft: ScenarioDraft, event: KitEvent) {
+  const questions = draft.judge_questions
+    .map((question, index) => `${index + 1}. ${question.trim()}`)
+    .join("\n");
+  return [judgeIntro(draft, event), ...documentBlocks(draft.judge_body), `${judgeProcedure(draft, event)}\n${questions}`].join("\n\n");
+}
+
+export function solutionDocument(draft: ScenarioDraft) {
+  const lines = draft.internal_notes.strong_answer_outline
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item, index) => `${index + 1}. ${item}`);
+  const solution = draft.judge_solution;
+  if (solution) {
+    if (solution.conceptIntro.trim()) lines.push(solution.conceptIntro.trim());
+    for (const bullet of solution.conceptBullets) {
+      if (bullet.trim()) lines.push(`• ${bullet.trim()}`);
+    }
+    for (const step of solution.steps) {
+      if (step.trim()) lines.push(step.trim());
+    }
+    if (solution.modelConclusion.trim()) lines.push(solution.modelConclusion.trim());
+  }
+  return lines.join("\n\n");
+}
+
 export function judgeIntro(draft: ScenarioDraft, event: KitEvent) {
   if (event.category === "personal_financial_literacy" || !draft.company_name) {
     return `You are to assume the role of ${draft.judge_ref} of ${draft.participant_role} (participant).`;
@@ -115,9 +157,9 @@ export function judgeProcedure(draft: ScenarioDraft, event: KitEvent) {
     );
   }
   if (event.judge_questions_timing.toLowerCase().startsWith("after")) {
-    sentences.push("After the participant has presented the information, ask these questions:");
+    sentences.push("After the participant has presented the information, ask the following questions:");
   } else {
-    sentences.push(`During the ${draft.meeting_word}, ask these questions:`);
+    sentences.push(`During the ${draft.meeting_word}, ask the following questions:`);
   }
   sentences.push(
     `When the ${who} has finished presenting and has answered your questions, close by thanking the ${who} for the ${draft.thanks_for}. Do not comment on the performance after the event other than to thank the ${who}.`,

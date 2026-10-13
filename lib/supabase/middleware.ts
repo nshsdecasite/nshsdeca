@@ -23,7 +23,6 @@ function isProtected(pathname: string) {
     pathname.startsWith("/study") ||
     pathname.startsWith("/notes") ||
     pathname.startsWith("/profile") ||
-    pathname.startsWith("/leaderboard") ||
     pathname.startsWith("/messages")
   );
 }

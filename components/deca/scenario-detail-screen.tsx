@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { DecaButton } from "@/components/deca/button";
+import { JudgeQuestions } from "@/components/deca/judge-questions";
+import { ScenarioCase } from "@/components/deca/scenario-case";
 import { LEVEL_LABELS, type ScenarioDetail } from "@/lib/roleplay/scenario-types";
 import { getTotalScore } from "@/lib/roleplay/types";
 import type { Submission } from "@/lib/roleplay/types";
@@ -9,10 +11,12 @@ export function ScenarioDetailScreen({
   scenario,
   attempts,
   canSubmit,
+  questionAnswers = {},
 }: {
   scenario: ScenarioDetail;
   attempts: Submission[];
   canSubmit: boolean;
+  questionAnswers?: Record<number, string>;
 }) {
   const title =
     scenario.scenario_title?.trim() ||
@@ -36,12 +40,6 @@ export function ScenarioDetailScreen({
             <span className="rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
               {scenario.year} · {LEVEL_LABELS[scenario.level].toUpperCase()}
             </span>
-            <span className="rounded-full bg-white px-3 py-1 text-[11px] font-extrabold text-mute shadow-card">
-              10 MIN PREP
-            </span>
-            <span className="rounded-full bg-white px-3 py-1 text-[11px] font-extrabold text-mute shadow-card">
-              10 MIN WITH THE JUDGE
-            </span>
           </div>
         </div>
         <div className="flex gap-2.5">
@@ -64,29 +62,12 @@ export function ScenarioDetailScreen({
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_400px]">
-        <div className="deca-card px-[38px] py-[34px]">
-          <h2 className="font-display text-xl font-extrabold tracking-[-0.02em]">
-            The situation
-          </h2>
-          <p className="mt-4 max-w-[62ch] whitespace-pre-wrap text-base leading-[1.7]">
-            {scenario.situation_description ?? "No situation text available."}
-          </p>
-          {scenario.judge_characterization ? (
-            <p className="mt-3.5 max-w-[62ch] whitespace-pre-wrap text-base leading-[1.7]">
-              {scenario.judge_characterization}
-            </p>
-          ) : null}
-          {scenario.solution_text ? (
-            <div className="mt-6 rounded-2xl bg-ever-lt px-6 py-5">
-              <p className="text-xs font-extrabold tracking-[0.1em] uppercase text-ever-dk">
-                Your task
-              </p>
-              <p className="mt-2.5 whitespace-pre-wrap text-[15px] leading-[1.65]">
-                {scenario.solution_text}
-              </p>
-            </div>
-          ) : null}
-        </div>
+        <ScenarioCase
+          scenarioId={scenario.id}
+          situation={scenario.situation_description}
+          solution={scenario.solution_text}
+          hasAttempt={attempts.length > 0}
+        />
 
         <div className="flex flex-col gap-4">
           <div className="deca-card px-[26px] py-6">
@@ -109,6 +90,12 @@ export function ScenarioDetailScreen({
               )}
             </div>
           </div>
+
+          <JudgeQuestions
+            scenarioId={scenario.id}
+            questions={scenario.judge_questions}
+            initialAnswers={questionAnswers}
+          />
 
           <div className="deca-card px-[26px] py-6">
             <h2 className="mb-3.5 font-display text-[17px] font-extrabold tracking-[-0.02em]">
@@ -165,16 +152,17 @@ export function ScenarioDetailScreen({
           </div>
 
           {canSubmit ? (
-            <div className="flex flex-1 flex-col gap-[18px] rounded-[20px] bg-ever-dk p-[26px] text-white">
-              <p className="m-0 font-display text-[19px] font-extrabold leading-[1.3] tracking-[-0.02em]">
-                Ready? Open the full case, then record your attempt.
+            <div className="w-fit max-w-full rounded-[20px] bg-ever-dk px-5 py-4 text-white">
+              <p className="m-0 text-pretty font-display text-[17px] font-extrabold leading-[1.3] tracking-[-0.02em]">
+                Ready? Record your attempt.
               </p>
               <DecaButton
                 href={`/roleplays/submit?scenario=${scenario.id}`}
                 variant="white"
-                className="mt-auto self-start"
+                size="sm"
+                className="mt-3"
               >
-                Start 10-minute prep
+                Record your attempt
               </DecaButton>
             </div>
           ) : null}

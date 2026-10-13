@@ -7,7 +7,6 @@ import type {
   DashboardStats,
   Flashcard,
   FlashcardSetSummary,
-  LeaderboardEntry,
   Note,
   PiHeatmapCell,
   UserProfile,
@@ -30,9 +29,15 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     ...stats,
     total_points: Number(stats.total_points ?? 0),
     tests_completed: Number(stats.tests_completed ?? 0),
+    avg_test_pct:
+      stats.avg_test_pct == null || Number.isNaN(Number(stats.avg_test_pct))
+        ? null
+        : Number(stats.avg_test_pct),
     roleplays_submitted: Number(stats.roleplays_submitted ?? 0),
     roleplays_graded: Number(stats.roleplays_graded ?? 0),
     total_pi_count: Number(stats.total_pi_count ?? 0),
+    event_pi_count: Number(stats.event_pi_count ?? 0),
+    event_pis_studied: Number(stats.event_pis_studied ?? 0),
   };
 }
 
@@ -45,7 +50,6 @@ export async function updateMyProfile(input: {
   firstName?: string;
   lastName?: string;
   gradeLevel?: number;
-  isPublicOnLeaderboard?: boolean;
 }) {
   await requireAuth();
   const supabase = await getSupabase();
@@ -53,37 +57,10 @@ export async function updateMyProfile(input: {
     p_first_name: input.firstName ?? null,
     p_last_name: input.lastName ?? null,
     p_grade_level: input.gradeLevel ?? null,
-    p_is_public_on_leaderboard: input.isPublicOnLeaderboard ?? null,
+    p_is_public_on_leaderboard: null,
   });
   if (error) throw new Error(error.message);
   revalidatePath("/profile");
-  revalidatePath("/leaderboard");
-}
-
-function mapLeaderboard(rows: LeaderboardEntry[] | null): LeaderboardEntry[] {
-  return ((rows ?? []) as LeaderboardEntry[]).map((row) => ({
-    ...row,
-    rank: Number(row.rank),
-    total_points: Number(row.total_points),
-  }));
-}
-
-export async function listLeaderboard(): Promise<LeaderboardEntry[]> {
-  await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("list_leaderboard", { p_limit: 50 });
-  if (error) throw new Error(error.message);
-  return mapLeaderboard(data as LeaderboardEntry[] | null);
-}
-
-export async function listWeeklyLeaderboard(): Promise<LeaderboardEntry[]> {
-  await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("list_weekly_leaderboard", {
-    p_limit: 50,
-  });
-  if (error) return [];
-  return mapLeaderboard(data as LeaderboardEntry[] | null);
 }
 
 export async function getMyPiHeatmap(): Promise<PiHeatmapCell[]> {

@@ -168,6 +168,18 @@ export async function chooseUsername(
     };
   }
 
+  const passwordChoice = String(formData.get("passwordChoice") ?? "keep");
+  const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+  if (passwordChoice === "change") {
+    if (password.length < 8) {
+      return { error: "Password must be at least 8 characters." };
+    }
+    if (password !== confirmPassword) {
+      return { error: "Passwords do not match." };
+    }
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.rpc("claim_username", {
     p_username: username,
@@ -180,6 +192,16 @@ export async function chooseUsername(
         ? "That username is already taken."
         : "Could not save that username. Try again.",
     };
+  }
+
+  if (passwordChoice === "change") {
+    const admin = createAdminClient();
+    const { error: passwordError } = await admin.auth.admin.updateUserById(user.id, {
+      password,
+    });
+    if (passwordError) {
+      return { error: "Could not update your password. Try again." };
+    }
   }
 
   redirect("/dashboard");
@@ -206,7 +228,7 @@ export async function requestPasswordReset(
     .schema("core")
     .from("users")
     .select("last_name")
-    .eq("email", email)
+    .eq("username", username)
     .maybeSingle();
 
   if (profileError) {

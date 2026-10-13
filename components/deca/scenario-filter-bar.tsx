@@ -1,9 +1,10 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { SelectMenu } from "@/components/ui/select-menu";
-import { LEVEL_LABELS, type ScenarioSummary } from "@/lib/roleplay/scenario-types";
+import type { ScenarioSummary } from "@/lib/roleplay/scenario-types";
 
 export type ScenarioFilters = {
   search?: string;
@@ -14,28 +15,29 @@ export type ScenarioFilters = {
   pi?: string;
 };
 
-function levelName(level: string) {
-  return (
-    LEVEL_LABELS[level as ScenarioSummary["level"]] ??
-    level.charAt(0).toUpperCase() + level.slice(1)
-  );
+function generatedLabel(scenario: ScenarioSummary) {
+  const title =
+    scenario.scenario_title?.trim() ||
+    `${scenario.event_code} scenario ${scenario.scenario_number}`;
+  return `${scenario.event_code} — ${title}`;
 }
 
 export function ScenarioFilterBar({
   years,
   events,
   instructionalAreas,
-  levels,
+  generated = [],
   value,
   onChange,
 }: {
   years: number[];
   events: { event_code: string; event_name: string }[];
   instructionalAreas: { code: string; name: string }[];
-  levels: string[];
+  generated?: ScenarioSummary[];
   value: ScenarioFilters;
   onChange: (patch: Partial<ScenarioFilters>) => void;
 }) {
+  const router = useRouter();
   const eventOptions = [...events].sort((a, b) => a.event_code.localeCompare(b.event_code));
   const areaOptions = [...instructionalAreas].sort((a, b) => a.name.localeCompare(b.name));
   const yearOptions = years.map((year) => ({ value: String(year), label: String(year) }));
@@ -125,14 +127,30 @@ export function ScenarioFilterBar({
 
       <SelectMenu
         variant="pill"
-        active={Boolean(value.level)}
-        aria-label="Level"
-        triggerLabel={value.level ? levelName(value.level) : "Level"}
-        value={value.level ?? ""}
-        onValueChange={(level) => onChange({ level: level || undefined })}
+        active={value.level === "practice"}
+        aria-label="Generated"
+        triggerLabel="Generated"
+        value={value.level === "practice" ? "practice" : ""}
+        onValueChange={(next) => {
+          if (!next) {
+            onChange({ level: undefined });
+            return;
+          }
+          if (next === "practice") {
+            onChange({ level: "practice" });
+            return;
+          }
+          router.push(`/roleplays/${next}`);
+        }}
         options={[
-          { value: "", label: "All levels" },
-          ...levels.map((level) => ({ value: level, label: levelName(level) })),
+          { value: "", label: "All scenarios" },
+          { value: "practice", label: "All generated" },
+          ...[...generated]
+            .sort((a, b) => generatedLabel(a).localeCompare(generatedLabel(b)))
+            .map((scenario) => ({
+              value: scenario.id,
+              label: generatedLabel(scenario),
+            })),
         ]}
       />
 

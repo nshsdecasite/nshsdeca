@@ -1,22 +1,19 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { generatePracticeEvent } from "@/app/generate/actions";
 import { DecaButton } from "@/components/deca/button";
-import { PracticePacketView } from "@/components/deca/practice-packet";
-import { Segmented } from "@/components/deca/segmented";
 import { SelectMenu } from "@/components/ui/select-menu";
-import type { GeneratorEvent, PracticePacket } from "@/lib/roleplay-gen/types";
+import type { GeneratorEvent } from "@/lib/roleplay-gen/types";
 
 export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
   const [eventCode, setEventCode] = useState(events[0]?.code ?? "");
   const [area, setArea] = useState("");
-  const [difficulty, setDifficulty] = useState<"standard" | "advanced">("standard");
   const [calculations, setCalculations] = useState(false);
-  const [avoid, setAvoid] = useState<string[]>([]);
-  const [packet, setPacket] = useState<PracticePacket | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const event = useMemo(
     () => events.find((item) => item.code === eventCode) ?? events[0],
@@ -36,18 +33,13 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
       const result = await generatePracticeEvent({
         eventCode: event.code,
         primaryIA: area || undefined,
-        difficulty,
         calculations: event.calculations === "optional" ? calculations : undefined,
-        avoid,
       });
       if (!result.ok) {
         setError(result.error);
         return;
       }
-      setPacket(result.packet);
-      if (result.packet.companyName) {
-        setAvoid((current) => [result.packet.companyName!, ...current].slice(0, 20));
-      }
+      router.push(`/roleplays/${result.scenarioId}`);
     });
   }
 
@@ -108,18 +100,6 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
           {event.prepMinutes} min to prepare · {event.presentMinutes} min to present
         </p>
 
-        <div className="mt-5 max-w-sm">
-          <p className="mb-2 text-[13px] font-bold text-ink">Difficulty</p>
-          <Segmented
-            value={difficulty}
-            onChange={setDifficulty}
-            options={[
-              { value: "standard", label: "Standard" },
-              { value: "advanced", label: "Advanced" },
-            ]}
-          />
-        </div>
-
         {event.calculations === "optional" ? (
           <label className="mt-5 flex items-center gap-3 text-sm font-semibold text-ink">
             <input
@@ -139,7 +119,7 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <DecaButton type="button" onClick={generate} disabled={pending}>
-            {pending ? "Writing the practice event…" : packet ? "Generate another" : "Generate"}
+            {pending ? "Writing the practice event…" : "Generate"}
           </DecaButton>
           {pending ? (
             <p className="text-sm text-mute">Choosing indicators, then writing the scenario.</p>
@@ -151,12 +131,6 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
           </p>
         ) : null}
       </div>
-
-      {packet ? (
-        <div className="mt-8">
-          <PracticePacketView packet={packet} />
-        </div>
-      ) : null}
     </div>
   );
 }

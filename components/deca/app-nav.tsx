@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
+import { useNavIntent } from "@/components/deca/page-ghost";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/auth/roles";
@@ -13,7 +14,6 @@ const MAIN = [
   { href: "/generate", label: "Generate" },
   { href: "/submissions", label: "Submissions" },
   { href: "/study", label: "Study" },
-  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/messages", label: "Messages" },
 ] as const;
 
@@ -23,7 +23,7 @@ const OFFICER = [
 ] as const;
 
 function isActive(pathname: string, href: string) {
-  if (href === "/dashboard") return pathname === "/dashboard";
+  if (href === "/dashboard" || href === "/admin") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -41,6 +41,8 @@ export function AppNav({
   unreadCount?: number;
 }) {
   const pathname = usePathname();
+  const intent = useNavIntent();
+  const currentPath = intent ?? pathname;
   const showOfficer = role === "officer" || role === "advisor";
 
   const pillPad = showOfficer ? "px-3" : "px-[18px]";
@@ -63,13 +65,13 @@ export function AppNav({
         <nav className="flex min-w-0 flex-1 items-center overflow-x-auto [justify-content:safe_center]">
           <div className="flex w-max gap-1 rounded-full bg-ground p-1.5 text-sm font-semibold">
             {MAIN.map((item) => {
-              const active = isActive(pathname, item.href);
+              const active = isActive(currentPath, item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-[7px] rounded-full py-2 whitespace-nowrap text-[#4b463c] transition-colors duration-150 hover:text-ever-dk",
+                    "flex items-center gap-[7px] rounded-full py-2 whitespace-nowrap text-[#4b463c] transition-[background-color,color] duration-150 ease-[cubic-bezier(0.2,0,0,1)] hover:text-ever-dk",
                     pillPad,
                     active && "bg-ever-dk font-bold text-white hover:text-white",
                   )}
@@ -90,13 +92,13 @@ export function AppNav({
             })}
             {showOfficer
               ? OFFICER.map((item) => {
-                  const active = isActive(pathname, item.href);
+                  const active = isActive(currentPath, item.href);
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "rounded-full py-2 whitespace-nowrap text-[#4b463c] transition-colors duration-150 hover:text-ever-dk",
+                        "rounded-full py-2 whitespace-nowrap text-[#4b463c] transition-[background-color,color] duration-150 ease-[cubic-bezier(0.2,0,0,1)] hover:text-ever-dk",
                         pillPad,
                         active && "bg-ever-dk font-bold text-white hover:text-white",
                       )}

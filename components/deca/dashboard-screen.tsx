@@ -49,17 +49,14 @@ export function DashboardScreen({
   examAccuracy,
   roleplayAverage,
   streak,
-  masteredCount,
-  masteredTotal,
+  piCoveragePct,
+  eventPisStudied,
+  eventPiTotal,
   questionCount,
   accuracy,
   trend,
   weakPis,
   waiting,
-  standingRank,
-  standingOf,
-  points,
-  testsTaken,
 }: {
   name: string;
   examAccuracy: number | null;
@@ -67,47 +64,44 @@ export function DashboardScreen({
   roleplayAttempts?: number;
   streak: number;
   bestStreak?: number;
-  masteredCount: number;
-  masteredTotal: number;
+  piCoveragePct: number | null;
+  eventPisStudied?: number;
+  eventPiTotal?: number;
   questionCount?: number;
   accuracy: DashboardAccuracy[];
   trend: DashboardTrendPoint[];
   weakPis: DashboardWeakPi[];
   waiting: DashboardWaiting[];
-  standingRank?: number | null;
-  standingOf?: number | null;
-  standingNote?: string;
-  points?: number;
   testsTaken?: number;
   roleplaysGraded?: number;
 }) {
   const firstName = name.split(" ")[0] || name;
   const weeks = weeksUntil(NEXT_CONFERENCE.iso);
-  const masteredPct = masteredTotal
-    ? Math.round((masteredCount / masteredTotal) * 100)
-    : 0;
 
   const jumps = [
     {
       href: "/tests",
       title: "Practice exam",
-      detail: examAccuracy != null ? `${examAccuracy}% accuracy` : "Start a full or custom test",
+      detail:
+        examAccuracy != null ? `${examAccuracy}% test accuracy` : "Start a full or custom test",
     },
     {
       href: "/roleplays",
       title: "Roleplays",
       detail:
         roleplayAverage != null
-          ? `${roleplayAverage}/100 average`
+          ? `${roleplayAverage}% roleplay accuracy`
           : "Browse scenarios and submit",
     },
     {
-      href: weakPis[0]?.href ?? "/study",
+      href: weakPis[0]?.href ?? "/study/pis",
       title: "Study",
       detail:
-        weakPis.length > 0
-          ? `${weakPis.length} weak indicator${weakPis.length === 1 ? "" : "s"}`
-          : "PIs, flashcards, and vocab",
+        eventPiTotal
+          ? `${eventPisStudied ?? 0}/${eventPiTotal} event PIs studied`
+          : weakPis.length > 0
+            ? `${weakPis.length} weak indicator${weakPis.length === 1 ? "" : "s"}`
+            : "PIs, flashcards, and vocab",
     },
     {
       href: "/messages",
@@ -126,13 +120,11 @@ export function DashboardScreen({
           <h1 className="mt-2 font-display text-[40px] font-black tracking-[-0.04em] text-balance">
             {timeGreeting()}, {firstName}
           </h1>
-          <p className="mt-2 text-sm text-ink-2">
-            {weeks > 0
-              ? `${weeks} weeks to ${NEXT_CONFERENCE.name}.`
-              : standingRank && standingOf
-                ? `#${standingRank} of ${standingOf} · ${points ?? 0} points`
-                : `${points ?? 0} chapter points`}
-          </p>
+          {weeks > 0 ? (
+            <p className="mt-2 text-sm text-ink-2">
+              {weeks} weeks to {NEXT_CONFERENCE.name}.
+            </p>
+          ) : null}
         </div>
         <div className="flex gap-2.5">
           <DecaButton href="/tests" variant="outline">
@@ -143,14 +135,25 @@ export function DashboardScreen({
       </header>
 
       <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label="Accuracy" value={examAccuracy != null ? `${examAccuracy}%` : "—"} />
         <StatCard
-          label="Roleplay"
-          value={roleplayAverage != null ? `${roleplayAverage}` : "—"}
-          suffix={roleplayAverage != null ? "/100" : undefined}
+          label="Test accuracy"
+          value={examAccuracy != null ? `${examAccuracy}%` : "—"}
+        />
+        <StatCard
+          label="Roleplay accuracy"
+          value={roleplayAverage != null ? `${roleplayAverage}%` : "—"}
         />
         <StatCard label="Streak" value={`${streak}d`} />
-        <StatCard label="Tests" value={String(testsTaken ?? 0)} rail={masteredPct / 100} />
+        <StatCard
+          label="Performance indicators"
+          value={piCoveragePct != null ? `${piCoveragePct}%` : "—"}
+          note={
+            eventPiTotal
+              ? `${eventPisStudied ?? 0}/${eventPiTotal} for your event`
+              : "Set your event in profile"
+          }
+          rail={piCoveragePct != null ? piCoveragePct / 100 : undefined}
+        />
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_0.85fr]">
@@ -294,11 +297,13 @@ function StatCard({
   label,
   value,
   suffix,
+  note,
   rail,
 }: {
   label: string;
   value: string;
   suffix?: string;
+  note?: string;
   rail?: number;
 }) {
   return (
@@ -310,6 +315,7 @@ function StatCard({
           {value}
           {suffix ? <span className="text-base text-mute">{suffix}</span> : null}
         </p>
+        {note ? <p className="mt-1.5 text-[11px] text-mute">{note}</p> : null}
         {rail != null ? <Rail fill={rail} height="h-[6px]" className="mt-3" /> : null}
       </div>
     </div>

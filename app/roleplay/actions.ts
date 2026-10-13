@@ -10,6 +10,15 @@ async function getSupabase() {
   return createClient();
 }
 
+export async function recordSolutionPeek(scenarioId: string) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("record_solution_peek", {
+    p_scenario_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+}
+
 export async function listSubmissions(): Promise<Submission[]> {
   await requireAuth();
   const supabase = await getSupabase();

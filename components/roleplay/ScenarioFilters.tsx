@@ -105,17 +105,15 @@ export function ScenarioFilters({
           </div>
 
           <div>
-            <Label htmlFor="scenario-level">Level</Label>
+            <Label htmlFor="scenario-level">Generated</Label>
             <SelectMenu
               id="scenario-level"
               name="level"
-              defaultValue={current.level ?? ""}
+              defaultValue={current.level === "practice" ? "practice" : ""}
               className="mt-2"
               options={[
-                { value: "", label: "All levels" },
-                { value: "district", label: "District" },
-                { value: "state", label: "State" },
-                { value: "icdc", label: "ICDC" },
+                { value: "", label: "All scenarios" },
+                { value: "practice", label: "All generated" },
               ]}
             />
           </div>

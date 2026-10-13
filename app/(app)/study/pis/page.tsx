@@ -22,6 +22,7 @@ type PisPageProps = {
     ia?: string;
     cluster?: string;
     event?: string;
+    tier?: string;
     all?: string;
     page?: string;
   }>;
@@ -34,6 +35,7 @@ function queryString(params: {
   ia?: string;
   cluster?: string;
   event?: string;
+  tier?: string;
   page?: number;
 }) {
   return new URLSearchParams({
@@ -41,6 +43,7 @@ function queryString(params: {
     ...(params.ia ? { ia: params.ia } : {}),
     ...(params.cluster ? { cluster: params.cluster } : {}),
     ...(params.event ? { event: params.event } : {}),
+    ...(params.tier ? { tier: params.tier } : {}),
     ...(params.page && params.page > 1 ? { page: String(params.page) } : {}),
   }).toString();
 }
@@ -56,7 +59,8 @@ export default async function PisPage({ searchParams }: PisPageProps) {
     params.event !== undefined ||
     params.cluster !== undefined ||
     Boolean(params.ia?.trim()) ||
-    Boolean(params.search?.trim());
+    Boolean(params.search?.trim()) ||
+    Boolean(params.tier?.trim());
 
   let eventCode = params.event?.trim() || undefined;
   let clusterSlug = params.cluster?.trim() || undefined;
@@ -68,29 +72,37 @@ export default async function PisPage({ searchParams }: PisPageProps) {
     }
   }
 
-  const [pis, filterOptions] = await Promise.all([
+  const tier = ["1", "2", "3"].includes(params.tier?.trim() ?? "")
+    ? params.tier!.trim()
+    : undefined;
+
+  const [result, filterOptions] = await Promise.all([
     listPerformanceIndicators({
       search: params.search?.trim() || undefined,
       iaCode: params.ia?.trim() || undefined,
       clusterSlug,
       eventCode,
+      tier: tier ? Number(tier) : undefined,
       limit: PAGE_SIZE,
       offset,
     }),
     getPiFilterOptions(),
   ]);
+  const pis = result.items;
 
   const current = {
     search: params.search,
     ia: params.ia,
     cluster: clusterSlug,
     event: eventCode,
+    tier,
   };
   const pageQuery = {
     search: params.search,
     ia: params.ia,
     cluster: clusterSlug,
     event: eventCode,
+    tier,
   };
 
   return (
@@ -116,6 +128,11 @@ export default async function PisPage({ searchParams }: PisPageProps) {
           current={current}
         />
         <PiFilterPills current={current} />
+
+        <p className="text-sm font-semibold tabular-nums text-foreground">
+          {result.total.toLocaleString("en-US")} performance indicator
+          {result.total === 1 ? "" : "s"}
+        </p>
 
         {pis.length === 0 ? (
           <SocialPanel className="p-8 text-center">
@@ -144,7 +161,7 @@ export default async function PisPage({ searchParams }: PisPageProps) {
             <span />
           )}
 
-          {pis.length === PAGE_SIZE ? (
+          {offset + pis.length < result.total ? (
             <Button asChild variant="secondary">
               <Link
                 href={`/study/pis?${queryString({ ...pageQuery, page: page + 1 })}`}

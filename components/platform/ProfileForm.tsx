@@ -33,7 +33,6 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                 firstName: String(formData.get("firstName") ?? ""),
                 lastName: String(formData.get("lastName") ?? ""),
                 gradeLevel: Number(formData.get("gradeLevel")),
-                isPublicOnLeaderboard: formData.get("isPublicOnLeaderboard") === "on",
               });
               setMessage("Profile updated.");
             } catch (saveError) {
@@ -78,16 +77,6 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             }))}
           />
         </div>
-
-        <label className="flex items-center gap-3 rounded-2xl bg-muted px-4 py-3">
-          <input
-            type="checkbox"
-            name="isPublicOnLeaderboard"
-            defaultChecked={profile.is_public_on_leaderboard}
-            className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
-          />
-          <span className="text-sm text-foreground">Show me on the chapter leaderboard</span>
-        </label>
 
         {message ? <p className="text-sm text-primary">{message}</p> : null}
         {error ? <p className="text-sm text-destructive">{error}</p> : null}

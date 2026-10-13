@@ -6,18 +6,18 @@ import { formatStat, type SiteStats } from "@/lib/site-stats";
 const STEPS = [
   {
     step: "STEP 1",
-    title: "Pick a real scenario",
-    body: "Every released case study from 2017 on, filed by event, year and conference level.",
+    title: "Pick a scenario",
+    body: "Released roleplays by event, year, and level.",
   },
   {
     step: "STEP 2",
     title: "Record and submit",
-    body: "Ten minutes on your phone, drop the link, and it lands in the officer queue.",
+    body: "Upload your run. It goes straight to an officer.",
   },
   {
     step: "STEP 3",
-    title: "Get the rubric back",
-    body: "Scored on the official evaluation form, with the two things to fix before next time.",
+    title: "Get your score back",
+    body: "Official rubric scoring plus what to fix next.",
   },
 ];
 
@@ -46,21 +46,19 @@ export function HomeScreen({ stats }: HomeScreenProps) {
 
       <div className="grid animate-settle grid-cols-1 items-stretch gap-4 px-10 pt-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <div className="deca-card flex flex-col items-start px-12 py-14">
-          <h1 className="max-w-[13ch] font-display text-[72px] font-black leading-[0.95] tracking-[-0.045em] text-ink">
-            Practice the event, not just the test.
+          <h1 className="max-w-[12ch] font-display text-[72px] font-black leading-[0.95] tracking-[-0.045em] text-ink">
+            Roleplay practice for Newman Smith DECA.
           </h1>
-          <p className="mt-6 max-w-[46ch] text-lg leading-[1.6] text-ink-2">
-            {formatStat(stats.scenarios)} released roleplays, {stats.exams} exams,{" "}
-            {formatStat(stats.performanceIndicators)} performance indicators,{" "}
-            {stats.competitiveEvents} competitive events — and a chapter officer who sends
-            the rubric back with comments pinned to the minute they happened.
+          <p className="mt-6 max-w-[42ch] text-lg leading-[1.55] text-ink-2">
+            {formatStat(stats.scenarios)} scenarios, {stats.exams} exams, and officer
+            grading on the official rubric.
           </p>
           <div className="mt-auto flex flex-wrap gap-3 pt-10">
             <DecaButton href="/login?next=/roleplays" size="lg">
               Sign in
             </DecaButton>
             <DecaButton href="/login?next=/roleplays" variant="tint" size="lg">
-              Browse the library
+              Browse scenarios
             </DecaButton>
           </div>
         </div>
@@ -116,16 +114,7 @@ export function HomeScreen({ stats }: HomeScreenProps) {
         ))}
       </div>
 
-      <div className="mx-10 my-10 flex flex-col items-center justify-center gap-8 rounded-[20px] bg-acc-deep px-14 py-14 text-center text-white md:flex-row md:text-left">
-        <h2 className="max-w-[22ch] font-display text-5xl font-black leading-none tracking-[-0.04em]">
-          Every member competes. Nobody walks in cold.
-        </h2>
-        <DecaButton href="/login" variant="white" size="lg" className="flex-none">
-          Sign in
-        </DecaButton>
-      </div>
-
-      <div className="px-10 pb-8 text-center text-xs font-semibold uppercase tracking-[0.06em] text-mute">
+      <div className="px-10 py-10 text-center text-xs font-semibold uppercase tracking-[0.06em] text-mute">
         Newman Smith High School DECA · Carrollton, TX
       </div>
     </>

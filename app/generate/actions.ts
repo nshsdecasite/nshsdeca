@@ -1,18 +1,20 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { requireAuth } from "@/lib/auth/roles";
 import { clusterName, getEvent } from "@/lib/roleplay-gen/catalog";
 import { parseDraft, parseModelJson } from "@/lib/roleplay-gen/draft";
 import { repairDraft } from "@/lib/roleplay-gen/repair";
 import { completeJson } from "@/lib/roleplay-gen/openai";
 import { ROLEPLAY_WRITER_PROMPT, writerPayload } from "@/lib/roleplay-gen/prompt";
-import { renderPacket, wantsCalculations } from "@/lib/roleplay-gen/render";
+import { judgeDocument, situationDocument, solutionDocument, wantsCalculations } from "@/lib/roleplay-gen/render";
 import { selectPIs } from "@/lib/roleplay-gen/select";
-import type { GenerateInput, PracticePacket } from "@/lib/roleplay-gen/types";
+import type { GenerateInput, ScenarioDraft, Selection } from "@/lib/roleplay-gen/types";
 import { validateDraft } from "@/lib/roleplay-gen/validate";
+import { createClient } from "@/lib/supabase/server";
 
 export type GenerateResult =
-  | { ok: true; packet: PracticePacket }
+  | { ok: true; scenarioId: string }
   | { ok: false; error: string };
 
 function bodyRange(min: number, max: number, team: boolean): [number, number] {
@@ -20,6 +22,40 @@ function bodyRange(min: number, max: number, team: boolean): [number, number] {
   const low = Math.max(45, min - overhead);
   const high = Math.max(low + 30, max - 90);
   return [low, high];
+}
+
+function practiceTitle(draft: ScenarioDraft) {
+  if (draft.company_name) return draft.company_name;
+  const role = draft.participant_role.trim();
+  return role ? role.charAt(0).toUpperCase() + role.slice(1) : "Practice event";
+}
+
+async function savePracticeScenario(selection: Selection, draft: ScenarioDraft) {
+  const event = getEvent(selection.eventCode);
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("save_practice_scenario", {
+    p_event_code: event.code,
+    p_instructional_area_code: selection.primaryIA.code,
+    p_instructional_area_name: selection.primaryIA.name,
+    p_career_pathway: event.pathway,
+    p_title: practiceTitle(draft),
+    p_situation: situationDocument(draft, event),
+    p_judge: judgeDocument(draft, event),
+    p_solution: solutionDocument(draft),
+    p_question_1: draft.judge_questions[0],
+    p_question_2: draft.judge_questions[1],
+    p_indicators: selection.pis.map((pi, index) => ({
+      code: pi.code,
+      text: pi.display_text,
+      order: index + 1,
+    })),
+  });
+  if (error || typeof data !== "string" || !data) {
+    throw new Error(error?.message ?? "Could not save the practice event.");
+  }
+  revalidateTag("scenario-catalog");
+  revalidateTag("scenario-filters");
+  return data;
 }
 
 function cleanAvoid(values: string[] | undefined) {
@@ -33,7 +69,6 @@ export async function generatePracticeEvent(input: GenerateInput): Promise<Gener
   await requireAuth("/generate");
 
   const eventCode = input.eventCode?.trim().toUpperCase();
-  const difficulty = input.difficulty === "advanced" ? "advanced" : "standard";
   const primaryIA = input.primaryIA?.trim() || undefined;
 
   let event;
@@ -64,7 +99,6 @@ export async function generatePracticeEvent(input: GenerateInput): Promise<Gener
       scenario_focus: event.scenario_focus,
     },
     primaryIA: selection.primaryIA.name,
-    difficulty,
     calculations,
     wordRange: event.situation_word_range,
     bodyRange: bodyRange(event.situation_word_range[0], event.situation_word_range[1], event.category === "team_decision_making"),
@@ -106,7 +140,8 @@ export async function generatePracticeEvent(input: GenerateInput): Promise<Gener
       const draft = repairDraft(selection, parsed.draft, calculations);
       const problems = validateDraft(selection, draft, calculations);
       if (problems.length === 0) {
-        return { ok: true, packet: renderPacket(selection, draft, calculations) };
+        const scenarioId = await savePracticeScenario(selection, draft);
+        return { ok: true, scenarioId };
       }
       lastErrors = problems;
       prior.push({ draft: raw, errors: problems });

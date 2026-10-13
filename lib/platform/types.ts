@@ -11,9 +11,12 @@ export type PiHeatmapCell = {
 export type DashboardStats = {
   total_points: number;
   tests_completed: number;
+  avg_test_pct?: number | null;
   roleplays_submitted: number;
   roleplays_graded?: number;
   total_pi_count?: number;
+  event_pi_count?: number;
+  event_pis_studied?: number;
   weak_pis: {
     id: string;
     pi_code: string;
@@ -52,15 +55,6 @@ export type UserProfile = {
   cluster_slug?: string | null;
   cluster_name?: string | null;
   event_pi_count?: number;
-};
-
-export type LeaderboardEntry = {
-  user_id: string;
-  first_name: string | null;
-  last_name: string | null;
-  grade_level: number | null;
-  total_points: number;
-  rank: number;
 };
 
 export type Note = {
@@ -131,6 +125,22 @@ export type ChapterActivity = {
   tab_blur_count: number;
   last_test_at: string | null;
   last_roleplay_at: string | null;
+};
+
+export type SolutionPeek = {
+  id: string;
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  scenario_id: string;
+  event_code: string;
+  scenario_title: string | null;
+  scenario_number: number;
+  year: number;
+  level: string;
+  checked_at: string;
+  attempted_after: boolean;
 };
 
 export type ChapterMember = {

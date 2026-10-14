@@ -32,7 +32,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           Welcome back
         </h1>
         <p className="mt-2 text-center text-sm text-ink-2">
-          Sign in with your username. The first time, that is your first and last name together, like thinhphan.
+          Sign in with your username. The first time, that is your first and last name together, like janedoe.
         </p>
 
         <form action={formAction} className="mt-7 flex flex-col gap-4">

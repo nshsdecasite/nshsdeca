@@ -111,7 +111,7 @@ export function ForgotPasswordForm() {
                   autoCorrect="off"
                   spellCheck={false}
                   defaultValue={username}
-                  placeholder="thinhphan"
+                  placeholder="janedoe"
                   required
                   className="deca-field"
                 />

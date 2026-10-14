@@ -183,6 +183,7 @@ export function ChapterInbox({
     "direct",
   );
   const [memberQuery, setMemberQuery] = useState("");
+  const [recipientId, setRecipientId] = useState("");
   const [announcementPending, startAnnouncementTransition] = useTransition();
   const [messagePending, startMessageTransition] = useTransition();
 
@@ -222,6 +223,7 @@ export function ChapterInbox({
     setMessageError("");
     setRecipientMode("direct");
     setMemberQuery("");
+    setRecipientId("");
     router.push(`/messages?with=${userId}`);
   }
 
@@ -229,6 +231,7 @@ export function ChapterInbox({
     setMessageError("");
     setRecipientMode("direct");
     setMemberQuery("");
+    setRecipientId("");
     router.push("/messages");
   }
 
@@ -562,6 +565,8 @@ export function ChapterInbox({
                         await sendBroadcastMessage(to, body);
                         form.reset();
                         setRecipientMode("direct");
+                        setMemberQuery("");
+                        setRecipientId("");
                         router.refresh();
                         return;
                       }
@@ -570,6 +575,7 @@ export function ChapterInbox({
                       await sendDirectMessage(recipient, body);
                       form.reset();
                       setMemberQuery("");
+                      setRecipientId("");
                       router.push(`/messages?with=${recipient}`);
                       router.refresh();
                     } catch (sendError) {
@@ -586,47 +592,74 @@ export function ChapterInbox({
                   <input type="hidden" name="to" value={activeUserId} />
                 ) : (
                   <div className="space-y-2">
-                    <input
-                      value={memberQuery}
-                      onChange={(event) => setMemberQuery(event.target.value)}
-                      placeholder="Search members"
-                      className="deca-field"
-                      aria-label="Search members"
-                    />
-                    <SelectMenu
-                      name="to"
-                      required
-                      defaultValue=""
-                      placeholder="To…"
-                      invalidMessage="Choose someone to message."
-                      aria-label="To"
-                      searchable={false}
-                      onValueChange={(value) => {
-                        setRecipientMode(value === "students" || value === "all" ? value : "direct");
-                      }}
-                      options={[
-                        ...(isOfficer && !memberQuery.trim()
-                          ? [
-                              { value: "students", label: "All students" },
-                              { value: "all", label: "Everyone" },
-                            ]
-                          : []),
-                        ...filteredMembers.map((member) => ({
-                          value: member.id,
-                          label: `${displayName(member.first_name, member.last_name, member.email)}${
-                            member.role === "student" ? "" : ` · ${member.role}`
-                          }`,
-                        })),
-                      ]}
-                    />
-                    {filteredMembers.length === 0 ? (
-                      <p className="text-sm text-mute">No members match that search.</p>
-                    ) : null}
-                    {isOfficer && recipientMode !== "direct" ? (
-                      <p className="inline-flex items-center gap-1.5 rounded-full bg-ever-lt px-3 py-1 text-[12px] font-bold text-ever-dk">
-                        <Users className="h-3.5 w-3.5" strokeWidth={2.5} />
-                        {recipientMode === "students" ? "All students" : "Everyone"}
-                      </p>
+                    <div className="relative">
+                      <input
+                        value={memberQuery}
+                        onChange={(event) => {
+                          setMemberQuery(event.target.value);
+                          setRecipientId("");
+                          setRecipientMode("direct");
+                        }}
+                        placeholder="To…"
+                        className="deca-field"
+                        aria-label="To"
+                        autoComplete="off"
+                      />
+                      {memberQuery.trim() && !recipientId ? (
+                        <ul className="absolute bottom-[calc(100%+6px)] z-20 max-h-56 w-full overflow-y-auto rounded-2xl bg-white py-1 shadow-card">
+                          {filteredMembers.length === 0 ? (
+                            <li className="px-4 py-2.5 text-sm text-mute">No members match that name.</li>
+                          ) : (
+                            filteredMembers.map((member) => {
+                              const label = personLabel(member);
+                              return (
+                                <li key={member.id}>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setRecipientId(member.id);
+                                      setRecipientMode("direct");
+                                      setMemberQuery(label);
+                                    }}
+                                    className="flex w-full items-center px-4 py-2.5 text-left text-sm font-bold text-ink transition-[background-color,color] duration-150 ease-[cubic-bezier(0.2,0,0,1)] hover:bg-ever-lt"
+                                  >
+                                    {label}
+                                  </button>
+                                </li>
+                              );
+                            })
+                          )}
+                        </ul>
+                      ) : null}
+                    </div>
+                    <input type="hidden" name="to" value={recipientId} />
+                    {isOfficer ? (
+                      <div className="flex flex-wrap gap-2">
+                        {(
+                          [
+                            ["students", "All students"],
+                            ["all", "Everyone"],
+                          ] as const
+                        ).map(([value, label]) => (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => {
+                              setRecipientId(value);
+                              setRecipientMode(value);
+                              setMemberQuery(label);
+                            }}
+                            className={cn(
+                              "rounded-full px-3 py-1 text-[12px] font-bold transition-[background-color,color,scale] duration-150 ease-[cubic-bezier(0.2,0,0,1)] active:scale-[0.96]",
+                              recipientId === value
+                                ? "bg-ever-dk text-white"
+                                : "bg-ever-lt text-ever-dk",
+                            )}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
                     ) : null}
                   </div>
                 )}

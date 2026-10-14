@@ -24,6 +24,7 @@ interface RubricFormProps {
     score: number;
     max: number;
     group?: RubricCriterionGroup;
+    note?: string;
   }[];
   readOnly?: boolean;
 }
@@ -132,6 +133,11 @@ export default function RubricForm({
                     readOnly
                   />
                 </div>
+                {item.note ? (
+                  <p className="rounded-xl border border-border/60 bg-card px-3 py-2 text-sm text-muted-foreground">
+                    {item.note}
+                  </p>
+                ) : null}
               </div>
             </div>
           );

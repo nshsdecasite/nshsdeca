@@ -9,7 +9,6 @@ import {
   submitFinalGrading,
 } from "@/app/roleplay/actions";
 import { DecaButton } from "@/components/deca/button";
-import { PointScale } from "@/components/deca/point-scale";
 import { ScrubRail } from "@/components/deca/rail";
 import VideoPlayer, { DriveDurationInput } from "@/components/roleplay/VideoPlayer";
 import { monoTime } from "@/lib/deca/format";
@@ -17,15 +16,11 @@ import {
   clampScore,
   createEmptyRubric,
   criterionDisplayText,
-  defaultNumericLevels,
   extraCriteria,
   GROUP_LABELS,
-  levelsForCriterion,
   piCriteria,
-  scoreToPointValue,
   splitCriterionLabel,
   type RubricCriterionGroup,
-  type RubricLevelScale,
 } from "@/lib/roleplay/rubric";
 import { resolveVideoSource } from "@/lib/roleplay/submission";
 import type { Scenario } from "@/lib/roleplay/types";
@@ -50,11 +45,18 @@ type GradingRow = {
   group: RubricCriterionGroup;
   code: string | null;
   label: string;
-  levels: RubricLevelScale[];
   score: number;
   maxPoints: number;
+  noteKey: string | null;
   onChange: (score: number) => void;
 };
+
+const NOTE_GROUPS = new Set<RubricCriterionGroup>([
+  "performance_indicator",
+  "solution",
+  "career_competencies",
+  "twenty_first_century_skills",
+]);
 
 function commentLabel(tag: CommentTag, scenario: Scenario) {
   if (tag.startsWith("PI-")) {
@@ -337,9 +339,9 @@ export function OfficerGradingWorkspace({
           scenario.performanceIndicators?.[index]?.pi_code ??
           `PI-${index + 1}`,
         label: criterionDisplayText(criterion),
-        levels: levelsForCriterion(criterion, rubric.maxPiScore),
         score: rubric.piScores[`PI-${index + 1}`] ?? 0,
         maxPoints: criterion.max_points || rubric.maxPiScore,
+        noteKey: `PI-${index + 1}`,
         onChange: (score) => setPiScore(index, score),
       });
     });
@@ -350,9 +352,9 @@ export function OfficerGradingWorkspace({
         group: "performance_indicator",
         code: scenario.performanceIndicators?.[index]?.pi_code ?? `PI-${index + 1}`,
         label,
-        levels: defaultNumericLevels(rubric.maxPiScore),
         score: rubric.piScores[`PI-${index + 1}`] ?? 0,
         maxPoints: rubric.maxPiScore,
+        noteKey: `PI-${index + 1}`,
         onChange: (score) => setPiScore(index, score),
       });
     });
@@ -365,9 +367,9 @@ export function OfficerGradingWorkspace({
         group: criterion.criterion_group,
         code: null,
         label: criterionDisplayText(criterion),
-        levels: levelsForCriterion(criterion, criterion.max_points),
         score: rubric.extraScores?.[criterion.id] ?? 0,
         maxPoints: criterion.max_points,
+        noteKey: NOTE_GROUPS.has(criterion.criterion_group) ? criterion.id : null,
         onChange: (score) => setExtraScore(criterion.id, score),
       });
     });
@@ -378,11 +380,9 @@ export function OfficerGradingWorkspace({
       group: "twenty_first_century_skills",
       code: null,
       label: "21st Century Skills — overall presentation and judgment",
-      levels: century
-        ? levelsForCriterion(century)
-        : defaultNumericLevels(rubric.maxCenturyScore),
       score: rubric.centurySkills,
       maxPoints: century?.max_points ?? rubric.maxCenturyScore,
+      noteKey: "century",
       onChange: setLegacyCentury,
     });
   }
@@ -633,12 +633,12 @@ export function OfficerGradingWorkspace({
                     ) : null}
                     <div
                       className={cn(
-                        "flex flex-col gap-3 py-5 lg:flex-row lg:items-center lg:gap-6",
+                        "py-5",
                         index < rows.length - 1 && "border-b border-edge/70",
                       )}
                     >
-                      <div className="flex min-w-0 flex-1 items-start justify-between gap-4 lg:max-w-[28rem] xl:max-w-[34rem]">
-                        <p className="text-pretty text-[16px] font-semibold leading-[1.45] text-ink">
+                      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
+                        <p className="min-w-0 flex-1 text-pretty text-[16px] font-semibold leading-[1.45] text-ink lg:max-w-[28rem] xl:max-w-[34rem]">
                           {row.code ? (
                             <span className="mr-1.5 font-mono text-[13px] font-extrabold text-ever">
                               {row.code}
@@ -653,27 +653,48 @@ export function OfficerGradingWorkspace({
                             body
                           )}
                         </p>
-                        <span className="pt-0.5 text-[22px] font-black tabular-nums leading-none lg:hidden">
-                          {row.score}
-                        </span>
+                        <label className="flex min-w-0 flex-[1.35] items-center gap-3">
+                          <input
+                            type="range"
+                            min={0}
+                            max={row.maxPoints}
+                            step={1}
+                            value={row.score}
+                            disabled={submitted}
+                            aria-label={`${title || body} score`}
+                            onChange={(event) => row.onChange(Number(event.target.value))}
+                            className="h-1.5 w-full cursor-pointer accent-ever-dk disabled:cursor-default"
+                          />
+                          <span className="w-16 shrink-0 text-right text-[22px] font-black tabular-nums leading-none">
+                            {row.score}
+                            <span className="text-sm font-bold text-mute">/{row.maxPoints}</span>
+                          </span>
+                        </label>
                       </div>
-                      <div className="min-w-0 flex-[1.35]">
-                        <PointScale
-                          name={row.key}
-                          value={scoreToPointValue(row.score)}
-                          levels={row.levels}
-                          size="lg"
-                          labeled={showGroup}
-                          onChange={
-                            submitted
-                              ? undefined
-                              : (value) => row.onChange(Number(value))
+                      {row.noteKey ? (
+                        <textarea
+                          value={
+                            row.noteKey === "century"
+                              ? centuryFeedback
+                              : (piFeedback[row.noteKey] ?? "")
                           }
+                          onChange={(event) => {
+                            const value = event.target.value;
+                            if (row.noteKey === "century") {
+                              setCenturyFeedback(value);
+                              return;
+                            }
+                            setPiFeedback((current) => ({
+                              ...current,
+                              [row.noteKey!]: value,
+                            }));
+                          }}
+                          placeholder="Notes for this item"
+                          rows={2}
+                          disabled={submitted}
+                          className="deca-field mt-3 resize-none"
                         />
-                      </div>
-                      <span className="hidden w-14 shrink-0 text-right text-[22px] font-black tabular-nums leading-none lg:block">
-                        {row.score}
-                      </span>
+                      ) : null}
                     </div>
                   </div>
                 );

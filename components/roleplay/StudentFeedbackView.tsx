@@ -109,6 +109,7 @@ export function StudentFeedbackView({
                           label: criterionDisplayText(criterion),
                           score: grading.rubric.extraScores?.[criterion.id] ?? 0,
                           max: criterion.max_points,
+                          note: grading.piFeedback?.[criterion.id] ?? "",
                         }))
                       : undefined
                   }

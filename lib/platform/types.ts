@@ -127,6 +127,20 @@ export type ChapterActivity = {
   last_roleplay_at: string | null;
 };
 
+export type ChapterTestTabLeave = {
+  session_id: string;
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  exam_title: string | null;
+  exam_code: string | null;
+  score: number | null;
+  total_questions: number;
+  completed_at: string;
+  tab_leave_count: number;
+};
+
 export type SolutionPeek = {
   id: string;
   user_id: string;
@@ -180,4 +194,14 @@ export type DirectMessage = {
   body: string;
   created_at: string;
   read_at: string | null;
+};
+
+export type ChapterEvent = {
+  id: string;
+  title: string;
+  detail: string | null;
+  location: string | null;
+  starts_at: string;
+  ends_at: string | null;
+  created_at?: string;
 };

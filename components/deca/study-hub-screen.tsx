@@ -9,7 +9,7 @@ const METHODS = [
   {
     href: "/study/flashcards",
     title: "PI flashcards",
-    description: "Flip indicators, grouped by instructional area.",
+    description: "Flip the indicators for your competitive event.",
   },
   {
     href: "/study/vocab",

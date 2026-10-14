@@ -1,6 +1,6 @@
 import type { ScenarioRubric } from "@/lib/roleplay/rubric";
 
-export type PracticeReviewStatus = "private" | "pending_review";
+export type PracticeReviewStatus = "private" | "pending_review" | "approved";
 
 export type ScenarioSummary = {
   id: string;

@@ -3,6 +3,7 @@ import {
   getAdminOverview,
   listChapterActivity,
   listChapterMembers,
+  listChapterTestTabLeaves,
   listSolutionPeeks,
 } from "@/app/admin/actions";
 import { AdminPanel } from "@/components/platform/AdminPanel";
@@ -14,10 +15,11 @@ export const metadata: Metadata = {
 
 export default async function AdminPage() {
   const { user, role } = await requireRole(["officer", "advisor"], "/admin");
-  const [overview, members, activity, solutionPeeks] = await Promise.all([
+  const [overview, members, activity, recentTests, solutionPeeks] = await Promise.all([
     getAdminOverview(),
     listChapterMembers(),
     listChapterActivity(),
+    listChapterTestTabLeaves(),
     listSolutionPeeks(),
   ]);
 
@@ -27,6 +29,7 @@ export default async function AdminPage() {
         overview={overview}
         members={members}
         activity={activity}
+        recentTests={recentTests}
         solutionPeeks={solutionPeeks}
         currentUserId={user.id}
         currentRole={role === "advisor" ? "advisor" : "officer"}

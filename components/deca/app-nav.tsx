@@ -14,12 +14,15 @@ const MAIN = [
   { href: "/generate", label: "Generate" },
   { href: "/submissions", label: "Submissions" },
   { href: "/study", label: "Study" },
+  { href: "/tests", label: "Exams" },
+  { href: "/calendar", label: "Events" },
   { href: "/messages", label: "Messages" },
 ] as const;
 
 const OFFICER = [
   { href: "/admin/grading", label: "Grading" },
   { href: "/admin/generated", label: "Reviews" },
+  { href: "/admin/calendar", label: "Calendar" },
   { href: "/admin", label: "Admin" },
 ] as const;
 

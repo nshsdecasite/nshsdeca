@@ -66,9 +66,21 @@ export default async function TestHistoryPage() {
 
                   <div className="flex items-center gap-3">
                     {completed ? (
-                      <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold tabular-nums text-primary">
-                        {session.score ?? 0}/{session.total_questions}
-                      </span>
+                      <>
+                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold tabular-nums text-primary">
+                          {session.score ?? 0}/{session.total_questions}
+                        </span>
+                        <span
+                          className={`text-sm font-semibold tabular-nums ${
+                            session.tab_leave_count > 0
+                              ? "text-amber-800"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {session.tab_leave_count} tab leave
+                          {session.tab_leave_count === 1 ? "" : "s"}
+                        </span>
+                      </>
                     ) : (
                       <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
                         In progress

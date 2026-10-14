@@ -284,7 +284,7 @@ export function DashboardScreen({
             {NEXT_CONFERENCE.name}
           </p>
           <p className="mt-1.5 text-[13px] text-white/85">{NEXT_CONFERENCE.when}</p>
-          <DecaButton href="/events" variant="white" size="sm" className="mt-auto self-start pt-5">
+          <DecaButton href="/calendar" variant="white" size="sm" className="mt-auto self-start pt-5">
             Checklist
           </DecaButton>
         </div>

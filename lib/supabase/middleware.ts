@@ -23,8 +23,13 @@ function isProtected(pathname: string) {
     pathname.startsWith("/study") ||
     pathname.startsWith("/notes") ||
     pathname.startsWith("/profile") ||
-    pathname.startsWith("/messages")
+    pathname.startsWith("/messages") ||
+    pathname.startsWith("/calendar")
   );
+}
+
+function isSignedInEventsPath(pathname: string) {
+  return pathname === "/events" || pathname.startsWith("/events/");
 }
 
 function redirectTo(request: NextRequest, pathname: string, next?: string) {
@@ -94,6 +99,7 @@ export async function updateSession(request: NextRequest) {
   // only inside the margin so cookies stay current before they expire.
   if (expiresAt - Date.now() > REFRESH_MARGIN_MS) {
     if (authPage) return redirectTo(request, "/dashboard");
+    if (isSignedInEventsPath(pathname)) return redirectTo(request, "/calendar");
     return NextResponse.next({ request });
   }
 
@@ -124,6 +130,10 @@ export async function updateSession(request: NextRequest) {
 
   if (user && authPage) {
     return redirectTo(request, "/dashboard");
+  }
+
+  if (user && isSignedInEventsPath(pathname)) {
+    return redirectTo(request, "/calendar");
   }
 
   return supabaseResponse;

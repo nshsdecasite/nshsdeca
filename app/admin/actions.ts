@@ -9,6 +9,7 @@ import type {
   AnnouncementReactionName,
   ChapterActivity,
   ChapterMember,
+  ChapterTestTabLeave,
   SolutionPeek,
 } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
@@ -122,6 +123,19 @@ export async function listChapterActivity(): Promise<ChapterActivity[]> {
     avg_roleplay_score:
       row.avg_roleplay_score != null ? Number(row.avg_roleplay_score) : null,
     tab_blur_count: Number(row.tab_blur_count),
+  }));
+}
+
+export async function listChapterTestTabLeaves(): Promise<ChapterTestTabLeave[]> {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_chapter_test_tab_leaves");
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as ChapterTestTabLeave[]).map((row) => ({
+    ...row,
+    score: row.score != null ? Number(row.score) : null,
+    total_questions: Number(row.total_questions ?? 0),
+    tab_leave_count: Number(row.tab_leave_count ?? 0),
   }));
 }
 

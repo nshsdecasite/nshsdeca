@@ -28,8 +28,11 @@ export function ScenarioDetailScreen({
     <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <Link href="/roleplays" className="text-[13px] font-bold text-ever-dk hover:text-ever">
-            ← Scenario library
+          <Link
+            href={scenario.level === "practice" ? "/roleplays?level=practice" : "/roleplays"}
+            className="text-[13px] font-bold text-ever-dk hover:text-ever"
+          >
+            {scenario.level === "practice" ? "← Generated library" : "← Scenario library"}
           </Link>
           <h1 className="mt-3.5 font-display text-4xl font-black tracking-[-0.035em]">
             {title}

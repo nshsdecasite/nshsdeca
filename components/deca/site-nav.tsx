@@ -40,7 +40,10 @@ export function SiteNav({
       </nav>
 
       <div className="flex items-center justify-end">
-        <DecaButton href="/login" size="sm">
+        <DecaButton
+          href={active === "events" ? "/login?next=/calendar" : "/login"}
+          size="sm"
+        >
           Sign in
         </DecaButton>
       </div>

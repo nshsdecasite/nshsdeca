@@ -31,6 +31,7 @@ export function TestTaker({ session }: TestTakerProps) {
   const submittingRef = useRef(false);
   const pendingSaves = useRef(Promise.resolve());
   const failedSaves = useRef(new Set<string>());
+  const lastLeaveAtRef = useRef(0);
   const answersRef = useRef(answers);
   answersRef.current = answers;
 
@@ -58,14 +59,22 @@ export function TestTaker({ session }: TestTakerProps) {
     if (completed) return;
 
     const logLeave = (eventType: "blur" | "hidden") => {
-      void recordTabEvent(session.id, eventType).catch(() => undefined);
+      const now = Date.now();
+      if (now - lastLeaveAtRef.current < 1000) return;
+      lastLeaveAtRef.current = now;
+      void recordTabEvent(session.id, eventType).catch((leaveError) => {
+        console.error("Could not record tab leave", leaveError);
+      });
     };
 
     const onVisibilityChange = () => {
       if (document.hidden) logLeave("hidden");
     };
 
-    const onBlur = () => logLeave("blur");
+    const onBlur = () => {
+      if (document.hidden) return;
+      logLeave("blur");
+    };
 
     window.addEventListener("blur", onBlur);
     document.addEventListener("visibilitychange", onVisibilityChange);
@@ -224,9 +233,13 @@ export function TestTaker({ session }: TestTakerProps) {
               <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-white/80">
                 Complete
               </p>
-              <p className="mt-1 font-display text-4xl font-black tracking-[-0.035em]">
+              <p className="mt-1 font-display text-4xl font-black tracking-[-0.035em] tabular-nums">
                 {session.score ?? 0}
                 <span className="text-lg text-white/70">/{session.total_questions}</span>
+              </p>
+              <p className="mt-2 text-[13px] font-semibold tabular-nums text-white/80">
+                {session.tab_leave_count} tab leave
+                {session.tab_leave_count === 1 ? "" : "s"}
               </p>
             </div>
           ) : null}
@@ -373,10 +386,16 @@ export function TestTaker({ session }: TestTakerProps) {
               <p className="text-xs font-semibold text-mute">
                 {completed ? "Exam score" : "Answered"}
               </p>
-              <p className="mt-1.5 font-display text-[28px] font-black tracking-[-0.03em]">
+              <p className="mt-1.5 font-display text-[28px] font-black tracking-[-0.03em] tabular-nums">
                 {completed ? session.score ?? 0 : answeredCount}
                 <span className="text-base text-mute">/{session.total_questions}</span>
               </p>
+              {completed ? (
+                <p className="mt-1 text-xs font-semibold tabular-nums text-mute">
+                  {session.tab_leave_count} tab leave
+                  {session.tab_leave_count === 1 ? "" : "s"}
+                </p>
+              ) : null}
             </div>
             <span className="rounded-full bg-ever-lt px-3.5 py-1.5 text-[13px] font-extrabold text-ever-dk">
               {sessionAccuracy}%

@@ -7,6 +7,7 @@ import {
 } from "@/lib/auth/school-email";
 import { chosenUsername, isUsername, loginUsername, usernameEmail } from "@/lib/auth/username";
 import { getSessionUser } from "@/lib/auth/roles";
+import { safeInternalPath } from "@/lib/auth/safe-path";
 import { getSiteUrl } from "@/lib/site-url";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -67,7 +68,7 @@ export async function signIn(
     return { error: "That username or password is wrong." };
   }
 
-  redirect(next.startsWith("/") ? next : "/dashboard");
+  redirect(safeInternalPath(next));
 }
 
 export async function signUp(

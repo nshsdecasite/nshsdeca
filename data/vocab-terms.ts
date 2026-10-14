@@ -25,6 +25,7 @@ export type VocabTerm = {
     | "UN";
   /** Optional explicit cluster tags when a term spans clusters beyond its IA defaults. */
   clusterSlugs?: ClusterSlug[];
+  example?: string;
 };
 
 const baseVocabTerms: VocabTerm[] = [

@@ -8,11 +8,9 @@ import { Label } from "@/components/ui/label";
 
 type PiFiltersProps = {
   instructionalAreas: { code: string; name: string }[];
-  clusters: { slug: string; name: string }[];
   current: {
     search?: string;
     ia?: string;
-    cluster?: string;
     event?: string;
     tier?: string;
   };
@@ -26,7 +24,6 @@ function buildHref(
   const merged = { ...current, ...patch };
   if (merged.search) params.set("search", merged.search);
   if (merged.ia) params.set("ia", merged.ia);
-  if (merged.cluster) params.set("cluster", merged.cluster);
   if (merged.event) params.set("event", merged.event);
   if (merged.tier) params.set("tier", merged.tier);
   const query = params.toString();
@@ -35,13 +32,12 @@ function buildHref(
 
 export function PiFilters({
   instructionalAreas,
-  clusters,
   current,
 }: PiFiltersProps) {
   return (
     <Card className="p-5">
       <form action="/study/pis" method="get">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <div>
             <Label htmlFor="pi-search">Search</Label>
             <Input
@@ -66,23 +62,6 @@ export function PiFilters({
                 ...instructionalAreas.map((area) => ({
                   value: area.code,
                   label: `${area.code} — ${area.name}`,
-                })),
-              ]}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="pi-cluster">Cluster</Label>
-            <SelectMenu
-              id="pi-cluster"
-              name="cluster"
-              defaultValue={current.cluster ?? ""}
-              className="mt-2"
-              options={[
-                { value: "", label: "All clusters" },
-                ...clusters.map((cluster) => ({
-                  value: cluster.slug,
-                  label: cluster.name,
                 })),
               ]}
             />
@@ -128,7 +107,6 @@ export function PiFilterPills({
     current.event ? { label: `Event: ${current.event}`, key: "event" } : null,
     current.search ? { label: `Search: ${current.search}`, key: "search" } : null,
     current.ia ? { label: `IA: ${current.ia}`, key: "ia" } : null,
-    current.cluster ? { label: `Cluster: ${current.cluster}`, key: "cluster" } : null,
     current.tier ? { label: `Tier ${current.tier}`, key: "tier" } : null,
   ].filter(Boolean) as { label: string; key: keyof PiFiltersProps["current"] }[];
 

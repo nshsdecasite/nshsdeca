@@ -470,7 +470,7 @@ export function PageGhost({ path }: { path: string }) {
   const page = path.split("?")[0] || "/";
   if (page === "/") return <HomeGhost />;
   if (page.startsWith("/login") || page.startsWith("/signup")) return <LoginGhost />;
-  if (page.startsWith("/events")) return <EventsGhost />;
+  if (page.startsWith("/events") || page.startsWith("/calendar")) return <EventsGhost />;
   if (page === "/dashboard") return <DashboardGhost />;
   if (page === "/roleplays") return <LibraryGhost />;
   if (page.startsWith("/roleplays/submit")) return <FormGhost />;

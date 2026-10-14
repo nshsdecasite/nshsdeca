@@ -20,7 +20,6 @@ type PisPageProps = {
   searchParams: Promise<{
     search?: string;
     ia?: string;
-    cluster?: string;
     event?: string;
     tier?: string;
     all?: string;
@@ -33,7 +32,6 @@ const PAGE_SIZE = 48;
 function queryString(params: {
   search?: string;
   ia?: string;
-  cluster?: string;
   event?: string;
   tier?: string;
   page?: number;
@@ -41,7 +39,6 @@ function queryString(params: {
   return new URLSearchParams({
     ...(params.search ? { search: params.search } : {}),
     ...(params.ia ? { ia: params.ia } : {}),
-    ...(params.cluster ? { cluster: params.cluster } : {}),
     ...(params.event ? { event: params.event } : {}),
     ...(params.tier ? { tier: params.tier } : {}),
     ...(params.page && params.page > 1 ? { page: String(params.page) } : {}),
@@ -57,19 +54,13 @@ export default async function PisPage({ searchParams }: PisPageProps) {
   const hasExplicit =
     showAll ||
     params.event !== undefined ||
-    params.cluster !== undefined ||
     Boolean(params.ia?.trim()) ||
     Boolean(params.search?.trim()) ||
     Boolean(params.tier?.trim());
 
   let eventCode = params.event?.trim() || undefined;
-  let clusterSlug = params.cluster?.trim() || undefined;
   if (!hasExplicit && profile?.event_code) {
-    if ((profile.event_pi_count ?? 0) > 0) {
-      eventCode = profile.event_code;
-    } else if (profile.cluster_slug) {
-      clusterSlug = profile.cluster_slug;
-    }
+    eventCode = profile.event_code;
   }
 
   const tier = ["1", "2", "3"].includes(params.tier?.trim() ?? "")
@@ -80,7 +71,6 @@ export default async function PisPage({ searchParams }: PisPageProps) {
     listPerformanceIndicators({
       search: params.search?.trim() || undefined,
       iaCode: params.ia?.trim() || undefined,
-      clusterSlug,
       eventCode,
       tier: tier ? Number(tier) : undefined,
       limit: PAGE_SIZE,
@@ -93,14 +83,12 @@ export default async function PisPage({ searchParams }: PisPageProps) {
   const current = {
     search: params.search,
     ia: params.ia,
-    cluster: clusterSlug,
     event: eventCode,
     tier,
   };
   const pageQuery = {
     search: params.search,
     ia: params.ia,
-    cluster: clusterSlug,
     event: eventCode,
     tier,
   };
@@ -115,16 +103,13 @@ export default async function PisPage({ searchParams }: PisPageProps) {
         description={
           eventCode
             ? `Showing the performance indicators for ${eventCode}.`
-            : clusterSlug
-              ? `Showing ${profile?.cluster_name ?? "cluster"} performance indicators.`
-              : "Search the master PI bank and see which practice tests and roleplay events use each indicator."
+            : "Search the master PI bank and see which practice tests and roleplay events use each indicator."
         }
       />
 
       <div className="space-y-6">
         <PiFilters
           instructionalAreas={filterOptions.instructional_areas}
-          clusters={filterOptions.clusters}
           current={current}
         />
         <PiFilterPills current={current} />

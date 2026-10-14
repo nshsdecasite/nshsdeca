@@ -27,7 +27,12 @@ export async function listTestSessions(): Promise<TestSessionSummary[]> {
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_my_test_sessions");
   if (error) throw new Error(error.message);
-  return (data ?? []) as TestSessionSummary[];
+  return ((data ?? []) as TestSessionSummary[]).map((row) => ({
+    ...row,
+    score: row.score != null ? Number(row.score) : null,
+    total_questions: Number(row.total_questions ?? 0),
+    tab_leave_count: Number(row.tab_leave_count ?? 0),
+  }));
 }
 
 export async function getTestSession(sessionId: string): Promise<TestSession | null> {
@@ -43,6 +48,7 @@ export async function getTestSession(sessionId: string): Promise<TestSession | n
     ...session,
     timed: Boolean(session.timed),
     time_limit_seconds: session.time_limit_seconds ?? null,
+    tab_leave_count: Number(session.tab_leave_count ?? 0),
   };
 }
 
@@ -111,5 +117,6 @@ export async function completeTest(sessionId: string) {
   if (error) throw new Error(error.message);
   revalidatePath(`/tests/${sessionId}`);
   revalidatePath("/tests/history");
+  revalidatePath("/admin");
   redirect(`/tests/${sessionId}`);
 }

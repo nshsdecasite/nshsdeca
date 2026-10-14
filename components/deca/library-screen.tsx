@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { listScenarios } from "@/app/roleplay/scenario-actions";
 import { DecaButton } from "@/components/deca/button";
+import { Segmented } from "@/components/deca/segmented";
 import {
   ScenarioFilterBar,
   type ScenarioFilters,
@@ -144,13 +145,16 @@ export function LibraryScreen({
   }
 
   const visible = filterScenarios(scenarios, filters);
+  const generatedLibrary = filters.level === "practice";
   const areaLabel = filters.area
     ? instructionalAreas.find((area) => area.code === filters.area)?.name ?? filters.area
     : undefined;
   const summaryParts = [
     filters.event,
     areaLabel,
-    filters.level ? LEVEL_LABELS[filters.level as ScenarioSummary["level"]] ?? filters.level : null,
+    generatedLibrary ? null : filters.level
+      ? LEVEL_LABELS[filters.level as ScenarioSummary["level"]] ?? filters.level
+      : null,
     filters.year && filters.year !== "older" ? filters.year : null,
     filters.year === "older" ? "2017–2022" : null,
   ].filter(Boolean);
@@ -159,17 +163,33 @@ export function LibraryScreen({
     <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <h1 className="font-display text-[40px] font-black tracking-[-0.04em]">
-            Scenario library
+          <h1 className="text-balance font-display text-[40px] font-black tracking-[-0.04em]">
+            {generatedLibrary ? "Generated library" : "Scenario library"}
           </h1>
-          <p className="mt-2.5 text-sm text-ink-2">
+          <p className="mt-2.5 text-pretty text-sm text-ink-2">
             {summaryParts.length ? `${summaryParts.join(" · ")} — ` : ""}
             <strong className="tabular">{visible.length} scenarios</strong>
           </p>
         </div>
-        <DecaButton href="/generate" size="sm">
-          Generate
-        </DecaButton>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="w-[240px] shrink-0">
+            <Segmented
+              appearance="tint"
+              name="library"
+              value={generatedLibrary ? "practice" : "official"}
+              onChange={(next) =>
+                updateFilters({ level: next === "practice" ? "practice" : undefined })
+              }
+              options={[
+                { value: "official", label: "Official" },
+                { value: "practice", label: "Generated" },
+              ]}
+            />
+          </div>
+          <DecaButton href="/generate" size="sm">
+            Generate
+          </DecaButton>
+        </div>
       </div>
 
       <ScenarioFilterBar
@@ -229,6 +249,11 @@ export function LibraryScreen({
                   {scenario.review_status === "pending_review" ? (
                     <span className="w-fit rounded-full bg-gold-lt px-3 py-1 text-[11px] font-extrabold text-gold">
                       Sent for review
+                    </span>
+                  ) : null}
+                  {scenario.review_status === "approved" ? (
+                    <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
+                      Approved
                     </span>
                   ) : null}
                 </div>

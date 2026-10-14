@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookOpen,
+  CalendarDays,
   ClipboardList,
   GraduationCap,
   Inbox,
@@ -41,10 +42,11 @@ type NavItem = {
 
 const mainNav: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Tests", href: "/tests", icon: ClipboardList },
+  { label: "Exams", href: "/tests", icon: ClipboardList },
   { label: "Roleplays", href: "/roleplays", icon: Video },
   { label: "Generate", href: "/generate", icon: Sparkles },
   { label: "Study", href: "/study", icon: BookOpen },
+  { label: "Events", href: "/calendar", icon: CalendarDays },
   { label: "Notes", href: "/notes", icon: NotebookPen },
   { label: "Messages", href: "/messages", icon: MessageSquare },
   { label: "Profile", href: "/profile", icon: User },
@@ -53,6 +55,7 @@ const mainNav: NavItem[] = [
 const officerNav: NavItem[] = [
   { label: "Grading", href: "/admin/grading", icon: GraduationCap, roles: ["officer", "advisor"] },
   { label: "Reviews", href: "/admin/generated", icon: Inbox, roles: ["officer", "advisor"] },
+  { label: "Calendar", href: "/admin/calendar", icon: CalendarDays, roles: ["officer", "advisor"] },
   { label: "Admin", href: "/admin", icon: Settings, roles: ["officer", "advisor"] },
 ];
 

@@ -208,8 +208,7 @@ export async function submitPracticeScenarioForReview(scenarioId: string) {
     p_id: scenarioId,
   });
   if (error) throw new Error(error.message);
-  revalidatePath(`/roleplays/${scenarioId}`);
-  revalidatePath("/admin/generated");
+  revalidatePracticeReview(scenarioId);
 }
 
 export async function withdrawPracticeScenarioReview(scenarioId: string) {
@@ -219,8 +218,7 @@ export async function withdrawPracticeScenarioReview(scenarioId: string) {
     p_id: scenarioId,
   });
   if (error) throw new Error(error.message);
-  revalidatePath(`/roleplays/${scenarioId}`);
-  revalidatePath("/admin/generated");
+  revalidatePracticeReview(scenarioId);
 }
 
 export async function listPracticeReviewQueue(): Promise<PracticeReviewQueueItem[]> {
@@ -229,4 +227,30 @@ export async function listPracticeReviewQueue(): Promise<PracticeReviewQueueItem
   const { data, error } = await supabase.rpc("list_practice_review_queue");
   if (error) throw new Error(error.message);
   return (data ?? []) as PracticeReviewQueueItem[];
+}
+
+function revalidatePracticeReview(scenarioId: string) {
+  revalidatePath(`/roleplays/${scenarioId}`);
+  revalidatePath("/roleplays");
+  revalidatePath("/admin/generated");
+}
+
+export async function approvePracticeScenario(scenarioId: string) {
+  await requireRole(["officer", "advisor"], "/admin/generated");
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("approve_practice_scenario", {
+    p_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePracticeReview(scenarioId);
+}
+
+export async function rejectPracticeScenario(scenarioId: string) {
+  await requireRole(["officer", "advisor"], "/admin/generated");
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("reject_practice_scenario", {
+    p_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePracticeReview(scenarioId);
 }

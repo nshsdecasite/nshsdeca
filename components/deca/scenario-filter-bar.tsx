@@ -128,8 +128,8 @@ export function ScenarioFilterBar({
       <SelectMenu
         variant="pill"
         active={value.level === "practice"}
-        aria-label="Generated"
-        triggerLabel="Generated"
+        aria-label="Generated library"
+        triggerLabel="Generated library"
         value={value.level === "practice" ? "practice" : ""}
         onValueChange={(next) => {
           if (!next) {
@@ -143,8 +143,8 @@ export function ScenarioFilterBar({
           router.push(`/roleplays/${next}`);
         }}
         options={[
-          { value: "", label: "All scenarios" },
-          { value: "practice", label: "My generated" },
+          { value: "", label: "Official library" },
+          { value: "practice", label: "Generated library" },
           ...[...generated]
             .sort((a, b) => generatedLabel(a).localeCompare(generatedLabel(b)))
             .map((scenario) => ({

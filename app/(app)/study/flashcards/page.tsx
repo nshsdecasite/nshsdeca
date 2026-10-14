@@ -20,12 +20,21 @@ export default async function FlashcardsPage() {
         backLabel="Study tools"
         eyebrow="Flashcards"
         title="PI flashcard sets"
-        description="Auto-generated sets from the master Performance Indicator bank, grouped by instructional area."
+        description="Flashcards are limited to the performance indicators for your competitive event, grouped by instructional area."
       />
 
       {sets.length === 0 ? (
         <SocialPanel className="p-8 text-center">
-          <p className="text-muted-foreground">No flashcard sets available yet.</p>
+          <p className="text-muted-foreground">
+            No PI flashcards for your event yet. Set your competitive event on{" "}
+            <Link
+              href="/profile"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              Profile
+            </Link>{" "}
+            to see matching sets.
+          </p>
         </SocialPanel>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2">

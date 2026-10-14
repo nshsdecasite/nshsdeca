@@ -7,6 +7,7 @@ import {
 } from "@/lib/auth/school-email";
 import { chosenUsername, isUsername, loginUsername, usernameEmail } from "@/lib/auth/username";
 import { getSessionUser } from "@/lib/auth/roles";
+import { getSiteUrl } from "@/lib/site-url";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -243,10 +244,7 @@ export async function requestPasswordReset(
   }
 
   const supabase = await createClient();
-  const siteUrl =
-    process.env.SITE_URL ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    "http://localhost:3000";
+  const siteUrl = getSiteUrl();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${siteUrl.replace(/\/$/, "")}/login`,

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function OfficerGradingPage() {
   await requireRole(["officer", "advisor"], "/admin/grading");
-  const submissions = await listSubmissions();
+  const submissions = await listSubmissions("chapter");
 
   return (
     <SocialPage>

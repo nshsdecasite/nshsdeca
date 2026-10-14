@@ -19,12 +19,14 @@ export async function recordSolutionPeek(scenarioId: string) {
   if (error) throw new Error(error.message);
 }
 
-export async function listSubmissions(): Promise<Submission[]> {
-  await requireAuth();
+export async function listSubmissions(scope: "mine" | "chapter" = "mine"): Promise<Submission[]> {
+  const user = await requireAuth();
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_roleplay_submissions");
   if (error) return [];
-  return (data ?? []) as Submission[];
+  const rows = (data ?? []) as Submission[];
+  if (scope === "chapter") return rows;
+  return rows.filter((row) => row.user_id === user.id);
 }
 
 export async function getSubmission(id: string): Promise<Submission | null> {

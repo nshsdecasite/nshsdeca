@@ -653,23 +653,13 @@ export function OfficerGradingWorkspace({
                             body
                           )}
                         </p>
-                        <label className="flex min-w-0 flex-[1.35] items-center gap-3">
-                          <input
-                            type="range"
-                            min={0}
-                            max={row.maxPoints}
-                            step={1}
-                            value={row.score}
-                            disabled={submitted}
-                            aria-label={`${title || body} score`}
-                            onChange={(event) => row.onChange(Number(event.target.value))}
-                            className="h-1.5 w-full cursor-pointer accent-ever-dk disabled:cursor-default"
-                          />
-                          <span className="w-16 shrink-0 text-right text-[22px] font-black tabular-nums leading-none">
-                            {row.score}
-                            <span className="text-sm font-bold text-mute">/{row.maxPoints}</span>
-                          </span>
-                        </label>
+                        <ScoreSlider
+                          value={row.score}
+                          max={row.maxPoints}
+                          disabled={submitted}
+                          label={title || body}
+                          onChange={row.onChange}
+                        />
                       </div>
                       {row.noteKey ? (
                         <textarea
@@ -753,6 +743,56 @@ export function OfficerGradingWorkspace({
             ) : null}
           </div>
       </div>
+    </div>
+  );
+}
+
+function ScoreSlider({
+  value,
+  max,
+  disabled,
+  label,
+  onChange,
+}: {
+  value: number;
+  max: number;
+  disabled: boolean;
+  label: string;
+  onChange: (value: number) => void;
+}) {
+  const safeMax = Math.max(1, max);
+  const ratio = Math.max(0, Math.min(1, value / safeMax));
+
+  return (
+    <div className="flex min-w-0 flex-[1.35] items-center gap-4">
+      <div className="relative h-10 min-w-0 flex-1">
+        <span className="pointer-events-none absolute inset-x-[11px] top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-ground">
+          <span
+            className="block h-full rounded-full bg-ever-dk"
+            style={{ width: `${ratio * 100}%` }}
+          />
+        </span>
+        <input
+          type="range"
+          min={0}
+          max={max}
+          step={1}
+          value={value}
+          disabled={disabled}
+          aria-label={`${label} score`}
+          onChange={(event) => onChange(Number(event.target.value))}
+          className="peer absolute inset-0 z-10 h-10 w-full cursor-pointer opacity-0 disabled:cursor-default"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 size-[22px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)] transition-[scale,box-shadow] duration-150 ease-[cubic-bezier(0.2,0,0,1)] peer-hover:shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_-1px_rgba(0,0,0,0.08),0_2px_4px_0_rgba(0,0,0,0.06)] peer-active:scale-[0.96] peer-focus-visible:shadow-[0_0_0_3px_var(--color-ever-lt),0_0_0_1px_rgba(0,0,0,0.06)] peer-disabled:opacity-70"
+          style={{ left: `calc(11px + (100% - 22px) * ${ratio})` }}
+        />
+      </div>
+      <span className="w-[4.75rem] shrink-0 text-right text-[22px] font-black tabular-nums leading-none">
+        {value}
+        <span className="text-sm font-bold text-mute">/{max}</span>
+      </span>
     </div>
   );
 }

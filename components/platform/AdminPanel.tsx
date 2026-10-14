@@ -182,6 +182,12 @@ export function AdminPanel({
         >
           Needs grading · {overview.pending_submissions}
         </Link>
+        <Link
+          href="/admin/generated"
+          className="rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-[#4b463c] shadow-card hover:text-ever-dk"
+        >
+          Generated reviews
+        </Link>
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">

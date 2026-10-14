@@ -1,8 +1,9 @@
 "use server";
 
-import { unstable_cache } from "next/cache";
-import { requireAuth } from "@/lib/auth/roles";
+import { revalidatePath, unstable_cache } from "next/cache";
+import { requireAuth, requireRole } from "@/lib/auth/roles";
 import type {
+  PracticeReviewQueueItem,
   ScenarioDetail,
   ScenarioPerformanceIndicator,
   ScenarioFilterOptions,
@@ -67,26 +68,45 @@ export async function listScenarios(input?: {
   const limit = input?.limit ?? 24;
   const offset = input?.offset ?? 0;
 
+  const params = {
+    p_event_code: eventCode || null,
+    p_year: year > 0 ? year : null,
+    p_search: search || null,
+    p_limit: limit,
+    p_offset: offset,
+    p_cluster_slug: clusterSlug || null,
+  };
+
   try {
-    return await loadScenarioCatalog(
-      eventCode,
-      year,
-      level,
-      search,
-      clusterSlug,
-      limit,
-      offset,
-    );
+    const official =
+      level === "practice"
+        ? []
+        : (await loadScenarioCatalog(
+            eventCode,
+            year,
+            level,
+            search,
+            clusterSlug,
+            limit,
+            offset,
+          )).filter((scenario) => scenario.level !== "practice");
+
+    if (level && level !== "practice") return official;
+
+    const supabase = await getSupabase();
+    const { data, error } = await supabase.rpc("list_scenarios", {
+      ...params,
+      p_level: "practice",
+    });
+    if (error) throw new Error(error.message);
+    const practice = (data ?? []) as ScenarioSummary[];
+    if (level === "practice") return practice;
+    return [...official, ...practice];
   } catch {
     const supabase = await getSupabase();
     const { data, error } = await supabase.rpc("list_scenarios", {
-      p_event_code: eventCode || null,
-      p_year: year > 0 ? year : null,
+      ...params,
       p_level: level || null,
-      p_search: search || null,
-      p_limit: limit,
-      p_offset: offset,
-      p_cluster_slug: clusterSlug || null,
     });
     if (error) throw new Error(error.message);
     return (data ?? []) as ScenarioSummary[];
@@ -179,4 +199,34 @@ const getCachedScenarioFilterOptions = unstable_cache(
 export async function getScenarioFilterOptions(): Promise<ScenarioFilterOptions> {
   await requireAuth();
   return getCachedScenarioFilterOptions();
+}
+
+export async function submitPracticeScenarioForReview(scenarioId: string) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("submit_practice_scenario_for_review", {
+    p_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePath(`/roleplays/${scenarioId}`);
+  revalidatePath("/admin/generated");
+}
+
+export async function withdrawPracticeScenarioReview(scenarioId: string) {
+  await requireAuth();
+  const supabase = await getSupabase();
+  const { error } = await supabase.rpc("withdraw_practice_scenario_review", {
+    p_id: scenarioId,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePath(`/roleplays/${scenarioId}`);
+  revalidatePath("/admin/generated");
+}
+
+export async function listPracticeReviewQueue(): Promise<PracticeReviewQueueItem[]> {
+  await requireRole(["officer", "advisor"], "/admin/generated");
+  const supabase = await getSupabase();
+  const { data, error } = await supabase.rpc("list_practice_review_queue");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as PracticeReviewQueueItem[];
 }

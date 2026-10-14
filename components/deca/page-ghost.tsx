@@ -479,7 +479,7 @@ export function PageGhost({ path }: { path: string }) {
   if (page === "/study") return <StudyGhost />;
   if (page.startsWith("/study/")) return <ListGhost />;
   if (page.startsWith("/messages")) return <MessagesGhost />;
-  if (page === "/admin/grading") return <ListGhost />;
+  if (page === "/admin/grading" || page === "/admin/generated") return <ListGhost />;
   if (page.startsWith("/admin/grading/")) return <GradeGhost />;
   if (page.startsWith("/admin")) return <AdminGhost />;
   if (page.startsWith("/profile") || page.startsWith("/notes")) return <FormGhost />;

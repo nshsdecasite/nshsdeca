@@ -144,7 +144,7 @@ export function ScenarioFilterBar({
         }}
         options={[
           { value: "", label: "All scenarios" },
-          { value: "practice", label: "All generated" },
+          { value: "practice", label: "My generated" },
           ...[...generated]
             .sort((a, b) => generatedLabel(a).localeCompare(generatedLabel(b)))
             .map((scenario) => ({

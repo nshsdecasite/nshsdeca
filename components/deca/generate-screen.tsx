@@ -54,8 +54,8 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
           Generate a practice event
         </h1>
         <p className="mt-2.5 max-w-2xl text-sm leading-6 text-pretty text-ink-2">
-          Pick an event, and the site chooses real 2026–27 performance indicators. The scenario is written
-          for chapter practice with GPT-5 nano.
+          Pick an event, and the site chooses real 2026–27 performance indicators. The scenario stays
+          private to you unless you send it to officers for review.
         </p>
       </div>
 

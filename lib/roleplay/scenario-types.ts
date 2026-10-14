@@ -1,5 +1,7 @@
 import type { ScenarioRubric } from "@/lib/roleplay/rubric";
 
+export type PracticeReviewStatus = "private" | "pending_review";
+
 export type ScenarioSummary = {
   id: string;
   event_code: string;
@@ -12,6 +14,8 @@ export type ScenarioSummary = {
   instructional_area_code: string | null;
   career_pathway: string | null;
   preview: string | null;
+  review_status?: PracticeReviewStatus | null;
+  created_by?: string | null;
 };
 
 export type ScenarioPerformanceIndicator = {
@@ -40,6 +44,22 @@ export type ScenarioDetail = {
   judge_questions: string[];
   pis?: ScenarioPerformanceIndicator[];
   rubric?: ScenarioRubric;
+  created_by?: string | null;
+  review_status?: PracticeReviewStatus | null;
+  is_owner?: boolean;
+  creator_name?: string | null;
+};
+
+export type PracticeReviewQueueItem = {
+  id: string;
+  event_code: string;
+  event_name: string;
+  year: number;
+  scenario_title: string | null;
+  preview: string | null;
+  created_by: string | null;
+  creator_name: string | null;
+  submitted_for_review_at: string | null;
 };
 
 export type ScenarioFilterOptions = {

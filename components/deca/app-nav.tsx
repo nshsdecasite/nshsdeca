@@ -19,6 +19,7 @@ const MAIN = [
 
 const OFFICER = [
   { href: "/admin/grading", label: "Grading" },
+  { href: "/admin/generated", label: "Reviews" },
   { href: "/admin", label: "Admin" },
 ] as const;
 

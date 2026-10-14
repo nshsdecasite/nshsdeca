@@ -19,7 +19,7 @@ type SubmitRoleplayPageProps = {
 export default async function SubmitRoleplayPage({
   searchParams,
 }: SubmitRoleplayPageProps) {
-  await requireRole(["student"], "/roleplays/submit");
+  await requireRole(["student", "officer", "advisor"], "/roleplays/submit");
   const params = await searchParams;
   const selectedScenario = params.scenario
     ? await getScenario(params.scenario)

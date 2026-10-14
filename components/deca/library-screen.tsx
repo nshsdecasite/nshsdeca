@@ -218,13 +218,20 @@ export function LibraryScreen({
             const level = LEVEL_LABELS[scenario.level] ?? scenario.level;
             return (
               <div key={scenario.id} className="deca-card flex flex-col px-7 py-[26px]">
-                <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
-                  {scenario.event_code}
-                  {scenario.instructional_area_code
-                    ? ` · ${scenario.instructional_area_code}`
-                    : ""}{" "}
-                  · {scenario.year} · {String(level).toUpperCase()}
-                </span>
+                <div className="flex flex-wrap gap-2">
+                  <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
+                    {scenario.event_code}
+                    {scenario.instructional_area_code
+                      ? ` · ${scenario.instructional_area_code}`
+                      : ""}{" "}
+                    · {scenario.year} · {String(level).toUpperCase()}
+                  </span>
+                  {scenario.review_status === "pending_review" ? (
+                    <span className="w-fit rounded-full bg-gold-lt px-3 py-1 text-[11px] font-extrabold text-gold">
+                      Sent for review
+                    </span>
+                  ) : null}
+                </div>
                 <h3 className="mt-4 font-display text-xl font-extrabold tracking-[-0.02em]">
                   {title}
                 </h3>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DecaButton } from "@/components/deca/button";
 import { JudgeQuestions } from "@/components/deca/judge-questions";
+import { PracticeReviewActions } from "@/components/deca/practice-review-actions";
 import { ScenarioCase } from "@/components/deca/scenario-case";
 import { LEVEL_LABELS, type ScenarioDetail } from "@/lib/roleplay/scenario-types";
 import { getTotalScore } from "@/lib/roleplay/types";
@@ -11,12 +12,12 @@ export function ScenarioDetailScreen({
   scenario,
   attempts,
   canSubmit,
-  questionAnswers = {},
+  viewerIsOfficer = false,
 }: {
   scenario: ScenarioDetail;
   attempts: Submission[];
   canSubmit: boolean;
-  questionAnswers?: Record<number, string>;
+  viewerIsOfficer?: boolean;
 }) {
   const title =
     scenario.scenario_title?.trim() ||
@@ -42,7 +43,16 @@ export function ScenarioDetailScreen({
             </span>
           </div>
         </div>
-        <div className="flex gap-2.5">
+        <div className="flex flex-wrap items-center justify-end gap-2.5">
+          {scenario.level === "practice" ? (
+            <PracticeReviewActions
+              scenarioId={scenario.id}
+              isOwner={Boolean(scenario.is_owner)}
+              reviewStatus={scenario.review_status}
+              creatorName={scenario.creator_name}
+              viewerIsOfficer={viewerIsOfficer}
+            />
+          ) : null}
           {scenario.source_url ? (
             <a
               href={scenario.source_url}
@@ -92,9 +102,8 @@ export function ScenarioDetailScreen({
           </div>
 
           <JudgeQuestions
-            scenarioId={scenario.id}
             questions={scenario.judge_questions}
-            initialAnswers={questionAnswers}
+            hasAttempt={attempts.length > 0}
           />
 
           <div className="deca-card px-[26px] py-6">

@@ -6,6 +6,7 @@ import {
   BookOpen,
   ClipboardList,
   GraduationCap,
+  Inbox,
   LayoutDashboard,
   Menu,
   MessageSquare,
@@ -51,6 +52,7 @@ const mainNav: NavItem[] = [
 
 const officerNav: NavItem[] = [
   { label: "Grading", href: "/admin/grading", icon: GraduationCap, roles: ["officer", "advisor"] },
+  { label: "Reviews", href: "/admin/generated", icon: Inbox, roles: ["officer", "advisor"] },
   { label: "Admin", href: "/admin", icon: Settings, roles: ["officer", "advisor"] },
 ];
 

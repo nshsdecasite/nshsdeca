@@ -20,7 +20,6 @@ export default async function AdminCalendarPage() {
         backLabel="Admin"
         eyebrow="Officers"
         title="Chapter calendar"
-        description="Add meetings and competitions. They show up on the homepage and in the member calendar right away."
       />
       <CalendarManager events={events} />
     </SocialPage>

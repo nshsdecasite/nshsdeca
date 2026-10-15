@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { Suspense, use, useCallback, useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
 import { listScenarios } from "@/app/roleplay/scenario-actions";
 import { DecaButton } from "@/components/deca/button";
-import { Segmented } from "@/components/deca/segmented";
 import {
   ScenarioFilterBar,
   type ScenarioFilters,
 } from "@/components/deca/scenario-filter-bar";
 import { LEVEL_LABELS, type ScenarioSummary } from "@/lib/roleplay/scenario-types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 function buildHref(filters: ScenarioFilters) {
@@ -61,14 +61,132 @@ function filterScenarios(scenarios: ScenarioSummary[], filters: ScenarioFilters)
   });
 }
 
+function generatedScenarios(scenarios: ScenarioSummary[], filters: ScenarioFilters) {
+  return scenarios.filter((scenario) => {
+    if (scenario.level !== "practice") return false;
+    if (filters.event && scenario.event_code !== filters.event) return false;
+    if (filters.area && scenario.instructional_area_code !== filters.area) return false;
+    if (filters.year === "older") return scenario.year < 2023;
+    if (filters.year && String(scenario.year) !== filters.year) return false;
+    return true;
+  });
+}
+
+function ScenarioGrid({
+  scenarios,
+  pending,
+}: {
+  scenarios: ScenarioSummary[];
+  pending: boolean;
+}) {
+  if (scenarios.length === 0) {
+    return (
+      <p className="mt-10 text-[15px] leading-[1.6] text-ink-2">
+        No scenarios match those filters.
+      </p>
+    );
+  }
+
+  return (
+    <div
+      aria-busy={pending}
+      className={cn(
+        "mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3",
+        pending && "opacity-60",
+      )}
+    >
+      {scenarios.map((scenario) => {
+        const title =
+          scenario.scenario_title?.trim() ||
+          `${scenario.event_code} scenario ${scenario.scenario_number}`;
+        const description =
+          scenario.preview?.trim() ||
+          `${scenario.event_name}${
+            scenario.instructional_area_code
+              ? ` · ${scenario.instructional_area_code}`
+              : scenario.cluster_name
+                ? ` · ${scenario.cluster_name}`
+                : ""
+          }.`;
+        const level = LEVEL_LABELS[scenario.level] ?? scenario.level;
+        return (
+          <div key={scenario.id} className="deca-card flex flex-col px-7 py-[26px]">
+            <div className="flex flex-wrap gap-2">
+              <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
+                {scenario.event_code}
+                {scenario.instructional_area_code
+                  ? ` · ${scenario.instructional_area_code}`
+                  : ""}{" "}
+                · {scenario.year} · {String(level).toUpperCase()}
+              </span>
+              {scenario.review_status === "pending_review" ? (
+                <span className="w-fit rounded-full bg-gold-lt px-3 py-1 text-[11px] font-extrabold text-gold">
+                  Sent for review
+                </span>
+              ) : null}
+              {scenario.review_status === "approved" ? (
+                <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
+                  Approved
+                </span>
+              ) : null}
+            </div>
+            <h3 className="mt-4 font-display text-xl font-extrabold tracking-[-0.02em]">
+              {title}
+            </h3>
+            <p className="mt-2 mb-5 flex-1 text-[13px] leading-[1.55] text-ink-2 line-clamp-4">
+              {description}
+            </p>
+            <DecaButton
+              href={`/roleplays/${scenario.id}`}
+              variant="tint"
+              size="sm"
+              className="mt-auto self-start"
+            >
+              Open
+            </DecaButton>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ScenarioGridSkeleton() {
+  return (
+    <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {Array.from({ length: 6 }, (_, index) => (
+        <Skeleton key={index} className="h-52 w-full" />
+      ))}
+    </div>
+  );
+}
+
+function CatalogReady({
+  catalog,
+  filters,
+  pending,
+  onReady,
+}: {
+  catalog: Promise<ScenarioSummary[]>;
+  filters: ScenarioFilters;
+  pending: boolean;
+  onReady: (rows: ScenarioSummary[]) => void;
+}) {
+  const scenarios = use(catalog);
+  useLayoutEffect(() => {
+    onReady(scenarios);
+  }, [scenarios, onReady]);
+  return <ScenarioGrid scenarios={filterScenarios(scenarios, filters)} pending={pending} />;
+}
+
 export function LibraryScreen({
-  scenarios: initialScenarios,
+  catalog,
   years = [],
   events,
   instructionalAreas = [],
   current,
 }: {
-  scenarios: ScenarioSummary[];
+  catalog: Promise<ScenarioSummary[]>;
   years?: number[];
   events: { event_code: string; event_name: string }[];
   instructionalAreas?: { code: string; name: string }[];
@@ -77,17 +195,22 @@ export function LibraryScreen({
   const serverKey = JSON.stringify(current);
   const [filters, setFilters] = useState(current);
   const [serverKeySeen, setServerKeySeen] = useState(serverKey);
-  const [scenarios, setScenarios] = useState(initialScenarios);
+  const [loaded, setLoaded] = useState<ScenarioSummary[] | null>(null);
+  const [override, setOverride] = useState<ScenarioSummary[] | null>(null);
   const [loadError, setLoadError] = useState("");
   const [pending, startTransition] = useTransition();
   const fetchedSearch = useRef(searchQuery(current) ?? "");
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
+  const rememberCatalog = useCallback((rows: ScenarioSummary[]) => {
+    setLoaded(rows);
+  }, []);
 
   if (serverKey !== serverKeySeen) {
     setServerKeySeen(serverKey);
     setFilters(current);
-    setScenarios(initialScenarios);
+    setLoaded(null);
+    setOverride(null);
     fetchedSearch.current = searchQuery(current) ?? "";
   }
 
@@ -103,7 +226,7 @@ export function LibraryScreen({
         try {
           const rows = await listScenarios({ search: query || undefined, limit: 1000 });
           if (fetchedSearch.current !== query) return;
-          setScenarios(rows);
+          setOverride(rows);
           setLoadError("");
         } catch {
           if (fetchedSearch.current === query) setLoadError("Could not load scenarios.");
@@ -129,7 +252,7 @@ export function LibraryScreen({
       try {
         const rows = await listScenarios({ search: query || undefined, limit: 1000 });
         if (fetchedSearch.current !== query) return;
-        setScenarios(rows);
+        setOverride(rows);
       } catch {
         if (fetchedSearch.current === query) setLoadError("Could not load scenarios.");
       }
@@ -144,7 +267,8 @@ export function LibraryScreen({
     commit(next);
   }
 
-  const visible = filterScenarios(scenarios, filters);
+  const source = override ?? loaded;
+  const visible = source ? filterScenarios(source, filters) : null;
   const generatedLibrary = filters.level === "practice";
   const areaLabel = filters.area
     ? instructionalAreas.find((area) => area.code === filters.area)?.name ?? filters.area
@@ -168,113 +292,40 @@ export function LibraryScreen({
           </h1>
           <p className="mt-2.5 text-pretty text-sm text-ink-2">
             {summaryParts.length ? `${summaryParts.join(" · ")} — ` : ""}
-            <strong className="tabular">{visible.length} scenarios</strong>
+            {visible ? (
+              <strong className="tabular">{visible.length} scenarios</strong>
+            ) : (
+              <Skeleton className="inline-block h-4 w-24 align-middle" />
+            )}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="w-[240px] shrink-0">
-            <Segmented
-              appearance="tint"
-              name="library"
-              value={generatedLibrary ? "practice" : "official"}
-              onChange={(next) =>
-                updateFilters({ level: next === "practice" ? "practice" : undefined })
-              }
-              options={[
-                { value: "official", label: "Official" },
-                { value: "practice", label: "Generated" },
-              ]}
-            />
-          </div>
-          <DecaButton href="/generate" size="sm">
-            Generate
-          </DecaButton>
-        </div>
+        <DecaButton href="/generate" className="min-w-[17rem]">
+          Generate roleplay
+        </DecaButton>
       </div>
 
       <ScenarioFilterBar
         years={years}
         events={events}
         instructionalAreas={instructionalAreas}
-        generated={scenarios.filter((scenario) => {
-          if (scenario.level !== "practice") return false;
-          if (filters.event && scenario.event_code !== filters.event) return false;
-          if (filters.area && scenario.instructional_area_code !== filters.area) return false;
-          if (filters.year === "older") return scenario.year < 2023;
-          if (filters.year && String(scenario.year) !== filters.year) return false;
-          return true;
-        })}
+        generated={source ? generatedScenarios(source, filters) : []}
         value={filters}
         onChange={updateFilters}
       />
 
       {loadError ? <p className="mt-4 text-sm text-[#b42318]">{loadError}</p> : null}
 
-      {visible.length === 0 ? (
-        <p className="mt-10 text-[15px] leading-[1.6] text-ink-2">
-          No scenarios match those filters.
-        </p>
+      {override ? (
+        <ScenarioGrid scenarios={filterScenarios(override, filters)} pending={pending} />
       ) : (
-        <div
-          aria-busy={pending}
-          className={cn(
-            "mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3",
-            pending && "opacity-60",
-          )}
-        >
-          {visible.map((scenario) => {
-            const title =
-              scenario.scenario_title?.trim() ||
-              `${scenario.event_code} scenario ${scenario.scenario_number}`;
-            const description =
-              scenario.preview?.trim() ||
-              `${scenario.event_name}${
-                scenario.instructional_area_code
-                  ? ` · ${scenario.instructional_area_code}`
-                  : scenario.cluster_name
-                    ? ` · ${scenario.cluster_name}`
-                    : ""
-              }.`;
-            const level = LEVEL_LABELS[scenario.level] ?? scenario.level;
-            return (
-              <div key={scenario.id} className="deca-card flex flex-col px-7 py-[26px]">
-                <div className="flex flex-wrap gap-2">
-                  <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
-                    {scenario.event_code}
-                    {scenario.instructional_area_code
-                      ? ` · ${scenario.instructional_area_code}`
-                      : ""}{" "}
-                    · {scenario.year} · {String(level).toUpperCase()}
-                  </span>
-                  {scenario.review_status === "pending_review" ? (
-                    <span className="w-fit rounded-full bg-gold-lt px-3 py-1 text-[11px] font-extrabold text-gold">
-                      Sent for review
-                    </span>
-                  ) : null}
-                  {scenario.review_status === "approved" ? (
-                    <span className="w-fit rounded-full bg-ever-lt px-3 py-1 text-[11px] font-extrabold text-ever-dk">
-                      Approved
-                    </span>
-                  ) : null}
-                </div>
-                <h3 className="mt-4 font-display text-xl font-extrabold tracking-[-0.02em]">
-                  {title}
-                </h3>
-                <p className="mt-2 mb-5 flex-1 text-[13px] leading-[1.55] text-ink-2 line-clamp-4">
-                  {description}
-                </p>
-                <DecaButton
-                  href={`/roleplays/${scenario.id}`}
-                  variant="tint"
-                  size="sm"
-                  className="mt-auto self-start"
-                >
-                  Open
-                </DecaButton>
-              </div>
-            );
-          })}
-        </div>
+        <Suspense fallback={<ScenarioGridSkeleton />}>
+          <CatalogReady
+            catalog={catalog}
+            filters={filters}
+            pending={pending}
+            onReady={rememberCatalog}
+          />
+        </Suspense>
       )}
     </div>
   );

@@ -14,11 +14,10 @@ export default async function VisualsPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study"
+        backHref="/study/misc"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Visual reference library"
-        description="Charts, matrices, and concept diagrams for roleplays and tests. Click any card to expand the full visual."
       />
       <VisualLibrary />
     </SocialPage>

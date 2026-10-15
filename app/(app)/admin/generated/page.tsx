@@ -17,10 +17,6 @@ export default async function GeneratedReviewPage() {
       <h1 className="text-balance font-display text-[40px] font-black tracking-[-0.04em]">
         Generated reviews
       </h1>
-      <p className="mt-2.5 max-w-2xl text-pretty text-sm leading-6 text-ink-2">
-        Approve a practice event to add it to the generated library for the chapter. It stays
-        separate from official district, state, and ICDC scenarios.
-      </p>
 
       {queue.length === 0 ? (
         <p className="mt-10 text-[15px] leading-[1.6] text-ink-2">

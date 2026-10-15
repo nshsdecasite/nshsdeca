@@ -16,11 +16,10 @@ export default async function TheoriesPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study"
+        backHref="/study/misc"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Theories & fallacies"
-        description="Motivational frameworks, psychological principles, and logical fallacies organized by DECA cluster. Click any card to read the full explanation and example scenario."
       />
       <TheoryLibrary
         theories={theories}

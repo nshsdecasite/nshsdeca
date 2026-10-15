@@ -16,11 +16,10 @@ export default async function PiTargetedTestPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/tests"
+        backHref="/study/exams"
         backLabel="Practice tests"
         eyebrow="PI-targeted"
         title="Practice your weakest PIs"
-        description="Auto-generates a short quiz from Performance Indicators where your accuracy is below 70%."
       />
       <PiTargetedLauncher weakPiCount={stats.weak_pis?.length ?? 0} />
     </SocialPage>

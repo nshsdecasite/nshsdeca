@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { PageGhost, rememberGhostPath } from "@/components/deca/page-ghost";
 
-const HOLD_MS = 420;
+const HOLD_MS = 0;
 
 function isNavigationClick(event: MouseEvent) {
   if (event.button !== 0) return false;

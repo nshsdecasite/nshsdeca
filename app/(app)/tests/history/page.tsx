@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { listTestSessions } from "@/app/test/actions";
 import { SocialPage, SocialPanel } from "@/components/layout/social-ui";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { requireAuth } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
@@ -22,19 +24,35 @@ function formatDate(value: string) {
 
 export default async function TestHistoryPage() {
   await requireAuth("/tests/history");
-  const sessions = await listTestSessions();
 
   return (
     <SocialPage>
       <PageHeader
-        backHref="/tests"
+        backHref="/study/exams"
         backLabel="Practice tests"
         eyebrow="History"
         title="Your test history"
-        description="Reopen any completed session to review answers and rationales."
       />
 
-      {sessions.length === 0 ? (
+      <Suspense
+        fallback={
+          <div className="space-y-4">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        }
+      >
+        <HistoryList />
+      </Suspense>
+    </SocialPage>
+  );
+}
+
+async function HistoryList() {
+  const sessions = await listTestSessions();
+
+  return sessions.length === 0 ? (
         <SocialPanel className="p-8 text-center">
           <p className="text-muted-foreground">You haven&apos;t taken a practice test yet.</p>
           <Button asChild className="mt-4">
@@ -95,7 +113,5 @@ export default async function TestHistoryPage() {
             );
           })}
         </ul>
-      )}
-    </SocialPage>
   );
 }

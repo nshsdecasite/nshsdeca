@@ -16,11 +16,10 @@ export default async function VocabPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/study"
+        backHref="/study/misc"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Vocab flashcards"
-        description="Study terms by DECA cluster. Many cards appear in multiple clusters. Use the arrow keys to navigate, or Space to flip each card."
       />
       <VocabFlashcards setTitle={setTitle} cards={cards} clusters={clusters} />
     </SocialPage>

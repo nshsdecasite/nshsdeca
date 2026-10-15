@@ -23,6 +23,14 @@ type RoleplaysPageProps = {
   }>;
 };
 
+function loadCatalog(search: string) {
+  return listScenarios({
+    search: search || undefined,
+    limit: 1000,
+    offset: 0,
+  });
+}
+
 export default async function RoleplaysPage({ searchParams }: RoleplaysPageProps) {
   await requireAuth("/roleplays");
   const [params, profile] = await Promise.all([searchParams, loadMyProfile()]);
@@ -30,18 +38,12 @@ export default async function RoleplaysPage({ searchParams }: RoleplaysPageProps
     .filter(Boolean)
     .join(" ");
 
-  const [scenarios, filterOptions] = await Promise.all([
-    listScenarios({
-      search: search || undefined,
-      limit: 1000,
-      offset: 0,
-    }),
-    getScenarioFilterOptions(),
-  ]);
+  const catalog = loadCatalog(search);
+  const filterOptions = await getScenarioFilterOptions();
 
   return (
     <LibraryScreen
-      scenarios={scenarios}
+      catalog={catalog}
       years={filterOptions.years}
       events={filterOptions.events}
       instructionalAreas={filterOptions.instructional_areas ?? []}

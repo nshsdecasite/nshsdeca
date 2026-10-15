@@ -16,11 +16,10 @@ export default async function NotesPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study"
+        backHref="/study/misc"
         backLabel="Study tools"
         eyebrow="Notes"
         title="Personal notes"
-        description="Keep tabbed notebooks for event prep, formulas, and study reminders. Notes autosave and can be searched from the sidebar."
       />
       <NotesWorkspace notes={notes} />
     </SocialPage>

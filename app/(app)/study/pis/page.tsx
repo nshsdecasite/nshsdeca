@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   getPiFilterOptions,
   listPerformanceIndicators,
 } from "@/app/study/actions";
 import { SocialPage, SocialPanel } from "@/components/layout/social-ui";
-import { PageHeader } from "@/components/page-header";
 import { PiCard } from "@/components/study/PiCard";
 import { PiFilterPills, PiFilters } from "@/components/study/PiFilters";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { requireAuth } from "@/lib/auth/roles";
 import { loadMyProfile } from "@/lib/data/request-cache";
 
 export const metadata: Metadata = {
-  title: "Performance indicators",
+  title: "PI browser",
 };
 
 type PisPageProps = {
@@ -47,9 +48,12 @@ function queryString(params: {
 
 export default async function PisPage({ searchParams }: PisPageProps) {
   await requireAuth("/study/pis");
-  const [params, profile] = await Promise.all([searchParams, loadMyProfile()]);
+  const [params, profile, filterOptions] = await Promise.all([
+    searchParams,
+    loadMyProfile(),
+    getPiFilterOptions(),
+  ]);
   const page = Math.max(1, Number(params.page ?? "1") || 1);
-  const offset = (page - 1) * PAGE_SIZE;
   const showAll = params.all === "1";
   const hasExplicit =
     showAll ||
@@ -67,26 +71,7 @@ export default async function PisPage({ searchParams }: PisPageProps) {
     ? params.tier!.trim()
     : undefined;
 
-  const [result, filterOptions] = await Promise.all([
-    listPerformanceIndicators({
-      search: params.search?.trim() || undefined,
-      iaCode: params.ia?.trim() || undefined,
-      eventCode,
-      tier: tier ? Number(tier) : undefined,
-      limit: PAGE_SIZE,
-      offset,
-    }),
-    getPiFilterOptions(),
-  ]);
-  const pis = result.items;
-
   const current = {
-    search: params.search,
-    ia: params.ia,
-    event: eventCode,
-    tier,
-  };
-  const pageQuery = {
     search: params.search,
     ia: params.ia,
     event: eventCode,
@@ -95,68 +80,106 @@ export default async function PisPage({ searchParams }: PisPageProps) {
 
   return (
     <SocialPage size="wide">
-      <PageHeader
-        backHref="/study"
-        backLabel="Study tools"
-        eyebrow="Performance indicators"
-        title="PI browser"
-        description={
-          eventCode
-            ? `Showing the performance indicators for ${eventCode}.`
-            : "Search the master PI bank and see which practice tests and roleplay events use each indicator."
-        }
-      />
-
       <div className="space-y-6">
         <PiFilters
           instructionalAreas={filterOptions.instructional_areas}
           current={current}
         />
         <PiFilterPills current={current} />
-
-        <p className="text-sm font-semibold tabular-nums text-foreground">
-          {result.total.toLocaleString("en-US")} performance indicator
-          {result.total === 1 ? "" : "s"}
-        </p>
-
-        {pis.length === 0 ? (
-          <SocialPanel className="p-8 text-center">
-            <p className="text-muted-foreground">No performance indicators match those filters.</p>
-          </SocialPanel>
-        ) : (
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {pis.map((pi) => (
-              <li key={pi.id}>
-                <PiCard pi={pi} />
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="flex items-center justify-between gap-4">
-          {page > 1 ? (
-            <Button asChild variant="secondary">
-              <Link
-                href={`/study/pis?${queryString({ ...pageQuery, page: page - 1 })}`}
-              >
-                ← Previous
-              </Link>
-            </Button>
-          ) : (
-            <span />
-          )}
-
-          {offset + pis.length < result.total ? (
-            <Button asChild variant="secondary">
-              <Link
-                href={`/study/pis?${queryString({ ...pageQuery, page: page + 1 })}`}
-              >
-                Next →
-              </Link>
-            </Button>
-          ) : null}
-        </div>
+        <Suspense key={queryString({ ...current, page })} fallback={<PiListSkeleton />}>
+          <PiResults
+            search={params.search?.trim() || undefined}
+            iaCode={params.ia?.trim() || undefined}
+            eventCode={eventCode}
+            tier={tier}
+            page={page}
+          />
+        </Suspense>
       </div>
     </SocialPage>
+  );
+}
+
+async function PiResults({
+  search,
+  iaCode,
+  eventCode,
+  tier,
+  page,
+}: {
+  search?: string;
+  iaCode?: string;
+  eventCode?: string;
+  tier?: string;
+  page: number;
+}) {
+  const offset = (page - 1) * PAGE_SIZE;
+  const result = await listPerformanceIndicators({
+    search,
+    iaCode,
+    eventCode,
+    tier: tier ? Number(tier) : undefined,
+    limit: PAGE_SIZE,
+    offset,
+  });
+  const pis = result.items;
+  const pageQuery = { search, ia: iaCode, event: eventCode, tier };
+
+  return (
+    <>
+      <p className="text-sm font-semibold tabular-nums text-foreground">
+        {result.total.toLocaleString("en-US")} performance indicator
+        {result.total === 1 ? "" : "s"}
+      </p>
+
+      {pis.length === 0 ? (
+        <SocialPanel className="p-8 text-center">
+          <p className="text-muted-foreground">No performance indicators match those filters.</p>
+        </SocialPanel>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {pis.map((pi) => (
+            <li key={pi.id}>
+              <PiCard pi={pi} />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="flex items-center justify-between gap-4">
+        {page > 1 ? (
+          <Button asChild variant="secondary">
+            <Link href={`/study/pis?${queryString({ ...pageQuery, page: page - 1 })}`}>
+              ← Previous
+            </Link>
+          </Button>
+        ) : (
+          <span />
+        )}
+
+        {offset + pis.length < result.total ? (
+          <Button asChild variant="secondary">
+            <Link href={`/study/pis?${queryString({ ...pageQuery, page: page + 1 })}`}>
+              Next →
+            </Link>
+          </Button>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
+function PiListSkeleton() {
+  return (
+    <div className="space-y-4">
+      <Skeleton className="h-5 w-40" />
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: 6 }, (_, index) => (
+          <li key={index}>
+            <Skeleton className="h-36 w-full" />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -49,7 +49,6 @@ export default async function SubmitRoleplayPage({
         backHref="/roleplays"
         backLabel="Scenario library"
         title="Submit roleplay"
-        description="Select a scenario and submit your roleplay video for officer grading."
       />
       <SubmitRoleplayForm
         scenarios={scenarios}

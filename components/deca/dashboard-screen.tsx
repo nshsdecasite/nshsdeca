@@ -80,7 +80,7 @@ export function DashboardScreen({
 
   const jumps = [
     {
-      href: "/tests",
+      href: "/study/exams",
       title: "Practice exam",
       detail:
         examAccuracy != null ? `${examAccuracy}% test accuracy` : "Start a full or custom test",
@@ -127,7 +127,7 @@ export function DashboardScreen({
           ) : null}
         </div>
         <div className="flex gap-2.5">
-          <DecaButton href="/tests" variant="outline">
+          <DecaButton href="/study/exams" variant="outline">
             Practice exam
           </DecaButton>
           <DecaButton href="/roleplays">New roleplay</DecaButton>
@@ -284,9 +284,11 @@ export function DashboardScreen({
             {NEXT_CONFERENCE.name}
           </p>
           <p className="mt-1.5 text-[13px] text-white/85">{NEXT_CONFERENCE.when}</p>
-          <DecaButton href="/calendar" variant="white" size="sm" className="mt-auto self-start pt-5">
-            Checklist
-          </DecaButton>
+          <div className="mt-auto flex justify-end pt-4">
+            <DecaButton href="/calendar" variant="white" size="sm">
+              All events
+            </DecaButton>
+          </div>
         </div>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { listFlashcardSets } from "@/app/platform/actions";
 import { SocialPage, SocialPanel } from "@/components/layout/social-ui";
-import { PageHeader } from "@/components/page-header";
+import { Skeleton } from "@/components/ui/skeleton";
 import { requireAuth } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
@@ -11,19 +12,21 @@ export const metadata: Metadata = {
 
 export default async function FlashcardsPage() {
   await requireAuth("/study/flashcards");
-  const sets = await listFlashcardSets();
 
   return (
     <SocialPage>
-      <PageHeader
-        backHref="/study"
-        backLabel="Study tools"
-        eyebrow="Flashcards"
-        title="PI flashcard sets"
-        description="Flashcards are limited to the performance indicators for your competitive event, grouped by instructional area."
-      />
+      <Suspense fallback={<FlashcardSkeleton />}>
+        <FlashcardList />
+      </Suspense>
+    </SocialPage>
+  );
+}
 
-      {sets.length === 0 ? (
+async function FlashcardList() {
+  const sets = await listFlashcardSets();
+
+  if (sets.length === 0) {
+    return (
         <SocialPanel className="p-8 text-center">
           <p className="text-muted-foreground">
             No PI flashcards for your event yet. Set your competitive event on{" "}
@@ -36,7 +39,10 @@ export default async function FlashcardsPage() {
             to see matching sets.
           </p>
         </SocialPanel>
-      ) : (
+    );
+  }
+
+  return (
         <ul className="grid gap-4 sm:grid-cols-2">
           {sets.map((set) => (
             <li key={set.id}>
@@ -55,7 +61,17 @@ export default async function FlashcardsPage() {
             </li>
           ))}
         </ul>
-      )}
-    </SocialPage>
+  );
+}
+
+function FlashcardSkeleton() {
+  return (
+    <ul className="grid gap-4 sm:grid-cols-2">
+      {Array.from({ length: 4 }, (_, index) => (
+        <li key={index}>
+          <Skeleton className="h-28 w-full" />
+        </li>
+      ))}
+    </ul>
   );
 }

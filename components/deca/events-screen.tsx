@@ -76,9 +76,6 @@ export function EventsScreen({
             <h1 className="font-display text-[40px] font-black tracking-[-0.04em] text-balance">
               The season
             </h1>
-            <p className="mt-2.5 text-pretty text-sm text-ink-2">
-              Key chapter dates and the three conferences that matter.
-            </p>
           </div>
           <div className="flex rounded-full bg-white p-[5px] text-[13px] font-bold shadow-card">
             <button

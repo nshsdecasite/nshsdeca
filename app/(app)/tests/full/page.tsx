@@ -33,15 +33,10 @@ export default async function FullTestPage({ searchParams }: FullTestPageProps) 
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/tests"
+        backHref="/study/exams"
         backLabel="Practice tests"
         eyebrow="Full test"
         title={eventLabel ? `${eventLabel} exam` : "Pick an official cluster exam"}
-        description={
-          showAll
-            ? "Each exam includes 100 multiple-choice questions from a released DECA cluster sample test. Timed mode is 90 minutes."
-            : `These are the ${profile?.cluster_name ?? "cluster"} exams for ${profile?.event_code}. The newest year is first. Each one has 100 questions. Timed mode is 90 minutes.`
-        }
       />
       {!showAll ? (
         <p className="mb-6 text-sm text-muted-foreground">

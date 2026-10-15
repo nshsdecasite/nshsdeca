@@ -91,13 +91,28 @@ export function ScenarioDetailScreen({
             </div>
             <div className="flex flex-col gap-3">
               {(scenario.pis ?? []).length ? (
-                (scenario.pis ?? []).map((pi) => (
-                  <div key={`${pi.pi_code}-${pi.display_order}`} className="text-[13px] leading-[1.4]">
-                    <strong className="text-ever-dk">{pi.pi_code ?? "PI"}</strong>
-                    {" · "}
-                    {pi.indicator_text}
-                  </div>
-                ))
+                (scenario.pis ?? []).map((pi) => {
+                  const label = (
+                    <>
+                      <strong className="text-ever-dk">{pi.pi_code ?? "PI"}</strong>
+                      {" · "}
+                      {pi.indicator_text}
+                    </>
+                  );
+                  return pi.pi_id ? (
+                    <Link
+                      key={`${pi.pi_code}-${pi.display_order}`}
+                      href={`/study/pis/${pi.pi_id}`}
+                      className="rounded-lg text-[13px] leading-[1.4] transition-colors duration-150 hover:text-ever-dk"
+                    >
+                      {label}
+                    </Link>
+                  ) : (
+                    <div key={`${pi.pi_code}-${pi.display_order}`} className="text-[13px] leading-[1.4]">
+                      {label}
+                    </div>
+                  );
+                })
               ) : (
                 <p className="text-[13px] text-mute">No indicators listed for this scenario.</p>
               )}

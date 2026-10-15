@@ -16,11 +16,10 @@ export default async function CustomTestPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/tests"
+        backHref="/study/exams"
         backLabel="Practice tests"
         eyebrow="Custom test"
         title="Build your own quiz"
-        description="Pick a question count and filter by cluster, instructional area, or a specific PI. Questions are pulled randomly from the tagged exam bank."
       />
       <CustomTestForm
         clusters={filters.clusters}

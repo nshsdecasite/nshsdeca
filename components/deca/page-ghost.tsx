@@ -476,7 +476,8 @@ export function PageGhost({ path }: { path: string }) {
   if (page.startsWith("/roleplays/submit")) return <FormGhost />;
   if (page.startsWith("/roleplays/")) return <SituationGhost />;
   if (page.startsWith("/generate")) return <GenerateGhost />;
-  if (page === "/study") return <StudyGhost />;
+  if (page.startsWith("/study/exams")) return <TestsGhost />;
+  if (page === "/study" || page === "/study/misc") return <StudyGhost />;
   if (page.startsWith("/study/")) return <ListGhost />;
   if (page.startsWith("/messages")) return <MessagesGhost />;
   if (page === "/admin/grading" || page === "/admin/generated") return <ListGhost />;

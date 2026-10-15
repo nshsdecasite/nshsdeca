@@ -53,10 +53,6 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
         <h1 className="font-display text-[40px] font-black tracking-[-0.04em] text-balance">
           Generate a practice event
         </h1>
-        <p className="mt-2.5 max-w-2xl text-sm leading-6 text-pretty text-ink-2">
-          Pick an event, and the site chooses real 2026–27 performance indicators. The scenario stays
-          private to you unless you send it to officers for review.
-        </p>
       </div>
 
       <div className="mt-8 rounded-[28px] bg-white p-5 shadow-card print:hidden sm:p-6">

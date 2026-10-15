@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 type TestModeCardProps = {
   title: string;
-  description: string;
+  description?: string;
   href: string;
   badge?: string;
   live?: boolean;
@@ -32,7 +32,9 @@ export function TestModeCard({
           </span>
         ) : null}
       </div>
-      <p className="flex-1 text-sm leading-relaxed text-ink-2">{description}</p>
+      {description ? (
+        <p className="flex-1 text-sm leading-relaxed text-ink-2">{description}</p>
+      ) : null}
       <span
         className={cn(
           "mt-4 inline-flex text-[13px] font-bold",

@@ -327,7 +327,6 @@ export function AdminPanel({
       <AdminSection
         id="activity"
         title="Member activity"
-        description="Tests, roleplays, averages, and tab-leave counts during practice tests."
         count={activity.length}
         open={!collapsed.activity}
         onToggle={toggle}
@@ -392,7 +391,6 @@ export function AdminPanel({
       <AdminSection
         id="tests"
         title="Recent tests"
-        description="Completed practice tests with per-session tab-leave counts."
         count={recentTests.length}
         open={!collapsed.tests}
         onToggle={toggle}
@@ -458,7 +456,6 @@ export function AdminPanel({
       <AdminSection
         id="peeks"
         title="Checked solution before an attempt"
-        description="Members who opened the written solution before recording an attempt."
         count={solutionPeeks.length}
         open={!collapsed.peeks}
         onToggle={toggle}
@@ -509,7 +506,6 @@ export function AdminPanel({
       <AdminSection
         id="members"
         title="Members"
-        description="Roles, grades, and points for everyone in the chapter."
         count={filtered.length}
         open={!collapsed.members}
         onToggle={toggle}

@@ -44,10 +44,8 @@ export function TestTaker({ session }: TestTakerProps) {
   const answeredCount = questions.filter((q) => answers[q.id]).length;
   const unansweredCount = questions.length - answeredCount;
 
-  const [secondsLeft, setSecondsLeft] = useState(() =>
-    timed && session.time_limit_seconds
-      ? remainingSeconds(session.started_at, session.time_limit_seconds)
-      : null,
+  const [elapsed, setElapsed] = useState(() =>
+    Math.max(0, Math.floor((Date.now() - Date.parse(session.started_at)) / 1000)),
   );
 
   useEffect(() => {
@@ -85,11 +83,22 @@ export function TestTaker({ session }: TestTakerProps) {
   }, [completed, session.id]);
 
   useEffect(() => {
+    const end = completed && session.completed_at ? Date.parse(session.completed_at) : null;
+    const tick = () => {
+      const stop = end ?? Date.now();
+      setElapsed(Math.max(0, Math.floor((stop - Date.parse(session.started_at)) / 1000)));
+    };
+    tick();
+    if (end !== null) return;
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [completed, session.completed_at, session.started_at]);
+
+  useEffect(() => {
     if (completed || !timed || !session.time_limit_seconds) return;
 
     const tick = () => {
       const remaining = remainingSeconds(session.started_at, session.time_limit_seconds!);
-      setSecondsLeft(remaining);
       if (remaining <= 0 && !submittingRef.current) {
         submittingRef.current = true;
         startTransition(async () => {
@@ -194,36 +203,28 @@ export function TestTaker({ session }: TestTakerProps) {
         ? Math.round((answeredCount / questions.length) * 100)
         : 0;
 
+  const examName = [session.cluster_name || session.exam_title || "Exam", session.exam_year]
+    .filter((part) => part !== null && part !== undefined && String(part).length > 0)
+    .join(" ");
+  const lastQuestion = currentIndex === questions.length - 1;
+
   return (
-    <div>
+    <div className="pb-24">
       <div className="flex flex-wrap items-center justify-between gap-6">
-        <div>
-          <h1 className="font-display text-[28px] font-black tracking-[-0.03em]">
-            {session.exam_title ?? "Practice test"}
-          </h1>
-          <p className="mt-1.5 text-[13px] font-semibold text-mute">
-            {session.exam_year ? `${session.exam_year} · ` : ""}
-            {session.total_questions} questions
-            {timed ? " · timed" : ""}
-          </p>
-        </div>
+        <h1 className="text-balance font-display text-[28px] font-black tracking-[-0.03em]">
+          {examName}
+        </h1>
         <div className="flex items-center gap-3.5">
-          {timed && secondsLeft !== null && !completed ? (
-            <span className="rounded-full bg-white px-[22px] py-2.5 font-display text-[22px] font-black tracking-[-0.02em] shadow-card">
-              {formatCountdown(secondsLeft)}
-            </span>
-          ) : null}
-          <DecaButton href="/tests" variant="outline">
+          <span className="rounded-full bg-white px-[22px] py-2.5 font-display text-[22px] font-black tracking-[-0.02em] tabular-nums shadow-card">
+            {formatCountdown(elapsed)}
+            {timed && session.time_limit_seconds ? (
+              <span className="text-mute"> / {formatCountdown(session.time_limit_seconds)}</span>
+            ) : null}
+          </span>
+          <DecaButton href="/study/exams" variant="outline">
             {completed ? "Back to tests" : "Exit"}
           </DecaButton>
         </div>
-      </div>
-
-      <div className="mt-[22px] h-2.5 overflow-hidden rounded-full bg-white shadow-card">
-        <div
-          className="h-full rounded-full bg-ever transition-[width] duration-200"
-          style={{ width: `${(current.display_order / session.total_questions) * 100}%` }}
-        />
       </div>
 
       <div className="mt-[22px] grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
@@ -243,10 +244,22 @@ export function TestTaker({ session }: TestTakerProps) {
               </p>
             </div>
           ) : null}
-          <span className="rounded-full bg-ever-lt px-3.5 py-1.5 text-xs font-extrabold text-ever-dk">
-            Question {current.display_order} of {session.total_questions}
-            {current.pi_code ? ` · ${current.pi_code}` : ""}
-          </span>
+          <div className="flex flex-wrap items-center gap-3">
+            {current.pi_code ? (
+              <span className="rounded-full bg-ever-lt px-3.5 py-1.5 text-xs font-extrabold text-ever-dk">
+                {current.pi_code}
+              </span>
+            ) : null}
+            {!completed ? (
+              <button
+                type="button"
+                onClick={toggleFlag}
+                className="text-[13px] font-semibold text-mute transition-colors duration-150 hover:text-ever-dk"
+              >
+                {flagged.has(current.id) ? "Flagged" : "Flag for review"}
+              </button>
+            ) : null}
+          </div>
           <p className="mt-[22px] max-w-[56ch] text-[23px] leading-[1.45] font-semibold">
             {current.question_text}
           </p>
@@ -263,7 +276,7 @@ export function TestTaker({ session }: TestTakerProps) {
                   disabled={completed}
                   onClick={() => handleChoose(choice.id)}
                   className={cn(
-                    "flex items-center gap-3.5 rounded-2xl border-[1.5px] px-[18px] py-4 text-left text-[15px] transition-colors duration-150",
+                    "flex items-center gap-3.5 rounded-2xl border-[1.5px] px-[18px] py-4 text-left text-[15px] transition-[background-color,border-color,transform] duration-150 ease-[cubic-bezier(0.2,0,0,1)] active:scale-[0.96] disabled:active:scale-100",
                     showCorrect && "border-ever bg-ever-lt",
                     showIncorrect && "border-[#d9b48a] bg-gold-lt",
                     !showCorrect &&
@@ -300,39 +313,6 @@ export function TestTaker({ session }: TestTakerProps) {
             </div>
           ) : null}
           {error ? <p className="mt-4 text-sm text-[#b42318]">{error}</p> : null}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <DecaButton
-              variant="tint"
-              disabled={currentIndex === 0}
-              onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-            >
-              Previous
-            </DecaButton>
-            {currentIndex === questions.length - 1 ? (
-              completed ? (
-                <DecaButton href="/tests/history">History</DecaButton>
-              ) : (
-                <DecaButton disabled={isPending} onClick={requestComplete}>
-                  {isPending ? "Submitting…" : "Submit exam"}
-                </DecaButton>
-              )
-            ) : (
-              <DecaButton
-                onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
-              >
-                Next question
-              </DecaButton>
-            )}
-            {!completed ? (
-              <button
-                type="button"
-                onClick={toggleFlag}
-                className="ml-2 text-[13px] font-semibold text-mute hover:text-ever-dk"
-              >
-                {flagged.has(current.id) ? "Flagged" : "Flag for review"}
-              </button>
-            ) : null}
-          </div>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -400,6 +380,40 @@ export function TestTaker({ session }: TestTakerProps) {
             <span className="rounded-full bg-ever-lt px-3.5 py-1.5 text-[13px] font-extrabold text-ever-dk">
               {sessionAccuracy}%
             </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-edge bg-white/95 backdrop-blur-sm">
+        <div className="mx-auto flex w-full items-center justify-between gap-3 px-5 py-3 sm:px-8 lg:w-[70%] lg:max-w-[1100px] lg:px-0">
+          <p className="text-sm font-bold tabular-nums text-ink">
+            {currentIndex + 1} of {questions.length}
+          </p>
+          <div className="flex items-center gap-2">
+            <DecaButton
+              variant="outline"
+              size="sm"
+              disabled={currentIndex === 0}
+              onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
+            >
+              Back
+            </DecaButton>
+            {lastQuestion && !completed ? (
+              <DecaButton size="sm" disabled={isPending} onClick={requestComplete}>
+                {isPending ? "Submitting…" : "Submit"}
+              </DecaButton>
+            ) : lastQuestion ? (
+              <DecaButton href="/tests/history" size="sm">
+                History
+              </DecaButton>
+            ) : (
+              <DecaButton
+                size="sm"
+                onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
+              >
+                Next
+              </DecaButton>
+            )}
           </div>
         </div>
       </div>

@@ -18,7 +18,6 @@ export default async function OfficerGradingPage() {
       <PageHeader
         eyebrow="Officers"
         title="Grading queue"
-        description="Review and grade student roleplay submissions."
       />
       <OfficerQueueList submissions={submissions} />
     </SocialPage>

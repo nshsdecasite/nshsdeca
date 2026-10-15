@@ -36,6 +36,7 @@ export function JudgeQuestions({
   const [pendingNumber, setPendingNumber] = useState<number | null>(null);
   const [warningOpen, setWarningOpen] = useState(false);
   const [warningPresent, setWarningPresent] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
     if (warningOpen || !warningPresent) return;
@@ -50,7 +51,7 @@ export function JudgeQuestions({
       setOpen((current) => ({ ...current, [number]: false }));
       return;
     }
-    if (!hasAttempt) {
+    if (!hasAttempt && !acknowledged) {
       setPendingNumber(number);
       setWarningPresent(true);
       setWarningOpen(true);
@@ -62,6 +63,7 @@ export function JudgeQuestions({
   function revealPending() {
     if (pendingNumber == null) return;
     const number = pendingNumber;
+    setAcknowledged(true);
     setOpen((current) => ({ ...current, [number]: true }));
     setWarningOpen(false);
   }
@@ -165,12 +167,12 @@ export function JudgeQuestions({
               </DialogPrimitive.Close>
               <motion.div variants={warningPiece}>
                 <DialogPrimitive.Title className="pr-6 font-display text-[26px] font-black tracking-[-0.03em] text-balance text-ink">
-                  The judge asks these later
+                  Are you ready
                 </DialogPrimitive.Title>
               </motion.div>
               <motion.div variants={warningPiece}>
                 <DialogPrimitive.Description className="pt-2 text-pretty text-[15px] leading-relaxed text-ink-2">
-                  You have not recorded an attempt. In a real roleplay these stay with the judge until your presentation is over.
+                  The judge usually asks these at the end of the roleplay.
                 </DialogPrimitive.Description>
               </motion.div>
               <motion.div variants={warningPiece} className="flex flex-wrap justify-end gap-2 pt-5">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  currentUserIsSuperAdmin,
   getAdminOverview,
   listChapterActivity,
   listChapterMembers,
@@ -15,13 +16,15 @@ export const metadata: Metadata = {
 
 export default async function AdminPage() {
   const { user, role } = await requireRole(["officer", "advisor"], "/admin");
-  const [overview, members, activity, recentTests, solutionPeeks] = await Promise.all([
-    getAdminOverview(),
-    listChapterMembers(),
-    listChapterActivity(),
-    listChapterTestTabLeaves(),
-    listSolutionPeeks(),
-  ]);
+  const [overview, members, activity, recentTests, solutionPeeks, currentIsSuperAdmin] =
+    await Promise.all([
+      getAdminOverview(),
+      listChapterMembers(),
+      listChapterActivity(),
+      listChapterTestTabLeaves(),
+      listSolutionPeeks(),
+      currentUserIsSuperAdmin(),
+    ]);
 
   return (
     <div>
@@ -33,6 +36,7 @@ export default async function AdminPage() {
         solutionPeeks={solutionPeeks}
         currentUserId={user.id}
         currentRole={role === "advisor" ? "advisor" : "officer"}
+        currentIsSuperAdmin={currentIsSuperAdmin}
       />
     </div>
   );

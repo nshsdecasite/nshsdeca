@@ -117,7 +117,7 @@ export function DashboardScreen({
           <p className="text-xs font-bold tracking-[0.1em] uppercase text-ever-dk">
             {todayLabel()}
           </p>
-          <h1 className="mt-2 font-display text-[40px] font-black tracking-[-0.04em] text-balance">
+          <h1 className="mt-2 text-balance font-display text-[32px] font-black tracking-[-0.04em] sm:text-[40px]">
             {timeGreeting()}, {firstName}
           </h1>
           {weeks > 0 ? (

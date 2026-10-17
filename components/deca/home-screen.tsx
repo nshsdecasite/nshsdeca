@@ -41,19 +41,19 @@ export function HomeScreen({ stats }: HomeScreenProps) {
     <>
       <SiteNav
         active="program"
-        logoClassName="no-outline h-[2.55rem] w-auto sm:h-[2.975rem] md:h-[3.4rem]"
+        logoClassName="no-outline h-9 w-auto sm:h-12 md:h-[3.4rem]"
       />
 
-      <div className="grid animate-settle grid-cols-1 items-stretch gap-4 px-10 pt-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <div className="deca-card flex flex-col items-start px-12 py-14">
-          <h1 className="max-w-[12ch] font-display text-[72px] font-black leading-[0.95] tracking-[-0.045em] text-ink">
+      <div className="grid animate-settle grid-cols-1 items-stretch gap-3 px-4 pt-2 sm:gap-4 sm:px-8 sm:pt-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:px-10">
+        <div className="deca-card flex flex-col items-start px-6 py-8 sm:px-10 sm:py-12 lg:px-12 lg:py-14">
+          <h1 className="max-w-[12ch] text-balance font-display text-[2.5rem] font-black leading-[0.95] tracking-[-0.045em] text-ink sm:text-6xl lg:text-[72px]">
             Roleplay practice for Newman Smith DECA.
           </h1>
-          <p className="mt-6 max-w-[42ch] text-lg leading-[1.55] text-ink-2">
+          <p className="mt-4 max-w-[42ch] text-pretty text-base leading-[1.55] text-ink-2 sm:mt-6 sm:text-lg">
             {formatStat(stats.scenarios)} scenarios, {stats.exams} exams, and officer
             grading on the official rubric.
           </p>
-          <div className="mt-auto flex flex-wrap gap-3 pt-10">
+          <div className="mt-auto flex flex-wrap gap-3 pt-8 sm:pt-10">
             <DecaButton href="/login?next=/roleplays" size="lg">
               Sign in
             </DecaButton>
@@ -62,7 +62,7 @@ export function HomeScreen({ stats }: HomeScreenProps) {
             </DecaButton>
           </div>
         </div>
-        <div className="relative min-h-[360px] overflow-hidden rounded-[20px] bg-[#e3e1d6] shadow-card lg:min-h-[520px]">
+        <div className="relative min-h-[220px] overflow-hidden rounded-[20px] bg-[#e3e1d6] shadow-card sm:min-h-[320px] lg:min-h-[520px]">
           <Image
             src="/images/chapter-hero.webp"
             alt="Newman Smith DECA chapter"
@@ -74,17 +74,17 @@ export function HomeScreen({ stats }: HomeScreenProps) {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-4 px-10 lg:grid-cols-4">
+      <div className="mt-3 grid grid-cols-2 gap-3 px-4 sm:mt-4 sm:gap-4 sm:px-8 lg:grid-cols-4 lg:px-10">
         {statCards.map((stat) => (
           <div
             key={stat.label}
             className={
               stat.dark
-                ? "rounded-[20px] bg-ever-dk px-7 py-[26px] text-white"
-                : "deca-card px-7 py-[26px]"
+                ? "rounded-[20px] bg-ever-dk px-4 py-5 text-white sm:px-7 sm:py-[26px]"
+                : "deca-card px-4 py-5 sm:px-7 sm:py-[26px]"
             }
           >
-            <p className="font-display text-[42px] font-black tracking-[-0.035em]">
+            <p className="font-display text-[32px] font-black tracking-[-0.035em] tabular-nums sm:text-[42px]">
               {stat.value}
             </p>
             <p
@@ -100,9 +100,9 @@ export function HomeScreen({ stats }: HomeScreenProps) {
         ))}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 px-10 md:grid-cols-3">
+      <div className="mt-3 grid grid-cols-1 gap-3 px-4 sm:mt-4 sm:gap-4 sm:px-8 md:grid-cols-3 lg:px-10">
         {STEPS.map((step) => (
-          <div key={step.step} className="deca-card px-7 py-[26px]">
+          <div key={step.step} className="deca-card px-5 py-5 sm:px-7 sm:py-[26px]">
             <span className="rounded-full bg-ever-lt px-3 py-1 text-xs font-extrabold text-ever-dk">
               {step.step}
             </span>
@@ -114,7 +114,7 @@ export function HomeScreen({ stats }: HomeScreenProps) {
         ))}
       </div>
 
-      <div className="px-10 py-10 text-center text-xs font-semibold uppercase tracking-[0.06em] text-mute">
+      <div className="px-5 py-8 text-center text-xs font-semibold uppercase tracking-[0.06em] text-pretty text-mute sm:px-8 sm:py-10 lg:px-10">
         Newman Smith High School DECA · Carrollton, TX
       </div>
     </>

@@ -20,12 +20,28 @@ const chapterName = process.env.CHAPTER_NAME ?? "Newman Smith DECA";
 const schoolName =
   process.env.CHAPTER_SCHOOL_NAME ?? "Newman Smith High School";
 
+const siteUrl = "https://nshsdeca.com";
+const description = `Practice roleplays, take tests, and track progress for ${schoolName} DECA members.`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${chapterName} — Training Platform`,
     template: `%s · ${chapterName}`,
   },
-  description: `Practice roleplays, take tests, and track progress for ${schoolName} DECA members.`,
+  description,
+  openGraph: {
+    title: `${chapterName} — Training Platform`,
+    description,
+    url: siteUrl,
+    siteName: chapterName,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${chapterName} — Training Platform`,
+    description,
+  },
 };
 
 export default function RootLayout({

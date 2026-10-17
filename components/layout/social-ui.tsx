@@ -56,7 +56,7 @@ export function SocialHeader({
       ) : null}
       <h1
         className={cn(
-          "font-display text-[40px] font-black tracking-[-0.04em] text-ink",
+          "text-balance font-display text-[32px] font-black tracking-[-0.04em] text-ink sm:text-[40px]",
           backHref || eyebrow ? "mt-2.5" : "",
         )}
       >

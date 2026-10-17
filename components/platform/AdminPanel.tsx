@@ -124,6 +124,7 @@ type AdminPanelProps = {
   solutionPeeks: SolutionPeek[];
   currentUserId: string;
   currentRole: "officer" | "advisor";
+  currentIsSuperAdmin: boolean;
 };
 
 function downloadCsv(filename: string, rows: string[][]) {
@@ -198,6 +199,7 @@ export function AdminPanel({
   solutionPeeks,
   currentUserId,
   currentRole,
+  currentIsSuperAdmin,
 }: AdminPanelProps) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -208,16 +210,23 @@ export function AdminPanel({
   const canAssignAdvisor = currentRole === "advisor";
 
   const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase();
     return members.filter((member) => {
+      if (filter === "officers" && member.role === "student") return false;
+      if (filter === "students" && member.role !== "student") return false;
+      if (!needle) return true;
       const name = displayName(member.first_name, member.last_name, member.email).toLowerCase();
-      if (query && !name.includes(query.toLowerCase()) && !member.email?.toLowerCase().includes(query.toLowerCase())) {
-        return false;
-      }
-      if (filter === "officers") return member.role !== "student";
-      if (filter === "students") return member.role === "student";
-      return true;
+      const username = member.username?.toLowerCase() ?? "";
+      const email = member.email?.toLowerCase() ?? "";
+      return name.includes(needle) || username.includes(needle) || email.includes(needle);
     });
   }, [filter, members, query]);
+  const visibleIds = useMemo(() => new Set(filtered.map((member) => member.id)), [filtered]);
+  const filteredActivity = activity.filter((row) => visibleIds.has(row.user_id));
+  const filteredTests = recentTests.filter((row) => visibleIds.has(row.user_id));
+  const filteredPeeks = solutionPeeks.filter((row) => visibleIds.has(row.user_id));
+  const officerCount = members.filter((member) => member.role !== "student").length;
+  const studentCount = members.length - officerCount;
 
   const exportMembers = () => {
     downloadCsv("chapter-members.csv", [
@@ -248,7 +257,7 @@ export function AdminPanel({
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={`Search ${members.length} members…`}
+            placeholder="Search name or username"
             className="w-[260px] rounded-full bg-white px-5 py-3 text-sm shadow-card placeholder:text-mute"
           />
           <DecaButton variant="outline" onClick={exportMembers}>
@@ -260,9 +269,9 @@ export function AdminPanel({
       <div className="mt-5 flex flex-wrap gap-2">
         {(
           [
-            ["all", `All members`],
-            ["officers", "Officers"],
-            ["students", "Students"],
+            ["all", `All · ${members.length}`],
+            ["officers", `Officers · ${officerCount}`],
+            ["students", `Students · ${studentCount}`],
           ] as const
         ).map(([value, label]) => (
           <button
@@ -299,6 +308,12 @@ export function AdminPanel({
         </Link>
       </div>
 
+      {currentIsSuperAdmin ? (
+        <p className="mt-4 max-w-3xl text-sm leading-6 text-pretty text-ink-2">
+          Super admin. Open any member to change their username, password, event, role, or to give super admin to someone else.
+        </p>
+      ) : null}
+
       <AdminSection
         id="overview"
         title="Overview"
@@ -327,7 +342,7 @@ export function AdminPanel({
       <AdminSection
         id="activity"
         title="Member activity"
-        count={activity.length}
+        count={filteredActivity.length}
         open={!collapsed.activity}
         onToggle={toggle}
         actions={
@@ -361,11 +376,15 @@ export function AdminPanel({
             </tr>
           </thead>
           <tbody>
-            {activity.map((row) => {
+            {filteredActivity.map((row) => {
               const name = displayName(row.first_name, row.last_name, row.email);
               return (
                 <tr key={row.user_id} className="border-t border-edge">
-                  <td className="py-3 pr-3 font-bold">{name}</td>
+                  <td className="py-3 pr-3 font-bold">
+                    <Link href={`/admin/members/${row.user_id}`} className="hover:text-ever-dk">
+                      {name}
+                    </Link>
+                  </td>
                   <td className="py-3">{row.tests_completed}</td>
                   <td className="py-3">{row.avg_test_pct ?? "—"}</td>
                   <td className="py-3">
@@ -391,11 +410,11 @@ export function AdminPanel({
       <AdminSection
         id="tests"
         title="Recent tests"
-        count={recentTests.length}
+        count={filteredTests.length}
         open={!collapsed.tests}
         onToggle={toggle}
       >
-        {recentTests.length === 0 ? (
+        {filteredTests.length === 0 ? (
           <p className="text-[13px] text-mute">No completed tests yet.</p>
         ) : (
           <table className="w-full border-collapse text-left text-[13px]">
@@ -412,7 +431,7 @@ export function AdminPanel({
               </tr>
             </thead>
             <tbody>
-              {recentTests.map((row) => {
+              {filteredTests.map((row) => {
                 const name = displayName(row.first_name, row.last_name, row.email);
                 const completed = new Date(row.completed_at).toLocaleString("en-US", {
                   month: "short",
@@ -424,7 +443,11 @@ export function AdminPanel({
                   [row.exam_code, row.exam_title].filter(Boolean).join(" · ") || "Practice test";
                 return (
                   <tr key={row.session_id} className="border-t border-edge">
-                    <td className="py-3 pr-3 font-bold">{name}</td>
+                    <td className="py-3 pr-3 font-bold">
+                      <Link href={`/admin/members/${row.user_id}`} className="hover:text-ever-dk">
+                        {name}
+                      </Link>
+                    </td>
                     <td className="py-3 pr-3">
                       <Link
                         href={`/tests/${row.session_id}`}
@@ -456,11 +479,11 @@ export function AdminPanel({
       <AdminSection
         id="peeks"
         title="Checked solution before an attempt"
-        count={solutionPeeks.length}
+        count={filteredPeeks.length}
         open={!collapsed.peeks}
         onToggle={toggle}
       >
-        {solutionPeeks.length === 0 ? (
+        {filteredPeeks.length === 0 ? (
           <p className="text-[13px] text-mute">No solution checks yet.</p>
         ) : (
           <table className="w-full border-collapse text-left text-[13px]">
@@ -477,7 +500,7 @@ export function AdminPanel({
               </tr>
             </thead>
             <tbody>
-              {solutionPeeks.map((peek) => {
+              {filteredPeeks.map((peek) => {
                 const name = displayName(peek.first_name, peek.last_name, peek.email);
                 const title =
                   peek.scenario_title?.trim() || `District Event ${peek.scenario_number}`;
@@ -489,7 +512,11 @@ export function AdminPanel({
                 });
                 return (
                   <tr key={peek.id} className="border-t border-edge">
-                    <td className="py-3 pr-3 font-bold">{name}</td>
+                    <td className="py-3 pr-3 font-bold">
+                      <Link href={`/admin/members/${peek.user_id}`} className="hover:text-ever-dk">
+                        {name}
+                      </Link>
+                    </td>
                     <td className="py-3 pr-3">
                       {peek.event_code} · {title} · {peek.year}
                     </td>
@@ -545,10 +572,16 @@ export function AdminPanel({
                       </div>
                       <div>
                         <p className="m-0 font-bold">
-                          {name}
+                          <Link href={`/admin/members/${member.id}`} className="hover:text-ever-dk">
+                            {name}
+                          </Link>
                           {member.id === currentUserId ? " · you" : ""}
+                          {member.is_super_admin ? " · super admin" : ""}
                         </p>
-                        <p className="mt-0.5 text-[11px] text-mute">{member.email}</p>
+                        <p className="mt-0.5 text-[11px] text-mute">
+                          {member.username ? `@${member.username}` : member.email}
+                          {member.event_code ? ` · ${member.event_code}` : ""}
+                        </p>
                       </div>
                     </div>
                   </td>

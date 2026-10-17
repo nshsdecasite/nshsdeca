@@ -50,7 +50,7 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
   return (
     <div>
       <div className="print:hidden">
-        <h1 className="font-display text-[40px] font-black tracking-[-0.04em] text-balance">
+        <h1 className="text-balance font-display text-[32px] font-black tracking-[-0.04em] sm:text-[40px]">
           Generate a practice event
         </h1>
       </div>

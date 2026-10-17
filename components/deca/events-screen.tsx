@@ -73,7 +73,7 @@ export function EventsScreen({
       >
         <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div>
-            <h1 className="font-display text-[40px] font-black tracking-[-0.04em] text-balance">
+            <h1 className="text-balance font-display text-[32px] font-black tracking-[-0.04em] sm:text-[40px]">
               The season
             </h1>
           </div>

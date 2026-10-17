@@ -287,7 +287,7 @@ export function LibraryScreen({
     <div>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <h1 className="text-balance font-display text-[40px] font-black tracking-[-0.04em]">
+          <h1 className="text-balance font-display text-[32px] font-black tracking-[-0.04em] sm:text-[40px]">
             {generatedLibrary ? "Generated library" : "Scenario library"}
           </h1>
           <p className="mt-2.5 text-pretty text-sm text-ink-2">

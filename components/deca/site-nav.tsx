@@ -10,7 +10,7 @@ export function SiteNav({
   logoClassName?: string;
 }) {
   return (
-    <header className="flex items-center justify-between gap-4 px-10 py-5">
+    <header className="flex items-center justify-between gap-3 px-5 py-4 sm:gap-4 sm:px-8 sm:py-5 lg:px-10">
       <Link href="/" className="inline-flex items-center text-ink hover:text-ink">
         <Logo className={logoClassName} priority />
       </Link>

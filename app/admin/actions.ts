@@ -1,7 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { notFound } from "next/navigation";
 import { requireAuth, requireRole } from "@/lib/auth/roles";
+import { isUsername } from "@/lib/auth/username";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type {
   AdminOverview,
   Announcement,
@@ -10,6 +13,7 @@ import type {
   ChapterActivity,
   ChapterMember,
   ChapterTestTabLeave,
+  MemberDossier,
   SolutionPeek,
 } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
@@ -160,7 +164,81 @@ export async function listChapterMembers(): Promise<ChapterMember[]> {
   return ((data ?? []) as ChapterMember[]).map((row) => ({
     ...row,
     total_points: Number(row.total_points),
+    is_super_admin: Boolean(row.is_super_admin),
   }));
+}
+
+export async function currentUserIsSuperAdmin() {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("current_is_super_admin");
+  if (error) return false;
+  return data === true;
+}
+
+async function assertSuperAdmin() {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("current_is_super_admin");
+  if (error || data !== true) {
+    throw new Error("Only super admins can do that.");
+  }
+}
+
+export async function getMemberDossier(userId: string): Promise<MemberDossier> {
+  await requireRole(["officer", "advisor"], `/admin/members/${userId}`);
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_member_dossier", {
+    p_user_id: userId,
+  });
+  if (error) {
+    if (/not found/i.test(error.message)) notFound();
+    throw new Error(error.message);
+  }
+  const dossier = data as MemberDossier;
+  if (!dossier?.profile) notFound();
+  return dossier;
+}
+
+export async function updateMemberAccount(input: {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  gradeLevel: number;
+  role: ChapterMember["role"];
+  eventCode: string;
+  username: string;
+  isSuperAdmin: boolean;
+}) {
+  await assertSuperAdmin();
+  if (!isUsername(input.username)) {
+    throw new Error("Use 3 to 30 letters and numbers, and start with a letter.");
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("admin_update_member", {
+    p_user_id: input.userId,
+    p_first_name: input.firstName,
+    p_last_name: input.lastName,
+    p_grade_level: input.gradeLevel,
+    p_role: input.role,
+    p_event_code: input.eventCode,
+    p_username: input.username,
+    p_is_super_admin: input.isSuperAdmin,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin");
+  revalidatePath(`/admin/members/${input.userId}`);
+}
+
+export async function setMemberPassword(userId: string, password: string) {
+  await assertSuperAdmin();
+  if (password.length < 8) {
+    throw new Error("Password must be at least 8 characters.");
+  }
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.updateUserById(userId, { password });
+  if (error) throw new Error(error.message);
+  revalidatePath(`/admin/members/${userId}`);
 }
 
 export async function setMemberRole(userId: string, role: ChapterMember["role"]) {

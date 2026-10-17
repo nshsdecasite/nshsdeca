@@ -71,7 +71,7 @@ export function AppNav({
           href="/dashboard"
           className="inline-flex flex-none items-center text-ink transition-transform duration-150 ease-[cubic-bezier(0.2,0,0,1)] hover:text-ink active:scale-[0.96]"
         >
-          <Logo className="no-outline h-[2.55rem] w-auto" priority />
+          <Logo className="no-outline h-8 w-auto sm:h-[2.55rem]" priority />
         </Link>
 
         <nav className="flex min-w-0 flex-1 items-center overflow-x-auto [justify-content:safe_center]">

@@ -162,10 +162,104 @@ export type ChapterMember = {
   first_name: string | null;
   last_name: string | null;
   email: string | null;
+  username?: string | null;
+  username_confirmed?: boolean;
   grade_level: number | null;
   role: "student" | "officer" | "advisor";
+  event_code?: string | null;
+  event_name?: string | null;
+  is_super_admin?: boolean;
   total_points: number;
+  last_login?: string | null;
   created_at: string;
+};
+
+export type MemberDossier = {
+  profile: Record<string, unknown>;
+  events: { event_code: string; event_name: string }[];
+  tests: {
+    id: string;
+    session_type: string | null;
+    exam_code: string | null;
+    exam_title: string | null;
+    score: number | null;
+    total_questions: number | null;
+    started_at: string | null;
+    completed_at: string | null;
+    answered: number;
+    correct_answers: number;
+  }[];
+  submissions: {
+    id: string;
+    status: string | null;
+    attempt_number: number | null;
+    submitted_at: string | null;
+    reviewed_at: string | null;
+    video_url: string | null;
+    video_source: string | null;
+    duration_seconds: number | null;
+    scenario_key: string | null;
+    event_code: string | null;
+    scenario_title: string | null;
+    scenario_number: number | null;
+    year: number | null;
+    level: string | null;
+    grading_data: { total_score?: number | null } | null;
+  }[];
+  pi_performance: {
+    pi_code: string;
+    indicator_text: string | null;
+    source: string | null;
+    total_attempts: number;
+    correct_count: number;
+    last_updated: string | null;
+  }[];
+  points: {
+    id: string;
+    points_earned: number | null;
+    action_type: string | null;
+    reference_type: string | null;
+    reference_id: string | null;
+    earned_at: string | null;
+  }[];
+  peeks: {
+    id: string;
+    created_at: string;
+    event_code: string | null;
+    scenario_title: string | null;
+    scenario_number: number | null;
+    year: number | null;
+    level: string | null;
+  }[];
+  tab_leaves: {
+    id: string;
+    session_id: string | null;
+    event_type: string;
+    created_at: string;
+  }[];
+  notes: {
+    id: string;
+    tab_name: string | null;
+    content: { text?: string } | null;
+    updated_at: string | null;
+  }[];
+  generated_scenarios: {
+    id: string;
+    event_code: string | null;
+    scenario_title: string | null;
+    year: number | null;
+    level: string | null;
+    review_status: string | null;
+  }[];
+  flashcards: { learning: number; know_it: number };
+  messages: { sent: number; received: number };
+  friendships: {
+    status: string | null;
+    created_at: string | null;
+    responded_at: string | null;
+    other_name: string | null;
+  }[];
+  reactions: { reaction: string; created_at: string }[];
 };
 
 export type MessageableMember = {

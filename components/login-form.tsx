@@ -24,7 +24,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-lg items-center px-4 py-12 sm:px-6">
-      <div className="w-full rounded-3xl bg-white px-10 py-11 shadow-card">
+      <div className="w-full rounded-3xl bg-white px-6 py-8 shadow-card sm:px-10 sm:py-11">
         <div className="flex justify-center">
           <Logo className="no-outline h-12 w-auto" priority />
         </div>

@@ -114,9 +114,10 @@ export function GenerateScreen({ events }: { events: GeneratorEvent[] }) {
         ) : null}
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <DecaButton type="button" onClick={generate} disabled={pending}>
-            {pending ? "Writing the practice event…" : "Generate"}
+          <DecaButton type="button" onClick={generate} disabled className="pointer-events-none opacity-60">
+            Generate
           </DecaButton>
+          <p className="text-sm text-ink-2">Roleplay generation is closed.</p>
           {pending ? (
             <p className="text-sm text-mute">Choosing indicators, then writing the scenario.</p>
           ) : null}

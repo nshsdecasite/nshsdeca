@@ -299,9 +299,6 @@ export function LibraryScreen({
             )}
           </p>
         </div>
-        <DecaButton href="/generate" className="min-w-[17rem]">
-          Generate roleplay
-        </DecaButton>
       </div>
 
       <ScenarioFilterBar

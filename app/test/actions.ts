@@ -4,6 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth/roles";
 import type { ExamSummary, TestSession, TestSessionSummary } from "@/lib/test/types";
+import { loadMyProfile } from "@/lib/data/request-cache";
+import { isAssignedExamLocked } from "@/lib/test/assigned-exam-lock";
+import {
+  ASSIGNED_EXAM_LOCK_MESSAGE,
+  examIsAssigned,
+  isAssignedExamWindow,
+} from "@/lib/test/exam-window";
 import { FULL_EXAM_SECONDS } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
@@ -69,6 +76,14 @@ async function applySessionTiming(
 
 export async function startFullExam(examId: string, timed = false) {
   await requireAuth();
+  if (isAssignedExamWindow() && (await isAssignedExamLocked())) {
+    const [exams, profile] = await Promise.all([listExams(), loadMyProfile()]);
+    const exam = exams.find((item) => item.id === examId);
+    if (!exam || !examIsAssigned(exam, profile?.cluster_slug, exams)) {
+      throw new Error(ASSIGNED_EXAM_LOCK_MESSAGE);
+    }
+    timed = true;
+  }
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_test_session", {
     p_exam_id: examId,
@@ -117,6 +132,10 @@ export async function completeTest(sessionId: string) {
   if (error) throw new Error(error.message);
   revalidatePath(`/tests/${sessionId}`);
   revalidatePath("/tests/history");
+  revalidatePath("/tests/full");
+  revalidatePath("/tests/custom");
+  revalidatePath("/tests/pi-targeted");
+  revalidatePath("/study/exams");
   revalidatePath("/admin");
   redirect(`/tests/${sessionId}`);
 }

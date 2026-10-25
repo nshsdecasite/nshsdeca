@@ -63,7 +63,7 @@ export function PiTargetedLauncher({ weakPiCount }: PiTargetedLauncherProps) {
 
         <TimedModeField
           id="pi-targeted-timed"
-          hint="About 54 seconds per question. The quiz submits automatically when time runs out."
+          hint="About 54 seconds per question. When time runs out the clock turns red and you can keep working."
         />
 
         {error ? <p className="text-sm text-destructive">{error}</p> : null}

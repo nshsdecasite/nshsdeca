@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/page-header";
 import { ExamPicker } from "@/components/test/ExamPicker";
 import { requireAuth } from "@/lib/auth/roles";
 import { loadMyProfile } from "@/lib/data/request-cache";
+import { isAssignedExamLocked } from "@/lib/test/assigned-exam-lock";
 
 export const metadata: Metadata = {
   title: "Full practice test",
@@ -22,10 +23,12 @@ export default async function FullTestPage({ searchParams }: FullTestPageProps) 
     loadMyProfile(),
     listExams(),
   ]);
-  const showAll = params.all === "1" || !profile?.cluster_slug;
-  const visible = showAll
-    ? exams
-    : exams.filter((exam) => exam.cluster_slug === profile.cluster_slug);
+  const windowOpen = await isAssignedExamLocked();
+  const showAll = !windowOpen && (params.all === "1" || !profile?.cluster_slug);
+  const visible =
+    showAll || (windowOpen && !profile?.cluster_slug)
+      ? exams
+      : exams.filter((exam) => exam.cluster_slug === profile?.cluster_slug);
   const eventLabel = profile?.event_code
     ? `${profile.event_code}${profile.cluster_name ? ` · ${profile.cluster_name}` : ""}`
     : null;
@@ -38,20 +41,24 @@ export default async function FullTestPage({ searchParams }: FullTestPageProps) 
         eyebrow="Full test"
         title={eventLabel ? `${eventLabel} exam` : "Pick an official cluster exam"}
       />
-      {!showAll ? (
+      {!windowOpen && !showAll ? (
         <p className="mb-6 text-sm text-muted-foreground">
           <Link href="/tests/full?all=1" className="font-semibold text-foreground">
             Show every cluster exam
           </Link>
         </p>
-      ) : profile?.cluster_slug ? (
+      ) : !windowOpen && profile?.cluster_slug ? (
         <p className="mb-6 text-sm text-muted-foreground">
           <Link href="/tests/full" className="font-semibold text-foreground">
             Show only your {profile.event_code} exam
           </Link>
         </p>
       ) : null}
-      <ExamPicker exams={visible} />
+      <ExamPicker
+        exams={visible}
+        lockWindow={windowOpen}
+        assignedClusterSlug={profile?.cluster_slug}
+      />
     </SocialPage>
   );
 }

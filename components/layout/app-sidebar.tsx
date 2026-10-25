@@ -15,7 +15,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
-  Sparkles,
   User,
   Video,
 } from "lucide-react";
@@ -44,7 +43,6 @@ const mainNav: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Exams", href: "/tests", icon: ClipboardList },
   { label: "Roleplays", href: "/roleplays", icon: Video },
-  { label: "Generate", href: "/generate", icon: Sparkles },
   { label: "Study", href: "/study", icon: BookOpen },
   { label: "Events", href: "/calendar", icon: CalendarDays },
   { label: "Notes", href: "/notes", icon: NotebookPen },

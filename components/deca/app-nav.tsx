@@ -11,8 +11,11 @@ import type { UserRole } from "@/lib/auth/roles";
 const MAIN = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/roleplays", label: "Roleplays" },
-  { href: "/study", label: "Study" },
+  { href: "/generate", label: "Generate" },
   { href: "/submissions", label: "Submissions" },
+  { href: "/study", label: "Study" },
+  { href: "/tests", label: "Exams" },
+  { href: "/calendar", label: "Events" },
   { href: "/messages", label: "Messages" },
 ] as const;
 
@@ -25,13 +28,9 @@ const OFFICER = [
 
 function isActive(pathname: string, href: string) {
   if (href === "/dashboard" || href === "/admin") return pathname === href;
-  if (href === "/roleplays") {
-    return pathname.startsWith("/roleplays") || pathname.startsWith("/generate");
-  }
   if (href === "/study") {
     return (
       pathname.startsWith("/study") ||
-      pathname.startsWith("/tests") ||
       pathname === "/notes" ||
       pathname.startsWith("/notes/")
     );

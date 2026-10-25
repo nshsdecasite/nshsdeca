@@ -16,7 +16,7 @@ export default async function TheoriesPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study/misc"
+        backHref="/study"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Theories & fallacies"

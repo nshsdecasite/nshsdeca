@@ -16,7 +16,7 @@ export default async function VocabPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/study/misc"
+        backHref="/study"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Vocab flashcards"

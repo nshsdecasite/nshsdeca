@@ -80,7 +80,7 @@ export function DashboardScreen({
 
   const jumps = [
     {
-      href: "/study/exams",
+      href: "/tests",
       title: "Practice exam",
       detail:
         examAccuracy != null ? `${examAccuracy}% test accuracy` : "Start a full or custom test",
@@ -127,7 +127,7 @@ export function DashboardScreen({
           ) : null}
         </div>
         <div className="flex gap-2.5">
-          <DecaButton href="/study/exams" variant="outline">
+          <DecaButton href="/tests" variant="outline">
             Practice exam
           </DecaButton>
           <DecaButton href="/roleplays">New roleplay</DecaButton>

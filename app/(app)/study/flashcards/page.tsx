@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { listFlashcardSets } from "@/app/platform/actions";
 import { SocialPage, SocialPanel } from "@/components/layout/social-ui";
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireAuth } from "@/lib/auth/roles";
 
@@ -15,6 +16,13 @@ export default async function FlashcardsPage() {
 
   return (
     <SocialPage>
+      <PageHeader
+        backHref="/study"
+        backLabel="Study tools"
+        eyebrow="Flashcards"
+        title="PI flashcard sets"
+        description="Flashcards are limited to the performance indicators for your competitive event, grouped by instructional area."
+      />
       <Suspense fallback={<FlashcardSkeleton />}>
         <FlashcardList />
       </Suspense>

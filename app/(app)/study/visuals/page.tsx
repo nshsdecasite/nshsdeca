@@ -14,7 +14,7 @@ export default async function VisualsPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study/misc"
+        backHref="/study"
         backLabel="Study tools"
         eyebrow="Study tools"
         title="Visual reference library"

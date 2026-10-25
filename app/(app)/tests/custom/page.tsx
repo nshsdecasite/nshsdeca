@@ -16,7 +16,7 @@ export default async function CustomTestPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/study/exams"
+        backHref="/tests"
         backLabel="Practice tests"
         eyebrow="Custom test"
         title="Build your own quiz"

@@ -6,6 +6,7 @@ import {
   listPerformanceIndicators,
 } from "@/app/study/actions";
 import { SocialPage, SocialPanel } from "@/components/layout/social-ui";
+import { PageHeader } from "@/components/page-header";
 import { PiCard } from "@/components/study/PiCard";
 import { PiFilterPills, PiFilters } from "@/components/study/PiFilters";
 import { Button } from "@/components/ui/button";
@@ -80,6 +81,17 @@ export default async function PisPage({ searchParams }: PisPageProps) {
 
   return (
     <SocialPage size="wide">
+      <PageHeader
+        backHref="/study"
+        backLabel="Study tools"
+        eyebrow="Performance indicators"
+        title="PI browser"
+        description={
+          eventCode
+            ? `Showing the performance indicators for ${eventCode}.`
+            : "Search the master PI bank and see which practice tests and roleplay events use each indicator."
+        }
+      />
       <div className="space-y-6">
         <PiFilters
           instructionalAreas={filterOptions.instructional_areas}

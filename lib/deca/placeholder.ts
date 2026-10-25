@@ -102,7 +102,7 @@ export const PLACEHOLDER_FEATURES = [
   {
     title: "Take a test",
     body: "Full cluster exams or a short set built from the indicators you keep missing. Every question shows its rationale afterward.",
-    href: "/study/exams",
+    href: "/tests",
   },
   {
     title: "Submit a roleplay",

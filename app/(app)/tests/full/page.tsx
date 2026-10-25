@@ -33,7 +33,7 @@ export default async function FullTestPage({ searchParams }: FullTestPageProps) 
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study/exams"
+        backHref="/tests"
         backLabel="Practice tests"
         eyebrow="Full test"
         title={eventLabel ? `${eventLabel} exam` : "Pick an official cluster exam"}

@@ -28,7 +28,7 @@ export default async function TestHistoryPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/study/exams"
+        backHref="/tests"
         backLabel="Practice tests"
         eyebrow="History"
         title="Your test history"

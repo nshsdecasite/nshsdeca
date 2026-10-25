@@ -16,7 +16,7 @@ export default async function NotesPage() {
   return (
     <SocialPage size="wide">
       <PageHeader
-        backHref="/study/misc"
+        backHref="/study"
         backLabel="Study tools"
         eyebrow="Notes"
         title="Personal notes"

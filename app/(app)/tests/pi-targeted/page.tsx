@@ -16,7 +16,7 @@ export default async function PiTargetedTestPage() {
   return (
     <SocialPage>
       <PageHeader
-        backHref="/study/exams"
+        backHref="/tests"
         backLabel="Practice tests"
         eyebrow="PI-targeted"
         title="Practice your weakest PIs"

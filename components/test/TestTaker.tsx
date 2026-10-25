@@ -221,7 +221,7 @@ export function TestTaker({ session }: TestTakerProps) {
               <span className="text-mute"> / {formatCountdown(session.time_limit_seconds)}</span>
             ) : null}
           </span>
-          <DecaButton href="/study/exams" variant="outline">
+          <DecaButton href="/tests" variant="outline">
             {completed ? "Back to tests" : "Exit"}
           </DecaButton>
         </div>

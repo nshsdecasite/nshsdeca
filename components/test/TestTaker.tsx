@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { completeTest, recordTabEvent, saveAnswer } from "@/app/test/actions";
 import { DecaButton } from "@/components/deca/button";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
-import { formatCountdown, remainingSeconds } from "@/lib/test/timing";
+import { formatCountdown } from "@/lib/test/timing";
 import { cn } from "@/lib/utils";
 import type { TestSession } from "@/lib/test/types";
 
@@ -94,33 +94,6 @@ export function TestTaker({ session }: TestTakerProps) {
     return () => window.clearInterval(id);
   }, [completed, session.completed_at, session.started_at]);
 
-  useEffect(() => {
-    if (completed || !timed || !session.time_limit_seconds) return;
-
-    const tick = () => {
-      const remaining = remainingSeconds(session.started_at, session.time_limit_seconds!);
-      if (remaining <= 0 && !submittingRef.current) {
-        submittingRef.current = true;
-        startTransition(async () => {
-          try {
-            await completeTest(session.id);
-          } catch (completeError) {
-            submittingRef.current = false;
-            setError(
-              completeError instanceof Error
-                ? completeError.message
-                : "Time is up — could not submit automatically",
-            );
-          }
-        });
-      }
-    };
-
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, [completed, session.id, session.started_at, session.time_limit_seconds, timed]);
-
   const submitSession = () => {
     if (submittingRef.current) return;
     submittingRef.current = true;
@@ -203,6 +176,11 @@ export function TestTaker({ session }: TestTakerProps) {
         ? Math.round((answeredCount / questions.length) * 100)
         : 0;
 
+  const overLimit =
+    timed &&
+    session.time_limit_seconds != null &&
+    elapsed >= session.time_limit_seconds;
+
   const examName = [session.cluster_name || session.exam_title || "Exam", session.exam_year]
     .filter((part) => part !== null && part !== undefined && String(part).length > 0)
     .join(" ");
@@ -215,10 +193,18 @@ export function TestTaker({ session }: TestTakerProps) {
           {examName}
         </h1>
         <div className="flex items-center gap-3.5">
-          <span className="rounded-full bg-white px-[22px] py-2.5 font-display text-[22px] font-black tracking-[-0.02em] tabular-nums shadow-card">
+          <span
+            className={cn(
+              "rounded-full px-[22px] py-2.5 font-display text-[22px] font-black tracking-[-0.02em] tabular-nums shadow-card",
+              overLimit ? "bg-[#fde8e6] text-[#b42318]" : "bg-white",
+            )}
+          >
             {formatCountdown(elapsed)}
             {timed && session.time_limit_seconds ? (
-              <span className="text-mute"> / {formatCountdown(session.time_limit_seconds)}</span>
+              <span className={overLimit ? "text-[#b42318]" : "text-mute"}>
+                {" "}
+                / {formatCountdown(session.time_limit_seconds)}
+              </span>
             ) : null}
           </span>
           <DecaButton href="/tests" variant="outline">

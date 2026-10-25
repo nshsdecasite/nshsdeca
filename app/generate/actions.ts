@@ -65,8 +65,15 @@ function cleanAvoid(values: string[] | undefined) {
     .slice(0, 20);
 }
 
+function roleplayGenerationOpen() {
+  return false;
+}
+
 export async function generatePracticeEvent(input: GenerateInput): Promise<GenerateResult> {
   await requireAuth("/generate");
+  if (!roleplayGenerationOpen()) {
+    return { ok: false, error: "Roleplay generation is closed." };
+  }
 
   const eventCode = input.eventCode?.trim().toUpperCase();
   const primaryIA = input.primaryIA?.trim() || undefined;

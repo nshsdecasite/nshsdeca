@@ -12,6 +12,8 @@ import type {
   UserProfile,
 } from "@/lib/platform/types";
 import { loadMyProfile } from "@/lib/data/request-cache";
+import { isAssignedExamLocked } from "@/lib/test/assigned-exam-lock";
+import { ASSIGNED_EXAM_LOCK_MESSAGE } from "@/lib/test/exam-window";
 import { customTestSeconds } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
@@ -178,6 +180,7 @@ export async function startCustomTest(input: {
   timed?: boolean;
 }) {
   await requireAuth();
+  if (await isAssignedExamLocked()) throw new Error(ASSIGNED_EXAM_LOCK_MESSAGE);
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_custom_test_session", {
     p_question_count: input.questionCount,
@@ -198,6 +201,7 @@ export async function startCustomTest(input: {
 
 export async function startPiTargetedTest(questionCount = 15, timed = false) {
   await requireAuth();
+  if (await isAssignedExamLocked()) throw new Error(ASSIGNED_EXAM_LOCK_MESSAGE);
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("create_pi_targeted_test_session", {
     p_question_count: questionCount,

@@ -21,14 +21,6 @@ export default async function TestsPage() {
         title="Practice exams"
         description="Full cluster exams, custom quizzes, and drills built from the indicators you keep missing."
       />
-      {windowOpen ? (
-        <p className="mb-8 max-w-2xl text-sm leading-6 text-ink-2">
-          Until 4:00 p.m. Central on Monday, only your assigned exam is open, and it runs in timed
-          mode. When the 90 minutes are up the clock turns red and you can keep working. Submitting
-          that exam unlocks every other test.
-        </p>
-      ) : null}
-
       <div className="grid gap-4 sm:grid-cols-2">
         <TestModeCard
           title="Full practice test"

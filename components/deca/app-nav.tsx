@@ -11,7 +11,6 @@ import type { UserRole } from "@/lib/auth/roles";
 const MAIN = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/roleplays", label: "Roleplays" },
-  { href: "/generate", label: "Generate" },
   { href: "/submissions", label: "Submissions" },
   { href: "/study", label: "Study" },
   { href: "/tests", label: "Exams" },

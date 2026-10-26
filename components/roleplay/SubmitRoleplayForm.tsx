@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useTransition } from "react";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { createSubmission } from "@/app/roleplay/actions";
 import type { ScenarioSummary } from "@/lib/roleplay/scenario-types";
 import { LEVEL_LABELS } from "@/lib/roleplay/scenario-types";
@@ -63,6 +64,7 @@ export function SubmitRoleplayForm({
           videoSource,
         });
       } catch (submitError) {
+        if (isRedirectError(submitError)) throw submitError;
         setError(
           submitError instanceof Error
             ? submitError.message

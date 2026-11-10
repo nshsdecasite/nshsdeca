@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth, requireRole } from "@/lib/auth/roles";
+import { requireAuth, requireSuperAdmin } from "@/lib/auth/roles";
 import { loadUnreadMessageCount } from "@/lib/data/request-cache";
 import type {
   DirectMessage,
@@ -57,7 +57,7 @@ export async function sendDirectMessage(recipientId: string, body: string) {
 }
 
 export async function sendBroadcastMessage(audience: "students" | "all", body: string) {
-  await requireRole(["officer", "advisor"], "/messages");
+  await requireSuperAdmin("/messages");
   const text = body.trim();
   if (!text) throw new Error("Message is required");
   const supabase = await createClient();

@@ -3,14 +3,14 @@ import { listSubmissions } from "@/app/roleplay/actions";
 import { OfficerQueueList } from "@/components/roleplay/OfficerQueueList";
 import { SocialPage } from "@/components/layout/social-ui";
 import { PageHeader } from "@/components/page-header";
-import { requireRole } from "@/lib/auth/roles";
+import { requireSuperAdmin } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
   title: "Grade submissions",
 };
 
 export default async function OfficerGradingPage() {
-  await requireRole(["officer", "advisor"], "/admin/grading");
+  await requireSuperAdmin("/admin/grading");
   const submissions = await listSubmissions("chapter");
 
   return (

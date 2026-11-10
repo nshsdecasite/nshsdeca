@@ -1,18 +1,52 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { completeTest, recordTabEvent, saveAnswer } from "@/app/test/actions";
+import { useRouter } from "next/navigation";
+import { completeTest, recordTabEvent, saveAnswers } from "@/app/test/actions";
 import { DecaButton } from "@/components/deca/button";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
 import { formatCountdown } from "@/lib/test/timing";
 import { cn } from "@/lib/utils";
 import type { TestSession } from "@/lib/test/types";
 
+const ANSWER_BATCH_SIZE = 10;
+const ANSWER_FLUSH_MS = 20_000;
+const TAB_LEAVE_GAP_MS = 8_000;
+
+function answerStorageKey(sessionId: string) {
+  return `nshs-deca-answers:${sessionId}`;
+}
+
+function readStoredAnswers(sessionId: string): Record<string, string> {
+  try {
+    const raw = window.localStorage.getItem(answerStorageKey(sessionId));
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as unknown;
+    if (!parsed || typeof parsed !== "object") return {};
+    const stored: Record<string, string> = {};
+    for (const [questionId, choiceId] of Object.entries(parsed)) {
+      if (typeof choiceId === "string" && choiceId) stored[questionId] = choiceId;
+    }
+    return stored;
+  } catch {
+    return {};
+  }
+}
+
+function writeStoredAnswers(sessionId: string, answers: Record<string, string>) {
+  try {
+    window.localStorage.setItem(answerStorageKey(sessionId), JSON.stringify(answers));
+  } catch {
+    // A full disk or private-mode quota should not stop the test.
+  }
+}
+
 type TestTakerProps = {
   session: TestSession;
 };
 
 export function TestTaker({ session }: TestTakerProps) {
+  const router = useRouter();
   const { setFocusMode } = useSessionFocus();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState("");
@@ -29,11 +63,14 @@ export function TestTaker({ session }: TestTakerProps) {
   const completed = Boolean(session.completed_at);
   const timed = Boolean(session.timed && session.time_limit_seconds);
   const submittingRef = useRef(false);
-  const pendingSaves = useRef(Promise.resolve());
-  const failedSaves = useRef(new Set<string>());
+  const dirtyAnswers = useRef<Record<string, string>>({});
+  const flushChain = useRef(Promise.resolve());
+  const flushTimer = useRef<number | null>(null);
+  const tabSend = useRef<Promise<unknown> | null>(null);
   const lastLeaveAtRef = useRef(0);
   const answersRef = useRef(answers);
   answersRef.current = answers;
+  const serverAnswersRef = useRef(answers);
 
   const questions = useMemo(
     () => [...session.questions].sort((a, b) => a.display_order - b.display_order),
@@ -53,16 +90,130 @@ export function TestTaker({ session }: TestTakerProps) {
     return () => setFocusMode(false);
   }, [completed, setFocusMode]);
 
+  const clearFlushTimer = () => {
+    if (flushTimer.current != null) {
+      window.clearTimeout(flushTimer.current);
+      flushTimer.current = null;
+    }
+  };
+
+  const flushOnce = async () => {
+    const snapshot = { ...dirtyAnswers.current };
+    const entries = Object.entries(snapshot);
+    if (entries.length === 0) return;
+    for (const [questionId, choiceId] of entries) {
+      if (dirtyAnswers.current[questionId] === choiceId) {
+        delete dirtyAnswers.current[questionId];
+      }
+    }
+    try {
+      await saveAnswers(
+        session.id,
+        entries.map(([questionId, choiceId]) => ({ questionId, choiceId })),
+      );
+    } catch (saveError) {
+      for (const [questionId, choiceId] of entries) {
+        if (
+          answersRef.current[questionId] === choiceId &&
+          dirtyAnswers.current[questionId] === undefined
+        ) {
+          dirtyAnswers.current[questionId] = choiceId;
+        }
+      }
+      throw saveError;
+    }
+  };
+
+  const enqueueFlush = () => {
+    clearFlushTimer();
+    const job = flushChain.current.then(flushOnce);
+    flushChain.current = job.catch(() => undefined);
+    return job;
+  };
+
+  const scheduleFlush = () => {
+    const pending = Object.keys(dirtyAnswers.current).length;
+    if (pending === 0) return;
+    if (pending >= ANSWER_BATCH_SIZE) {
+      void enqueueFlush().catch((saveError) => {
+        setError(saveError instanceof Error ? saveError.message : "Could not save answers");
+      });
+      return;
+    }
+    if (flushTimer.current != null) return;
+    flushTimer.current = window.setTimeout(() => {
+      flushTimer.current = null;
+      void enqueueFlush().catch((saveError) => {
+        setError(saveError instanceof Error ? saveError.message : "Could not save answers");
+      });
+    }, ANSWER_FLUSH_MS);
+  };
+
+  const syncRef = useRef({ enqueueFlush, scheduleFlush });
+  syncRef.current = { enqueueFlush, scheduleFlush };
+
+  useEffect(() => {
+    if (completed) {
+      try {
+        window.localStorage.removeItem(answerStorageKey(session.id));
+      } catch {
+        // ignore
+      }
+      return;
+    }
+
+    const stored = readStoredAnswers(session.id);
+    const server = serverAnswersRef.current;
+    if (Object.keys(stored).length > 0) {
+      setAnswers((prev) => ({ ...prev, ...stored }));
+      answersRef.current = { ...answersRef.current, ...stored };
+      for (const [questionId, choiceId] of Object.entries(stored)) {
+        if (choiceId && choiceId !== server[questionId]) {
+          dirtyAnswers.current[questionId] = choiceId;
+        }
+      }
+      if (Object.keys(dirtyAnswers.current).length > 0) {
+        syncRef.current.scheduleFlush();
+      }
+    }
+
+    const flushOnHide = () => {
+      if (document.visibilityState === "hidden") {
+        void syncRef.current.enqueueFlush().catch(() => undefined);
+      }
+    };
+    const flushOnPageHide = () => {
+      void syncRef.current.enqueueFlush().catch(() => undefined);
+    };
+    document.addEventListener("visibilitychange", flushOnHide);
+    window.addEventListener("pagehide", flushOnPageHide);
+    return () => {
+      document.removeEventListener("visibilitychange", flushOnHide);
+      window.removeEventListener("pagehide", flushOnPageHide);
+      if (flushTimer.current != null) {
+        window.clearTimeout(flushTimer.current);
+        flushTimer.current = null;
+      }
+      void syncRef.current.enqueueFlush().catch(() => undefined);
+    };
+  }, [completed, session.id]);
+
   useEffect(() => {
     if (completed) return;
 
     const logLeave = (eventType: "blur" | "hidden") => {
       const now = Date.now();
-      if (now - lastLeaveAtRef.current < 1000) return;
+      if (now - lastLeaveAtRef.current < TAB_LEAVE_GAP_MS) return;
+      if (tabSend.current) return;
       lastLeaveAtRef.current = now;
-      void recordTabEvent(session.id, eventType).catch((leaveError) => {
-        console.error("Could not record tab leave", leaveError);
-      });
+      const pending = recordTabEvent(session.id, eventType)
+        .catch((leaveError) => {
+          console.error("Could not record tab leave", leaveError);
+        })
+        .finally(() => {
+          tabSend.current = null;
+        });
+      tabSend.current = pending;
     };
 
     const onVisibilityChange = () => {
@@ -101,16 +252,7 @@ export function TestTaker({ session }: TestTakerProps) {
     setError("");
     startTransition(async () => {
       try {
-        await pendingSaves.current;
-        const retry = [...failedSaves.current];
-        if (retry.length > 0) {
-          await Promise.all(
-            retry.map((questionId) =>
-              saveAnswer(session.id, questionId, answersRef.current[questionId]),
-            ),
-          );
-          failedSaves.current.clear();
-        }
+        await enqueueFlush();
         await completeTest(session.id);
       } catch (completeError) {
         submittingRef.current = false;
@@ -124,22 +266,19 @@ export function TestTaker({ session }: TestTakerProps) {
   const handleChoose = (choiceId: string) => {
     if (completed || !current || isPending) return;
     const questionId = current.id;
+    if (answersRef.current[questionId] === choiceId) return;
     setError("");
-    setAnswers((prev) =>
-      prev[questionId] === choiceId ? prev : { ...prev, [questionId]: choiceId },
-    );
-    pendingSaves.current = pendingSaves.current
-      .catch(() => undefined)
-      .then(async () => {
-        if (answersRef.current[questionId] !== choiceId) return;
-        await saveAnswer(session.id, questionId, choiceId);
-        failedSaves.current.delete(questionId);
-      })
-      .catch((saveError) => {
-        if (answersRef.current[questionId] !== choiceId) return;
-        failedSaves.current.add(questionId);
-        setError(saveError instanceof Error ? saveError.message : "Could not save answer");
-      });
+    const next = { ...answersRef.current, [questionId]: choiceId };
+    answersRef.current = next;
+    setAnswers(next);
+    writeStoredAnswers(session.id, next);
+    dirtyAnswers.current[questionId] = choiceId;
+    scheduleFlush();
+  };
+
+  const exitTest = () => {
+    void enqueueFlush().catch(() => undefined);
+    router.push("/tests");
   };
 
   const requestComplete = () => {
@@ -207,9 +346,15 @@ export function TestTaker({ session }: TestTakerProps) {
               </span>
             ) : null}
           </span>
-          <DecaButton href="/tests" variant="outline">
-            {completed ? "Back to tests" : "Exit"}
-          </DecaButton>
+          {completed ? (
+            <DecaButton href="/tests" variant="outline">
+              Back to tests
+            </DecaButton>
+          ) : (
+            <DecaButton variant="outline" onClick={exitTest}>
+              Exit
+            </DecaButton>
+          )}
         </div>
       </div>
 

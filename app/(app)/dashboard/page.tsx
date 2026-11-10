@@ -25,9 +25,10 @@ function groupAccuracy(cells: PiHeatmapCell[]) {
     map.set(name, prev);
   }
   return [...map.values()]
+    .filter((row) => row.attempts > 0)
     .map((row) => ({
       name: row.name,
-      accuracy: row.attempts ? Math.round((row.correct / row.attempts) * 100) : 0,
+      accuracy: Math.round((row.correct / row.attempts) * 100),
     }))
     .sort((a, b) => b.accuracy - a.accuracy)
     .slice(0, 5);
@@ -90,9 +91,6 @@ export default async function DashboardPage() {
 
   const eventPiTotal = stats.event_pi_count ?? profile?.event_pi_count ?? 0;
   const eventPisStudied = stats.event_pis_studied ?? 0;
-  const piCoveragePct = eventPiTotal
-    ? Math.round((eventPisStudied / eventPiTotal) * 100)
-    : null;
 
   const waiting = submissions
     .filter((item) => item.status === "submitted" || item.status === "under_review")
@@ -106,7 +104,10 @@ export default async function DashboardPage() {
     }));
 
   const trend = (stats.recent_sessions ?? [])
-    .filter((session) => session.completed_at && session.score != null)
+    .filter(
+      (session) =>
+        session.completed_at && session.score != null && session.total_questions > 0,
+    )
     .slice(0, 8)
     .reverse()
     .map((session) => ({
@@ -142,8 +143,8 @@ export default async function DashboardPage() {
       roleplayAttempts={reviewed.length}
       streak={streak}
       bestStreak={streak}
-      piCoveragePct={piCoveragePct}
       eventPisStudied={eventPisStudied}
+      questionsCompleted={stats.questions_completed ?? 0}
       eventPiTotal={eventPiTotal || undefined}
       questionCount={questionCount || undefined}
       accuracy={accuracy}

@@ -11,6 +11,7 @@ export type PiHeatmapCell = {
 export type DashboardStats = {
   total_points: number;
   tests_completed: number;
+  questions_completed?: number;
   avg_test_pct?: number | null;
   roleplays_submitted: number;
   roleplays_graded?: number;
@@ -55,6 +56,7 @@ export type UserProfile = {
   cluster_slug?: string | null;
   cluster_name?: string | null;
   event_pi_count?: number;
+  is_super_admin?: boolean;
 };
 
 export type Note = {

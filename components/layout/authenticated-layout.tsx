@@ -15,6 +15,7 @@ export function AuthenticatedLayout({
   gradeLabel,
   initials,
   role,
+  superAdmin = false,
   unreadCount = 0,
 }: {
   children: ReactNode;
@@ -22,6 +23,7 @@ export function AuthenticatedLayout({
   gradeLabel?: string;
   initials: string;
   role: UserRole | null;
+  superAdmin?: boolean;
   unreadCount?: number;
 }) {
   const { isFocusMode } = useSessionFocus();
@@ -43,6 +45,7 @@ export function AuthenticatedLayout({
         gradeLabel={gradeLabel}
         initials={initials}
         role={role}
+        superAdmin={superAdmin}
         unreadCount={unreadCount}
       />
       <main className={CONTENT}>

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAuth, requireRole } from "@/lib/auth/roles";
+import { requireAuth, requireSuperAdmin } from "@/lib/auth/roles";
 import type { Grading, Submission } from "@/lib/roleplay/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -59,7 +59,7 @@ export async function createSubmission(input: {
 }
 
 export async function saveGradingDraft(id: string, grading: Grading) {
-  await requireRole(["officer", "advisor"]);
+  await requireSuperAdmin();
   const supabase = await getSupabase();
   const { error } = await supabase.rpc("save_roleplay_grading", {
     p_id: id,
@@ -73,7 +73,7 @@ export async function saveGradingDraft(id: string, grading: Grading) {
 }
 
 export async function submitFinalGrading(id: string, grading: Grading) {
-  await requireRole(["officer", "advisor"]);
+  await requireSuperAdmin();
   const supabase = await getSupabase();
   const { error } = await supabase.rpc("save_roleplay_grading", {
     p_id: id,
@@ -87,7 +87,7 @@ export async function submitFinalGrading(id: string, grading: Grading) {
 }
 
 export async function deleteSubmission(id: string) {
-  await requireRole(["officer", "advisor"]);
+  await requireSuperAdmin();
   const supabase = await getSupabase();
   const { error } = await supabase.rpc("delete_roleplay_submission", {
     p_id: id,

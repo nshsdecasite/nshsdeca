@@ -95,7 +95,7 @@ export async function getAdminOverview(): Promise<AdminOverview> {
 }
 
 export async function createAnnouncement(formData: FormData) {
-  await requireRole(["officer", "advisor"], "/messages");
+  await assertSuperAdmin();
   const supabase = await createClient();
   const message = String(formData.get("message") ?? "").trim();
   const visibleTo = String(formData.get("visible_to") ?? "all");
@@ -209,10 +209,19 @@ export async function updateMemberAccount(input: {
   eventCode: string;
   username: string;
   isSuperAdmin: boolean;
+  totalPoints: number;
+  isPublicOnLeaderboard: boolean;
+  avatarUrl: string;
+  schoolName: string;
+  chapterName: string;
+  state: string;
 }) {
   await assertSuperAdmin();
   if (!isUsername(input.username)) {
     throw new Error("Use 3 to 30 letters and numbers, and start with a letter.");
+  }
+  if (!Number.isInteger(input.totalPoints) || input.totalPoints < 0) {
+    throw new Error("Points cannot be negative.");
   }
   const supabase = await createClient();
   const { error } = await supabase.rpc("admin_update_member", {
@@ -224,6 +233,12 @@ export async function updateMemberAccount(input: {
     p_event_code: input.eventCode,
     p_username: input.username,
     p_is_super_admin: input.isSuperAdmin,
+    p_total_points: input.totalPoints,
+    p_is_public_on_leaderboard: input.isPublicOnLeaderboard,
+    p_avatar_url: input.avatarUrl,
+    p_school_name: input.schoolName,
+    p_chapter_name: input.chapterName,
+    p_state: input.state,
   });
   if (error) throw new Error(error.message);
   revalidatePath("/admin");
@@ -242,7 +257,7 @@ export async function setMemberPassword(userId: string, password: string) {
 }
 
 export async function setMemberRole(userId: string, role: ChapterMember["role"]) {
-  await requireRole(["officer", "advisor"], "/admin");
+  await assertSuperAdmin();
   const supabase = await createClient();
   const { error } = await supabase.rpc("set_member_role", {
     p_user_id: userId,
@@ -253,7 +268,7 @@ export async function setMemberRole(userId: string, role: ChapterMember["role"])
 }
 
 export async function deleteAnnouncement(id: string) {
-  await requireRole(["officer", "advisor"], "/messages");
+  await assertSuperAdmin();
   const supabase = await createClient();
   const { error } = await supabase.rpc("delete_announcement", { p_id: id });
   if (error) throw new Error(error.message);

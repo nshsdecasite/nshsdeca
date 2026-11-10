@@ -11,6 +11,7 @@ import {
   examIsAssigned,
   isAssignedExamWindow,
 } from "@/lib/test/exam-window";
+import { listExamCatalog } from "@/lib/test/exam-catalog";
 import { FULL_EXAM_SECONDS } from "@/lib/test/timing";
 import { createClient } from "@/lib/supabase/server";
 
@@ -20,13 +21,7 @@ async function getSupabase() {
 
 export async function listExams(): Promise<ExamSummary[]> {
   await requireAuth();
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.rpc("list_exams");
-  if (error) throw new Error(error.message);
-  return (data ?? []).map((row: Record<string, unknown>) => ({
-    ...row,
-    question_count: Number(row.question_count ?? 0),
-  })) as ExamSummary[];
+  return listExamCatalog();
 }
 
 export async function listTestSessions(): Promise<TestSessionSummary[]> {
@@ -95,19 +90,44 @@ export async function startFullExam(examId: string, timed = false) {
   redirect(`/tests/${session.id}`);
 }
 
-export async function saveAnswer(
+const ANSWER_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function saveAnswers(
   sessionId: string,
-  questionId: string,
-  choiceId: string,
+  answers: { questionId: string; choiceId: string }[],
 ) {
   await requireAuth();
+  const batch = answers
+    .filter(
+      (answer) =>
+        ANSWER_ID.test(answer.questionId) && ANSWER_ID.test(answer.choiceId),
+    )
+    .slice(0, 100);
+  if (batch.length === 0) return;
+
   const supabase = await getSupabase();
-  const { error } = await supabase.rpc("save_test_answer", {
+  const { error } = await supabase.rpc("save_test_answers", {
     p_session_id: sessionId,
-    p_question_id: questionId,
-    p_choice_id: choiceId,
+    p_answers: batch.map((answer) => ({
+      question_id: answer.questionId,
+      choice_id: answer.choiceId,
+    })),
   });
-  if (error) throw new Error(error.message);
+  if (!error) return;
+
+  const missingBatch =
+    error.code === "PGRST202" || error.message.includes("save_test_answers");
+  if (!missingBatch) throw new Error(error.message);
+
+  for (const answer of batch) {
+    const { error: one } = await supabase.rpc("save_test_answer", {
+      p_session_id: sessionId,
+      p_question_id: answer.questionId,
+      p_choice_id: answer.choiceId,
+    });
+    if (one) throw new Error(one.message);
+  }
 }
 
 export async function recordTabEvent(

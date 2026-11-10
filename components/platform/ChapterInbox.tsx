@@ -18,7 +18,6 @@ import { DecaButton } from "@/components/deca/button";
 import { SelectMenu } from "@/components/ui/select-menu";
 import { initialsFromName } from "@/lib/deca/format";
 import { displayName } from "@/lib/auth/display-name";
-import type { UserRole } from "@/lib/auth/roles";
 import type {
   Announcement,
   AnnouncementReaction,
@@ -31,7 +30,7 @@ import { cn } from "@/lib/utils";
 
 type ChapterInboxProps = {
   currentUserId: string;
-  role: UserRole | null;
+  canManage?: boolean;
   announcements: Announcement[];
   conversations: MessageConversation[];
   members: MessageableMember[];
@@ -167,7 +166,7 @@ function personLabel(
 
 export function ChapterInbox({
   currentUserId,
-  role,
+  canManage = false,
   announcements,
   conversations,
   members,
@@ -175,7 +174,7 @@ export function ChapterInbox({
   activeMessages,
 }: ChapterInboxProps) {
   const router = useRouter();
-  const isOfficer = role === "officer" || role === "advisor";
+  const isOfficer = canManage;
   const [announcementError, setAnnouncementError] = useState("");
   const [messageError, setMessageError] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);

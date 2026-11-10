@@ -4,10 +4,10 @@ import {
   type ClusterSlug,
 } from "@/data/vocab-clusters";
 import {
+  theories as theorySeeds,
   theoryCategoryLabels,
   type TheoryCategory,
 } from "@/data/theories";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 export type Theory = {
   id: string;
@@ -20,51 +20,24 @@ export type Theory = {
   clusterLabel: string;
 };
 
-type TheoryRow = {
-  id: string;
-  theory_name: string;
-  category: TheoryCategory;
-  explanation: string;
-  example_scenario: string;
-  cluster_slug: ClusterSlug | null;
-  cluster_name: string | null;
-};
-
-export async function getTheories(): Promise<{
+export function getTheories(): {
   theories: Theory[];
   categories: { value: TheoryCategory; label: string }[];
   clusters: { slug: ClusterSlug; label: string }[];
-}> {
-  const supabase = createAdminClient();
-
-  const { data, error } = await supabase.rpc("get_theories");
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const rows = (data ?? []) as TheoryRow[];
-
-  const theories = rows.map((row) => {
-    const clusterSlug =
-      row.cluster_slug ?? "business-management-and-administration";
-
-    return {
-      id: row.id,
-      theoryName: row.theory_name,
-      category: row.category,
-      categoryLabel: theoryCategoryLabels[row.category] ?? row.category,
-      explanation: row.explanation,
-      exampleScenario: row.example_scenario,
-      clusterSlug,
-      clusterLabel:
-        row.cluster_name ?? clusterLabels[clusterSlug] ?? clusterSlug,
-    };
-  });
+} {
+  const theories = theorySeeds.map((theory, index) => ({
+    id: `theory-${index}`,
+    theoryName: theory.theoryName,
+    category: theory.category,
+    categoryLabel: theoryCategoryLabels[theory.category] ?? theory.category,
+    explanation: theory.explanation,
+    exampleScenario: theory.exampleScenario,
+    clusterSlug: theory.clusterSlug,
+    clusterLabel: clusterLabels[theory.clusterSlug],
+  }));
 
   const usedCategories = new Set<TheoryCategory>();
   const usedClusterSlugs = new Set<ClusterSlug>();
-
   for (const theory of theories) {
     usedCategories.add(theory.category);
     usedClusterSlugs.add(theory.clusterSlug);

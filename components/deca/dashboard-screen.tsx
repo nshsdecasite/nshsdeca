@@ -49,9 +49,9 @@ export function DashboardScreen({
   examAccuracy,
   roleplayAverage,
   streak,
-  piCoveragePct,
   eventPisStudied,
   eventPiTotal,
+  questionsCompleted = 0,
   questionCount,
   accuracy,
   trend,
@@ -64,9 +64,9 @@ export function DashboardScreen({
   roleplayAttempts?: number;
   streak: number;
   bestStreak?: number;
-  piCoveragePct: number | null;
   eventPisStudied?: number;
   eventPiTotal?: number;
+  questionsCompleted?: number;
   questionCount?: number;
   accuracy: DashboardAccuracy[];
   trend: DashboardTrendPoint[];
@@ -77,6 +77,9 @@ export function DashboardScreen({
 }) {
   const firstName = name.split(" ")[0] || name;
   const weeks = weeksUntil(NEXT_CONFERENCE.iso);
+  const scoredAreas = accuracy.filter((row) => row.accuracy > 0);
+  const scoredTrend = trend.filter((point) => point.score > 0);
+  const hasQuestionAccuracy = scoredAreas.length > 0 || scoredTrend.length > 0;
 
   const jumps = [
     {
@@ -145,14 +148,8 @@ export function DashboardScreen({
         />
         <StatCard label="Streak" value={`${streak}d`} />
         <StatCard
-          label="Performance indicators"
-          value={piCoveragePct != null ? `${piCoveragePct}%` : "—"}
-          note={
-            eventPiTotal
-              ? `${eventPisStudied ?? 0}/${eventPiTotal} for your event`
-              : "Set your event in profile"
-          }
-          rail={piCoveragePct != null ? piCoveragePct / 100 : undefined}
+          label="Questions completed (tests)"
+          value={questionsCompleted.toLocaleString("en-US")}
         />
       </div>
 
@@ -160,43 +157,48 @@ export function DashboardScreen({
         <div className="deca-card px-7 py-6">
           <div className="mb-5 flex items-baseline justify-between gap-3">
             <h2 className="font-display text-[19px] font-extrabold tracking-[-0.02em]">
-              Accuracy by area
+              Question accuracy by area
             </h2>
-            {questionCount ? (
+            {hasQuestionAccuracy && questionCount ? (
               <span className="text-xs font-bold text-mute">{questionCount} Qs</span>
             ) : null}
           </div>
-          {accuracy.length === 0 ? (
-            <p className="text-sm text-ink-2">Complete a practice test to see this.</p>
+          {!hasQuestionAccuracy ? (
+            <p className="text-sm leading-6 text-pretty text-ink-2">
+              Take tests to see your accuracy over time!
+            </p>
           ) : (
-            <div className="flex flex-col gap-3">
-              {accuracy.map((row, index) => (
-                <div
-                  key={row.name}
-                  className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_40px] items-center gap-3"
-                >
-                  <span className="truncate text-[13px] font-semibold">{row.name}</span>
-                  <Rail
-                    fill={row.accuracy / 100}
-                    tone={accuracyTone(row.accuracy)}
-                    delay={index * 60}
-                    height="h-3"
-                    className="mt-0"
-                  />
-                  <span className="text-right text-[13px] font-bold tabular-nums">
-                    {row.accuracy}%
-                  </span>
+            <>
+              {scoredAreas.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                  {scoredAreas.map((row, index) => (
+                    <div
+                      key={row.name}
+                      className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_40px] items-center gap-3"
+                    >
+                      <span className="truncate text-[13px] font-semibold">{row.name}</span>
+                      <Rail
+                        fill={row.accuracy / 100}
+                        tone={accuracyTone(row.accuracy)}
+                        delay={index * 60}
+                        height="h-3"
+                        className="mt-0"
+                      />
+                      <span className="text-right text-[13px] font-bold tabular-nums">
+                        {row.accuracy}%
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              ) : null}
+              {scoredTrend.length > 0 ? (
+                <div className={scoredAreas.length > 0 ? "mt-7 border-t border-hair pt-5" : ""}>
+                  <h3 className="mb-2 text-[13px] font-bold text-mute">Recent exams</h3>
+                  <ExamTrend points={trend} />
+                </div>
+              ) : null}
+            </>
           )}
-
-          {trend.length > 0 ? (
-            <div className="mt-7 border-t border-hair pt-5">
-              <h3 className="mb-2 text-[13px] font-bold text-mute">Recent exams</h3>
-              <ExamTrend points={trend} />
-            </div>
-          ) : null}
         </div>
 
         <div className="deca-card px-5 py-5">

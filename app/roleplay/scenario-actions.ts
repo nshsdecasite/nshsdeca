@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath, unstable_cache } from "next/cache";
-import { requireAuth, requireRole } from "@/lib/auth/roles";
+import { requireAuth, requireSuperAdmin } from "@/lib/auth/roles";
 import type {
   PracticeReviewQueueItem,
   ScenarioDetail,
@@ -222,7 +222,7 @@ export async function withdrawPracticeScenarioReview(scenarioId: string) {
 }
 
 export async function listPracticeReviewQueue(): Promise<PracticeReviewQueueItem[]> {
-  await requireRole(["officer", "advisor"], "/admin/generated");
+  await requireSuperAdmin("/admin/generated");
   const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_practice_review_queue");
   if (error) throw new Error(error.message);
@@ -236,7 +236,7 @@ function revalidatePracticeReview(scenarioId: string) {
 }
 
 export async function approvePracticeScenario(scenarioId: string) {
-  await requireRole(["officer", "advisor"], "/admin/generated");
+  await requireSuperAdmin("/admin/generated");
   const supabase = await getSupabase();
   const { error } = await supabase.rpc("approve_practice_scenario", {
     p_id: scenarioId,
@@ -246,7 +246,7 @@ export async function approvePracticeScenario(scenarioId: string) {
 }
 
 export async function rejectPracticeScenario(scenarioId: string) {
-  await requireRole(["officer", "advisor"], "/admin/generated");
+  await requireSuperAdmin("/admin/generated");
   const supabase = await getSupabase();
   const { error } = await supabase.rpc("reject_practice_scenario", {
     p_id: scenarioId,

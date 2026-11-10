@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import { loadMyProfile } from "@/lib/data/request-cache";
 import { createClient } from "@/lib/supabase/server";
 
 export type UserRole = "student" | "officer" | "advisor";
@@ -37,4 +38,13 @@ export async function requireRole(roles: UserRole[], next?: string) {
     redirect("/dashboard");
   }
   return { user, role };
+}
+
+export async function requireSuperAdmin(next?: string) {
+  const session = await requireRole(["officer", "advisor"], next);
+  const profile = await loadMyProfile();
+  if (profile?.is_super_admin !== true) {
+    redirect("/admin");
+  }
+  return session;
 }

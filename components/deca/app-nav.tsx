@@ -16,7 +16,9 @@ const MAIN = [
   { href: "/messages", label: "Messages" },
 ] as const;
 
-const OFFICER = [
+const ADMIN = [{ href: "/admin", label: "Admin" }] as const;
+
+const SUPER_ADMIN = [
   { href: "/admin/grading", label: "Grading" },
   { href: "/admin/generated", label: "Reviews" },
   { href: "/admin/calendar", label: "Calendar" },
@@ -44,18 +46,21 @@ export function AppNav({
   gradeLabel,
   initials,
   role,
+  superAdmin = false,
   unreadCount = 0,
 }: {
   displayName: string;
   gradeLabel?: string;
   initials: string;
   role: UserRole | null;
+  superAdmin?: boolean;
   unreadCount?: number;
 }) {
   const pathname = usePathname();
   const intent = useNavIntent();
   const currentPath = intent ?? pathname;
   const showOfficer = role === "officer" || role === "advisor";
+  const officerLinks = superAdmin ? SUPER_ADMIN : ADMIN;
 
   const pillPad = showOfficer ? "px-3" : "px-[18px]";
 
@@ -103,7 +108,7 @@ export function AppNav({
               );
             })}
             {showOfficer
-              ? OFFICER.map((item) => {
+              ? officerLinks.map((item) => {
                   const active = isActive(currentPath, item.href);
                   return (
                     <Link

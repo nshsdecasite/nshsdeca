@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { listPracticeReviewQueue } from "@/app/roleplay/scenario-actions";
 import { GeneratedReviewCard } from "@/components/deca/generated-review-card";
-import { requireRole } from "@/lib/auth/roles";
+import { requireSuperAdmin } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
   title: "Generated roleplay reviews",
 };
 
 export default async function GeneratedReviewPage() {
-  await requireRole(["officer", "advisor"], "/admin/generated");
+  await requireSuperAdmin("/admin/generated");
   const queue = await listPracticeReviewQueue();
 
   return (

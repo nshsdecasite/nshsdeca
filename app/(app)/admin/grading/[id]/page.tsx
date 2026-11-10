@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getSubmission } from "@/app/roleplay/actions";
 import { getScenario } from "@/app/roleplay/scenario-actions";
 import { OfficerGradingWorkspace } from "@/components/roleplay/OfficerGradingWorkspace";
-import { displayName, requireRole } from "@/lib/auth/roles";
+import { displayName, requireSuperAdmin } from "@/lib/auth/roles";
 import {
   scenarioDetailToLegacy,
   scenarioFromSubmission,
@@ -19,7 +19,7 @@ export default async function OfficerGradingDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { user } = await requireRole(["officer", "advisor"], "/admin/grading");
+  const { user } = await requireSuperAdmin("/admin/grading");
   const { id } = await params;
   const submission = await getSubmission(id);
   if (!submission) {

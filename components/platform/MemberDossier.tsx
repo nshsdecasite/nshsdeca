@@ -100,6 +100,12 @@ export function MemberDossierView({
   const [role, setRole] = useState(profileText(profile, "role") || "student");
   const [eventCode, setEventCode] = useState(profileText(profile, "event_code"));
   const [superAdmin, setSuperAdmin] = useState(profile.is_super_admin === true);
+  const [points, setPoints] = useState(profileText(profile, "total_points") || "0");
+  const [onLeaderboard, setOnLeaderboard] = useState(profile.is_public_on_leaderboard !== false);
+  const [avatarUrl, setAvatarUrl] = useState(profileText(profile, "avatar_url"));
+  const [schoolName, setSchoolName] = useState(profileText(profile, "school_name"));
+  const [chapterName, setChapterName] = useState(profileText(profile, "chapter_name"));
+  const [stateCode, setStateCode] = useState(profileText(profile, "state"));
   const [password, setPassword] = useState("");
   const name = displayName(
     profileText(profile, "first_name"),
@@ -123,6 +129,12 @@ export function MemberDossierView({
           eventCode,
           username,
           isSuperAdmin: superAdmin,
+          totalPoints: Number(points),
+          isPublicOnLeaderboard: onLeaderboard,
+          avatarUrl,
+          schoolName,
+          chapterName,
+          state: stateCode,
         });
         setSaved("Account saved.");
         router.refresh();
@@ -169,7 +181,7 @@ export function MemberDossierView({
             Super admin
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-pretty text-ink-2">
-            Change this account, their competitive event, or give them super admin. A super admin stays an officer or advisor.
+            Change this person’s name, grade, event, role, points, and chapter details. A super admin stays an officer or advisor.
           </p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label className="block text-xs font-bold text-ink-2">
@@ -240,7 +252,58 @@ export function MemberDossierView({
                 aria-label="Competitive event"
               />
             </div>
+            <label className="block text-xs font-bold text-ink-2">
+              Points
+              <input
+                value={points}
+                inputMode="numeric"
+                onChange={(event) => setPoints(event.target.value.replace(/[^\d]/g, ""))}
+                className="deca-field mt-1.5 tabular-nums"
+              />
+            </label>
+            <label className="block text-xs font-bold text-ink-2">
+              Avatar URL
+              <input
+                value={avatarUrl}
+                onChange={(event) => setAvatarUrl(event.target.value)}
+                className="deca-field mt-1.5"
+              />
+            </label>
+            <label className="block text-xs font-bold text-ink-2">
+              School
+              <input
+                value={schoolName}
+                onChange={(event) => setSchoolName(event.target.value)}
+                className="deca-field mt-1.5"
+              />
+            </label>
+            <label className="block text-xs font-bold text-ink-2">
+              Chapter
+              <input
+                value={chapterName}
+                onChange={(event) => setChapterName(event.target.value)}
+                className="deca-field mt-1.5"
+              />
+            </label>
+            <label className="block text-xs font-bold text-ink-2">
+              State
+              <input
+                value={stateCode}
+                onChange={(event) => setStateCode(event.target.value)}
+                maxLength={2}
+                className="deca-field mt-1.5 uppercase"
+              />
+            </label>
           </div>
+          <label className="mt-4 flex items-center gap-2 text-sm font-bold text-ink">
+            <input
+              type="checkbox"
+              checked={onLeaderboard}
+              onChange={(event) => setOnLeaderboard(event.target.checked)}
+              className="h-4 w-4 accent-[#47583c]"
+            />
+            Show on the leaderboard
+          </label>
           <label className="mt-4 flex items-center gap-2 text-sm font-bold text-ink">
             <input
               type="checkbox"
@@ -364,10 +427,17 @@ export function MemberDossierView({
               {dossier.submissions.map((submission) => (
                 <tr key={submission.id} className="border-t border-edge">
                   <td className="py-3 pr-3 font-bold">
-                    <Link href={`/admin/grading/${submission.id}`} className="hover:text-ever-dk">
-                      {submission.event_code ? `${submission.event_code} · ` : ""}
-                      {submission.scenario_title || submission.scenario_key || "Roleplay"}
-                    </Link>
+                    {canEdit ? (
+                      <Link href={`/admin/grading/${submission.id}`} className="hover:text-ever-dk">
+                        {submission.event_code ? `${submission.event_code} · ` : ""}
+                        {submission.scenario_title || submission.scenario_key || "Roleplay"}
+                      </Link>
+                    ) : (
+                      <span>
+                        {submission.event_code ? `${submission.event_code} · ` : ""}
+                        {submission.scenario_title || submission.scenario_key || "Roleplay"}
+                      </span>
+                    )}
                   </td>
                   <td className="py-3 pr-3">{submission.status ?? "—"}</td>
                   <td className="py-3 pr-3 tabular-nums">{submission.attempt_number ?? "—"}</td>

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireRole } from "@/lib/auth/roles";
+import { requireSuperAdmin } from "@/lib/auth/roles";
 import type { ChapterEvent } from "@/lib/platform/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -23,7 +23,7 @@ export async function listUpcomingChapterEvents(): Promise<ChapterEvent[]> {
 }
 
 export async function listAllChapterEvents(): Promise<ChapterEvent[]> {
-  await requireRole(["officer", "advisor"], "/admin/calendar");
+  await requireSuperAdmin("/admin/calendar");
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_all_chapter_events");
   if (error) return [];
@@ -31,7 +31,7 @@ export async function listAllChapterEvents(): Promise<ChapterEvent[]> {
 }
 
 export async function createChapterEvent(formData: FormData) {
-  await requireRole(["officer", "advisor"], "/admin/calendar");
+  await requireSuperAdmin("/admin/calendar");
   const supabase = await createClient();
   const title = String(formData.get("title") ?? "").trim();
   const detail = String(formData.get("detail") ?? "").trim();
@@ -61,7 +61,7 @@ export async function createChapterEvent(formData: FormData) {
 }
 
 export async function deleteChapterEvent(id: string) {
-  await requireRole(["officer", "advisor"], "/admin/calendar");
+  await requireSuperAdmin("/admin/calendar");
   const supabase = await createClient();
   const { error } = await supabase.rpc("delete_chapter_event", { p_id: id });
   if (error) throw new Error(error.message);

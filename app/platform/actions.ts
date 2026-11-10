@@ -31,6 +31,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     ...stats,
     total_points: Number(stats.total_points ?? 0),
     tests_completed: Number(stats.tests_completed ?? 0),
+    questions_completed: Number(stats.questions_completed ?? 0),
     avg_test_pct:
       stats.avg_test_pct == null || Number.isNaN(Number(stats.avg_test_pct))
         ? null

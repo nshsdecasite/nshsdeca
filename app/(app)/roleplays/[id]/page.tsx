@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { listSubmissions } from "@/app/roleplay/actions";
 import { getScenario } from "@/app/roleplay/scenario-actions";
 import { ScenarioDetailScreen } from "@/components/deca/scenario-detail-screen";
+import { loadMyProfile } from "@/lib/data/request-cache";
 import { getUserRole, requireAuth } from "@/lib/auth/roles";
 import { submissionScenarioId } from "@/lib/roleplay/scenario-display";
 
@@ -17,8 +18,9 @@ type ScenarioPageProps = {
 export default async function ScenarioPage({ params }: ScenarioPageProps) {
   const { id } = await params;
   const user = await requireAuth(`/roleplays/${id}`);
-  const role = await getUserRole(user.id);
-  const [scenario, submissions] = await Promise.all([
+  const [role, profile, scenario, submissions] = await Promise.all([
+    getUserRole(user.id),
+    loadMyProfile(),
     getScenario(id),
     listSubmissions().catch(() => []),
   ]);
@@ -34,7 +36,7 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
       scenario={scenario}
       attempts={attempts}
       canSubmit={role === "student" || role === "officer" || role === "advisor"}
-      viewerIsOfficer={role === "officer" || role === "advisor"}
+      viewerIsOfficer={profile?.is_super_admin === true}
     />
   );
 }

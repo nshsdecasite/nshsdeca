@@ -6,6 +6,7 @@ import {
   listMyConversations,
 } from "@/app/messages/actions";
 import { ChapterInbox } from "@/components/platform/ChapterInbox";
+import { loadMyProfile } from "@/lib/data/request-cache";
 import { getUserRole, requireAuth } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
@@ -21,9 +22,10 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   const params = await searchParams;
   const activeUserId = params.with?.trim() || null;
 
-  const [role, announcements, conversations, members, activeMessages] =
+  const [role, profile, announcements, conversations, members, activeMessages] =
     await Promise.all([
       getUserRole(user.id),
+      loadMyProfile(),
       listAnnouncements(),
       listMyConversations(),
       listMessageableMembers(),
@@ -40,7 +42,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   return (
     <ChapterInbox
       currentUserId={user.id}
-      role={role}
+      canManage={profile?.is_super_admin === true}
       announcements={announcements}
       conversations={conversations}
       members={messageableMembers}

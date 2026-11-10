@@ -147,15 +147,20 @@ export async function getScenario(id: string): Promise<ScenarioDetail | null> {
     judge_question_1?: string | null;
     judge_question_2?: string | null;
   };
-  const stored = [detail.judge_question_1, detail.judge_question_2]
-    .map((question) => question?.trim() ?? "")
-    .filter(Boolean);
+  const listed = Array.isArray(detail.judge_questions)
+    ? detail.judge_questions.map((question) => question.trim()).filter(Boolean)
+    : [];
+  const stored = listed.length
+    ? listed
+    : [detail.judge_question_1, detail.judge_question_2]
+        .map((question) => question?.trim() ?? "")
+        .filter(Boolean);
   return {
     ...detail,
     pis: normalizePerformanceIndicators(detail.pis),
     rubric: normalizeScenarioRubric(detail.rubric),
     judge_questions: stored.length
-      ? stored.slice(0, 2)
+      ? stored
       : extractJudgeQuestions(detail.judge_characterization),
   };
 }

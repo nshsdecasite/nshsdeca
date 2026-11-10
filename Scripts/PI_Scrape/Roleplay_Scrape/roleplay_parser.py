@@ -238,15 +238,24 @@ def parse_performance_indicators(cover_text: str) -> list[str]:
     return indicators
 
 
+def _clean_question(text: str) -> str:
+    text = re.sub(r"(?m)^\s*\d{1,2}\s*$", "", text)
+    text = _normalize(text)
+    text = re.sub(r"\s+\d{1,2}$", "", text)
+    text = re.sub(r"\s*\n+\s*", " ", text)
+    return re.sub(r" {2,}", " ", text).strip()
+
+
 def parse_judge_questions(text: str) -> list[str]:
     block = extract_section(
         text,
-        r"During the course of the role-play, you are to ask the following questions.*?:\s*",
+        r"you are to ask the\s+following(?:\s+questions)?[^:\n]*:\s*",
         [
-            r"Once the ",
-            r"You are not to make any comments",
-            r"EVALUATION INSTRUCTIONS",
-            r"SOLUTION",
+            r"\nOnce the ",
+            r"\nAfter the (?:candidate|participant|director)",
+            r"\nYou are not to make any comments",
+            r"\nEVALUATION INSTRUCTIONS",
+            r"\nSOLUTION\s*\n",
         ],
     )
     if not block:
@@ -254,7 +263,7 @@ def parse_judge_questions(text: str) -> list[str]:
 
     questions: list[str] = []
     for match in re.finditer(r"(?:^|\n)\s*\d+\.\s*(.+?)(?=\n\s*\d+\.\s|\Z)", block, re.DOTALL):
-        question = _normalize(match.group(1))
+        question = _clean_question(match.group(1))
         if question:
             questions.append(question)
     return questions
@@ -399,15 +408,23 @@ def parse_roleplay_pdf(pdf_path: Path, *, event_code: str | None = None) -> Pars
     if not year:
         raise ValueError(f"Could not determine year for {pdf_path}")
 
+    situation_end = [
+        r"\nJUDGE'?S? INSTRUCTIONS",
+        r"\nJUDGE ROLE-PLAY CHARACTERIZATION",
+        r"\nJUDGE CHARACTERIZATION",
+        r"Published \d{4}",
+    ]
     situation = extract_named_section(
         clean_text,
         "EVENT SITUATION",
-        [r"\nJUDGE INSTRUCTIONS", r"Published \d{4}"],
+        situation_end,
     ) or extract_named_section(
         clean_text,
         "CASE STUDY SITUATION",
-        [r"\nJUDGE INSTRUCTIONS", r"Published \d{4}"],
+        situation_end,
     )
+    if situation:
+        situation = re.sub(r"\n\d{1,2}\s*$", "", situation).strip()
     judge_char = extract_section(
         clean_text,
         r"(?:^|\n)(?:JUDGE ROLE-PLAY CHARACTERIZATION|JUDGE CHARACTERIZATION)\s*\n",

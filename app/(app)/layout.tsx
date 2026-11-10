@@ -54,6 +54,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         displayName={name}
         gradeLabel={gradeLabel || undefined}
         initials={initials}
+        username={profile?.username ?? ""}
         role={role}
         superAdmin={profile?.is_super_admin === true}
         unreadCount={unreadCount}

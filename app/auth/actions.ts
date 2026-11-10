@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   isAllowedSchoolEmail,
@@ -207,6 +208,89 @@ export async function chooseUsername(
   }
 
   redirect("/dashboard");
+}
+
+export async function updateMyUsername(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const user = await getSessionUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  const username = chosenUsername(String(formData.get("username") ?? ""));
+  if (!isUsername(username)) {
+    return {
+      error: "Use 3 to 30 letters and numbers, and start with a letter.",
+    };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("claim_username", {
+    p_username: username,
+  });
+
+  if (error) {
+    const taken = /taken/i.test(error.message);
+    return {
+      error: taken
+        ? "That username is already taken."
+        : "Could not save that username. Try again.",
+    };
+  }
+
+  revalidatePath("/", "layout");
+  return { message: "Username updated. Use it the next time you sign in." };
+}
+
+export async function updateMyPassword(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const user = await getSessionUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  const currentPassword = String(formData.get("currentPassword") ?? "");
+  const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+  if (!currentPassword) {
+    return { error: "Enter your current password." };
+  }
+  if (password.length < 8) {
+    return { error: "Password must be at least 8 characters." };
+  }
+  if (password !== confirmPassword) {
+    return { error: "Passwords do not match." };
+  }
+
+  const supabase = await createClient();
+  const { data: profile, error: profileError } = await supabase.rpc("get_my_profile");
+  const username =
+    profile && typeof profile === "object" && "username" in profile
+      ? String(profile.username ?? "")
+      : "";
+  if (profileError || !isUsername(username)) {
+    return { error: "Could not update your password. Try again." };
+  }
+
+  const { error: currentError } = await supabase.auth.signInWithPassword({
+    email: usernameEmail(username),
+    password: currentPassword,
+  });
+  if (currentError) {
+    return { error: "Current password is wrong." };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    return { error: "Could not update your password. Try again." };
+  }
+
+  return { message: "Password updated." };
 }
 
 export async function requestPasswordReset(

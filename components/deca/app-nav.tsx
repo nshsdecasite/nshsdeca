@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
+import { AccountMenu } from "@/components/deca/account-menu";
 import { useNavIntent } from "@/components/deca/page-ghost";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
@@ -45,6 +46,7 @@ export function AppNav({
   displayName,
   gradeLabel,
   initials,
+  username = "",
   role,
   superAdmin = false,
   unreadCount = 0,
@@ -52,6 +54,7 @@ export function AppNav({
   displayName: string;
   gradeLabel?: string;
   initials: string;
+  username?: string;
   role: UserRole | null;
   superAdmin?: boolean;
   unreadCount?: number;
@@ -145,12 +148,7 @@ export function AppNav({
               </button>
             </form>
           </div>
-          <Link
-            href="/profile"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-ever-lt text-sm font-extrabold text-ever-dk hover:text-ever-dk"
-          >
-            {initials}
-          </Link>
+          <AccountMenu initials={initials} username={username} />
         </div>
       </div>
     </header>

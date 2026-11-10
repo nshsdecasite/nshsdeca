@@ -14,6 +14,7 @@ export function AuthenticatedLayout({
   displayName,
   gradeLabel,
   initials,
+  username = "",
   role,
   superAdmin = false,
   unreadCount = 0,
@@ -22,6 +23,7 @@ export function AuthenticatedLayout({
   displayName: string;
   gradeLabel?: string;
   initials: string;
+  username?: string;
   role: UserRole | null;
   superAdmin?: boolean;
   unreadCount?: number;
@@ -44,6 +46,7 @@ export function AuthenticatedLayout({
         displayName={displayName}
         gradeLabel={gradeLabel}
         initials={initials}
+        username={username}
         role={role}
         superAdmin={superAdmin}
         unreadCount={unreadCount}

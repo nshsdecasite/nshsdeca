@@ -42,7 +42,14 @@ export type TestSession = {
   timed: boolean;
   time_limit_seconds: number | null;
   tab_leave_count: number;
+  tab_leaves?: TestTabLeave[];
   questions: TestQuestion[];
+};
+
+export type TestTabLeave = {
+  id: string;
+  question_number: number | null;
+  created_at: string;
 };
 
 export type TestSessionSummary = {

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { completeTest, recordTabEvent, saveAnswers } from "@/app/test/actions";
 import { DecaButton } from "@/components/deca/button";
+import { TestCalculator } from "@/components/test/calculator";
 import { useSessionFocus } from "@/components/layout/session-focus-context";
 import { formatCountdown } from "@/lib/test/timing";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,32 @@ function readStoredAnswers(sessionId: string): Record<string, string> {
   } catch {
     return {};
   }
+}
+
+function describeTabLeaves(session: TestSession) {
+  const leaves = session.tab_leaves ?? [];
+  if (leaves.length === 0) {
+    const count = session.tab_leave_count;
+    return `${count} tab leave${count === 1 ? "" : "s"}`;
+  }
+  const numbers = leaves
+    .map((leave) => leave.question_number)
+    .filter((number): number is number => number != null);
+  const unknown = leaves.length - numbers.length;
+  const shown = numbers.slice(0, 8).map(String);
+  const extra = numbers.length - shown.length;
+  const questionText =
+    shown.length === 0
+      ? ""
+      : shown.length === 1 && extra === 0
+        ? `question ${shown[0]}`
+        : `questions ${shown.join(", ")}${extra ? `, and ${extra} more` : ""}`;
+  const unknownText = unknown
+    ? `${unknown} leave${unknown === 1 ? "" : "s"} with no question recorded`
+    : "";
+  if (questionText && unknownText) return `Left the tab on ${questionText}. ${unknownText}.`;
+  if (questionText) return `Left the tab on ${questionText}`;
+  return unknownText;
 }
 
 function writeStoredAnswers(sessionId: string, answers: Record<string, string>) {
@@ -68,6 +95,7 @@ export function TestTaker({ session }: TestTakerProps) {
   const flushTimer = useRef<number | null>(null);
   const tabSend = useRef<Promise<unknown> | null>(null);
   const lastLeaveAtRef = useRef(0);
+  const questionNumberRef = useRef(1);
   const answersRef = useRef(answers);
   answersRef.current = answers;
   const serverAnswersRef = useRef(answers);
@@ -78,6 +106,7 @@ export function TestTaker({ session }: TestTakerProps) {
   );
 
   const current = questions[currentIndex];
+  questionNumberRef.current = current?.display_order || currentIndex + 1;
   const answeredCount = questions.filter((q) => answers[q.id]).length;
   const unansweredCount = questions.length - answeredCount;
 
@@ -206,7 +235,7 @@ export function TestTaker({ session }: TestTakerProps) {
       if (now - lastLeaveAtRef.current < TAB_LEAVE_GAP_MS) return;
       if (tabSend.current) return;
       lastLeaveAtRef.current = now;
-      const pending = recordTabEvent(session.id, eventType)
+      const pending = recordTabEvent(session.id, eventType, questionNumberRef.current)
         .catch((leaveError) => {
           console.error("Could not record tab leave", leaveError);
         })
@@ -369,9 +398,8 @@ export function TestTaker({ session }: TestTakerProps) {
                 {session.score ?? 0}
                 <span className="text-lg text-white/70">/{session.total_questions}</span>
               </p>
-              <p className="mt-2 text-[13px] font-semibold tabular-nums text-white/80">
-                {session.tab_leave_count} tab leave
-                {session.tab_leave_count === 1 ? "" : "s"}
+              <p className="mt-2 text-[13px] font-semibold text-pretty text-white/80">
+                {describeTabLeaves(session)}
               </p>
             </div>
           ) : null}
@@ -447,6 +475,7 @@ export function TestTaker({ session }: TestTakerProps) {
         </div>
 
         <div className="flex flex-col gap-4">
+          <TestCalculator />
           <div className="deca-card px-[26px] py-6">
             <div className="flex items-baseline justify-between">
               <h2 className="font-display text-[17px] font-extrabold tracking-[-0.02em]">
@@ -502,9 +531,8 @@ export function TestTaker({ session }: TestTakerProps) {
                 <span className="text-base text-mute">/{session.total_questions}</span>
               </p>
               {completed ? (
-                <p className="mt-1 text-xs font-semibold tabular-nums text-mute">
-                  {session.tab_leave_count} tab leave
-                  {session.tab_leave_count === 1 ? "" : "s"}
+                <p className="mt-1 text-xs font-semibold text-pretty text-mute">
+                  {describeTabLeaves(session)}
                 </p>
               ) : null}
             </div>

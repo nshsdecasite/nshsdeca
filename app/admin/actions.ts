@@ -13,6 +13,7 @@ import type {
   ChapterActivity,
   ChapterMember,
   ChapterTestTabLeave,
+  SubmittedTest,
   MemberDossier,
   SolutionPeek,
 } from "@/lib/platform/types";
@@ -140,6 +141,32 @@ export async function listChapterTestTabLeaves(): Promise<ChapterTestTabLeave[]>
     score: row.score != null ? Number(row.score) : null,
     total_questions: Number(row.total_questions ?? 0),
     tab_leave_count: Number(row.tab_leave_count ?? 0),
+  }));
+}
+
+function asQuestionNumbers(value: unknown): number[] {
+  const raw = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? value.replace(/[{}]/g, "").split(",")
+      : [];
+  return raw
+    .map((item) => Number(String(item).trim()))
+    .filter((number) => Number.isInteger(number) && number > 0);
+}
+
+export async function listChapterSubmittedTests(): Promise<SubmittedTest[]> {
+  await requireRole(["officer", "advisor"], "/admin");
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_chapter_submitted_tests");
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as SubmittedTest[]).map((row) => ({
+    ...row,
+    grade_level: row.grade_level != null ? Number(row.grade_level) : null,
+    score: row.score != null ? Number(row.score) : null,
+    total_questions: Number(row.total_questions ?? 0),
+    tab_leave_count: Number(row.tab_leave_count ?? 0),
+    leave_questions: asQuestionNumbers(row.leave_questions),
   }));
 }
 

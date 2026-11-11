@@ -4,16 +4,20 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DecaButton } from "@/components/deca/button";
 import { initialsFromName } from "@/lib/deca/format";
-import type { AdminOverview, ChapterMember } from "@/lib/platform/types";
+import { TestTimeline } from "@/components/platform/test-timeline";
+import type { AdminOverview, ChapterMember, SubmittedTest } from "@/lib/platform/types";
 import { displayName } from "@/lib/auth/display-name";
 import { cn } from "@/lib/utils";
 
 type AdminPanelProps = {
   overview: AdminOverview;
   members: ChapterMember[];
+  tests: SubmittedTest[];
   currentUserId: string;
   currentIsSuperAdmin: boolean;
 };
+
+type Section = "members" | "tests";
 
 type Filter = "all" | "officers" | "students";
 
@@ -43,9 +47,11 @@ function downloadCsv(filename: string, rows: string[][]) {
 export function AdminPanel({
   overview,
   members,
+  tests,
   currentUserId,
   currentIsSuperAdmin,
 }: AdminPanelProps) {
+  const [section, setSection] = useState<Section>("members");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const officerCount = members.filter((member) => member.role !== "student").length;
@@ -87,17 +93,21 @@ export function AdminPanel({
             {currentIsSuperAdmin ? "Super admin" : "Chapter admin"}
           </p>
           <h1 className="mt-2.5 text-balance font-display text-[40px] font-black tracking-[-0.04em]">
-            Members
+            {section === "members" ? "Members" : "Submitted tests"}
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-pretty text-ink-2">
-            {currentIsSuperAdmin
-              ? "Open someone to see everything they have done, and to change their event, grade, role, or account."
-              : "Open someone to see their tests, roleplays, and the rest of their record. Changes stay with super admins."}
+            {section === "tests"
+              ? "Newest submissions first. Filter by who left the tab, how they scored, and when they finished."
+              : currentIsSuperAdmin
+                ? "Open someone to see everything they have done, and to change their event, grade, role, or account."
+                : "Open someone to see their tests, roleplays, and the rest of their record. Changes stay with super admins."}
           </p>
         </div>
-        <DecaButton variant="outline" onClick={exportMembers}>
-          Export CSV
-        </DecaButton>
+        {section === "members" ? (
+          <DecaButton variant="outline" onClick={exportMembers}>
+            Export CSV
+          </DecaButton>
+        ) : null}
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -137,6 +147,35 @@ export function AdminPanel({
         </div>
       ) : null}
 
+      <div className="mt-6 flex flex-wrap gap-2">
+        {(
+          [
+            ["members", `Members · ${members.length}`],
+            ["tests", `Tests · ${tests.length}`],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setSection(value)}
+            className={cn(
+              "rounded-full px-4 py-2 text-[13px] font-bold transition-[background-color,color] duration-150 ease-[cubic-bezier(0.2,0,0,1)] active:scale-[0.96]",
+              section === value ? "bg-ever-dk text-white" : "bg-white text-ink shadow-card hover:bg-ever-lt",
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {section === "tests" ? (
+        <div className="mt-5">
+          <TestTimeline tests={tests} />
+        </div>
+      ) : null}
+
+      {section === "members" ? (
+      <>
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <input
           value={query}
@@ -206,6 +245,8 @@ export function AdminPanel({
           })
         )}
       </div>
+      </>
+      ) : null}
     </div>
   );
 }

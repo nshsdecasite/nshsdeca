@@ -129,6 +129,25 @@ export type ChapterActivity = {
   last_roleplay_at: string | null;
 };
 
+export type SubmittedTest = {
+  session_id: string;
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  username: string | null;
+  grade_level: number | null;
+  event_code: string | null;
+  exam_title: string | null;
+  exam_code: string | null;
+  session_type: string;
+  score: number | null;
+  total_questions: number;
+  started_at: string;
+  completed_at: string;
+  tab_leave_count: number;
+  leave_questions: number[];
+};
+
 export type ChapterTestTabLeave = {
   session_id: string;
   user_id: string;
@@ -237,6 +256,7 @@ export type MemberDossier = {
     id: string;
     session_id: string | null;
     event_type: string;
+    question_number: number | null;
     created_at: string;
   }[];
   notes: {

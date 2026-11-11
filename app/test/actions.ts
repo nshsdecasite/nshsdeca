@@ -133,12 +133,18 @@ export async function saveAnswers(
 export async function recordTabEvent(
   sessionId: string,
   eventType: "blur" | "hidden",
+  questionNumber: number,
 ) {
   await requireAuth();
   const supabase = await getSupabase();
+  const question =
+    Number.isInteger(questionNumber) && questionNumber >= 1 && questionNumber <= 500
+      ? questionNumber
+      : null;
   const { error } = await supabase.rpc("record_session_tab_event", {
     p_session_id: sessionId,
     p_event_type: eventType,
+    p_question_number: question,
   });
   if (error) throw new Error(error.message);
 }

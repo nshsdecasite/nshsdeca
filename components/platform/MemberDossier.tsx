@@ -534,7 +534,11 @@ export function MemberDossierView({
           <ul className="flex flex-col gap-2 text-sm">
             {dossier.tab_leaves.map((leave) => (
               <li key={leave.id}>
-                <span className="font-bold">{leave.event_type}</span>
+                <span className="font-bold">
+                  {leave.question_number
+                    ? `Question ${leave.question_number}`
+                    : "Question not recorded"}
+                </span>
                 <span className="text-mute"> · {text(leave.created_at)}</span>
               </li>
             ))}
